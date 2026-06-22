@@ -1,2 +1,2 @@
-def hello() -> str:
-    return "Hello from homelab-common!"
+from . import constant as constant
+from . import pydantic as pydantic
