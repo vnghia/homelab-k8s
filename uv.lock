@@ -10,6 +10,7 @@ resolution-markers = [
 members = [
     "homelab-common",
     "homelab-k8s",
+    "homelab-types",
 ]
 
 [[package]]
@@ -120,12 +121,6 @@ wheels = [
 name = "homelab-common"
 version = "0.1.0"
 source = { editable = "libs/homelab-common" }
-dependencies = [
-    { name = "pydantic" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
 
 [[package]]
 name = "homelab-k8s"
@@ -149,6 +144,17 @@ dev = [
     { name = "mypy", specifier = ">=2.1.0" },
     { name = "ruff", specifier = ">=0.15.18" },
 ]
+
+[[package]]
+name = "homelab-types"
+version = "0.1.0"
+source = { editable = "libs/homelab-types" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
 
 [[package]]
 name = "librt"
