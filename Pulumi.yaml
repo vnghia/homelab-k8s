@@ -1,0 +1,12 @@
+name: homelab
+description: Homelab configuration
+runtime:
+  name: python
+  options:
+    toolchain: uv
+    virtualenv: .venv
+    typechecker: mypy
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: python
