@@ -12,12 +12,29 @@
     }:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
+
+      lib = nixpkgs.lib;
+      pkgs = import nixpkgs {
+        inherit system;
+        config = {
+          allowUnfreePredicate =
+            pkg:
+            builtins.elem (lib.getName pkg) [
+              "vagrant"
+            ];
+        };
+      };
     in
     {
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
           pulumi-bin
+
+          talosctl
+
+          vagrant
+          swtpm
+          rubocop
         ];
       };
     };
