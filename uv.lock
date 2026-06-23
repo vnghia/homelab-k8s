@@ -8,8 +8,8 @@ resolution-markers = [
 
 [manifest]
 members = [
+    "homelab",
     "homelab-common",
-    "homelab-k8s",
     "homelab-types",
 ]
 
@@ -118,16 +118,12 @@ wheels = [
 ]
 
 [[package]]
-name = "homelab-common"
+name = "homelab"
 version = "0.1.0"
-source = { editable = "libs/homelab-common" }
-
-[[package]]
-name = "homelab-k8s"
-version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "pulumi" },
+    { name = "pydantic" },
 ]
 
 [package.dev-dependencies]
@@ -137,13 +133,21 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pulumi", specifier = ">=3.247.0" }]
+requires-dist = [
+    { name = "pulumi", specifier = ">=3.247.0" },
+    { name = "pydantic", specifier = ">=2.13.4" },
+]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "mypy", specifier = ">=2.1.0" },
     { name = "ruff", specifier = ">=0.15.18" },
 ]
+
+[[package]]
+name = "homelab-common"
+version = "0.1.0"
+source = { editable = "libs/homelab-common" }
 
 [[package]]
 name = "homelab-types"

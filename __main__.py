@@ -1,0 +1,3 @@
+import homelab
+
+homelab.Homelab()
