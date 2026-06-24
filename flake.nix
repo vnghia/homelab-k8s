@@ -32,8 +32,9 @@
           nickel
 
           pulumi-bin
-
           talosctl
+
+          just
 
           vagrant
           swtpm

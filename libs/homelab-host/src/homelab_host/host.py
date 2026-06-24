@@ -3,7 +3,7 @@ from typing import ClassVar
 import pulumi
 import pulumiverse_talos as talos
 from homelab_pulumi.data import OutputSerializer
-from pulumi import ComponentResource, ResourceOptions
+from pulumi import ComponentResource, Output, ResourceOptions
 
 from .config import HostConfig
 
@@ -46,5 +46,13 @@ class Host(ComponentResource):
         )
 
         pulumi.export(f"host.{self._name}.image.schematic", self._schematic.id)
+        pulumi.export(
+            f"host.{self._name}.image.url",
+            Output.format(
+                "https://factory.talos.dev/image/{}/{}/metal-amd64.iso",
+                self._schematic.id,
+                self._config.image.version,
+            ),
+        )
 
         self.register_outputs({})
