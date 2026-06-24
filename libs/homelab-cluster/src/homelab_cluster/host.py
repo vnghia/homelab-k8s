@@ -5,6 +5,8 @@ import pulumiverse_talos as talos
 from homelab_pulumi.data import OutputSerializer
 from pulumi import ComponentResource, Output, ResourceOptions
 
+from homelab_cluster.secrets import ClusterSecrets
+
 from .config import HostConfig
 
 
@@ -17,7 +19,10 @@ class Host(ComponentResource):
         config: HostConfig,
         *,
         opts: ResourceOptions | None,
-        version: str,
+        cluser_name: str,
+        cluser_version: str,
+        cluser_endpoint: str,
+        cluser_secrets: ClusterSecrets,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
@@ -26,7 +31,7 @@ class Host(ComponentResource):
         self._config = config
 
         self._extensions = talos.imagefactory.get_extensions_versions_output(
-            talos_version=version,
+            talos_version=cluser_version,
             filters=talos.imagefactory.GetExtensionsVersionsFiltersArgs(
                 names=self._config.image.extensions
             ),
@@ -56,7 +61,7 @@ class Host(ComponentResource):
             Output.format(
                 "https://factory.talos.dev/image/{}/{}/metal-amd64.iso",
                 self._schematic.id,
-                version,
+                cluser_version,
             ),
         )
 

@@ -11,5 +11,7 @@ class HostConfig(BaseModel):
 
 
 class ClusterConfig(BaseModel):
+    name: str
     version: str
+    endpoint: str
     hosts: dict[str, HostConfig]

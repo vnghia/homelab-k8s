@@ -10,7 +10,9 @@ let versions = import "../versions/cluster.yaml" in
   },
 
   CluserSchema = {
+    name | String | default = "homelab",
     version = versions.github.cluster.release,
+    endpoint | String = "sun",
     hosts | { _ : HostSchema },
   },
 
