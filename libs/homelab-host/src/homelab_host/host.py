@@ -15,8 +15,8 @@ class Host(ComponentResource):
         self, name: str, config: HostConfig, *, opts: ResourceOptions | None
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
-
         self._child_opts = ResourceOptions(parent=self)
+
         self._name = name
         self._config = config
 

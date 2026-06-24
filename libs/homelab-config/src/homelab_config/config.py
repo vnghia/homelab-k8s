@@ -3,13 +3,13 @@ from typing import Self
 
 import pulumi
 from homelab_common import constant
-from homelab_host.config import HostsConfig
+from homelab_host.config import ClusterConfig
 from homelab_types import BaseModel
 from nickel import nickel
 
 
 class Config(BaseModel):
-    hosts: HostsConfig
+    cluster: ClusterConfig
 
     @classmethod
     def load(cls) -> Self:

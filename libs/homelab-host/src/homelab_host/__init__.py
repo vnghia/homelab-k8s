@@ -1,2 +1,4 @@
+from . import cluster as cluster
 from . import config as config
-from .host import Host as Host
+from . import host as host
+from . import secret as secret

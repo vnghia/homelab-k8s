@@ -1,4 +1,4 @@
-from homelab_types import BaseModel, RootModel
+from homelab_types import BaseModel
 
 
 class ImageConfig(BaseModel):
@@ -11,5 +11,5 @@ class HostConfig(BaseModel):
     image: ImageConfig
 
 
-class HostsConfig(RootModel[dict[str, HostConfig]]):
-    pass
+class ClusterConfig(BaseModel):
+    hosts: dict[str, HostConfig]
