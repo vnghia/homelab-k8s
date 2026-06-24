@@ -10,6 +10,7 @@ dependencies = [
 
     # Workspace
     "homelab-config",
+    "homelab-host",
 ]
 
 [build-system]
