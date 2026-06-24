@@ -1,4 +1,4 @@
 github:
-  image:
+  cluster:
     package: siderolabs/talos
     release: v1.13.5

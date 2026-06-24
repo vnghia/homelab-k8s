@@ -2,7 +2,6 @@ from homelab_types import BaseModel
 
 
 class ImageConfig(BaseModel):
-    version: str
     extensions: list[str]
 
 
@@ -12,4 +11,5 @@ class HostConfig(BaseModel):
 
 
 class ClusterConfig(BaseModel):
+    version: str
     hosts: dict[str, HostConfig]

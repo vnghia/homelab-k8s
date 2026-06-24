@@ -16,10 +16,14 @@ class Cluster(ComponentResource):
 
         self._config = config
 
-        self._secret = ClusterSecrets(opts=None)
+        self._secret = ClusterSecrets(
+            opts=self._child_opts, version=self._config.version
+        )
 
         self._hosts = {
-            name: Host(name, config, opts=self._child_opts)
+            name: Host(
+                name, config, opts=self._child_opts, version=self._config.version
+            )
             for name, config in self._config.hosts.items()
         }
 

@@ -1,3 +1,3 @@
 {
-  hosts = import "hosts/hosts.ncl",
+  cluster = import "cluster/cluster.ncl",
 }

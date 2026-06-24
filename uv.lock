@@ -9,9 +9,9 @@ resolution-markers = [
 [manifest]
 members = [
     "homelab",
+    "homelab-cluster",
     "homelab-common",
     "homelab-config",
-    "homelab-host",
     "homelab-pulumi",
     "homelab-types",
 ]
@@ -125,8 +125,8 @@ name = "homelab"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "homelab-cluster" },
     { name = "homelab-config" },
-    { name = "homelab-host" },
     { name = "pulumi" },
     { name = "pydantic" },
 ]
@@ -139,8 +139,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "homelab-cluster", editable = "libs/homelab-cluster" },
     { name = "homelab-config", editable = "libs/homelab-config" },
-    { name = "homelab-host", editable = "libs/homelab-host" },
     { name = "pulumi", specifier = ">=3.247.0" },
     { name = "pydantic", specifier = ">=2.13.4" },
 ]
@@ -152,35 +152,9 @@ dev = [
 ]
 
 [[package]]
-name = "homelab-common"
+name = "homelab-cluster"
 version = "0.1.0"
-source = { editable = "libs/homelab-common" }
-
-[[package]]
-name = "homelab-config"
-version = "0.1.0"
-source = { editable = "libs/homelab-config" }
-dependencies = [
-    { name = "homelab-common" },
-    { name = "homelab-host" },
-    { name = "homelab-types" },
-    { name = "pulumi" },
-    { name = "py-nickel" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "homelab-common", editable = "libs/homelab-common" },
-    { name = "homelab-host", editable = "libs/homelab-host" },
-    { name = "homelab-types", editable = "libs/homelab-types" },
-    { name = "pulumi", specifier = ">=3.247.0" },
-    { name = "py-nickel", specifier = ">=1.17.0" },
-]
-
-[[package]]
-name = "homelab-host"
-version = "0.1.0"
-source = { editable = "libs/homelab-host" }
+source = { editable = "libs/homelab-cluster" }
 dependencies = [
     { name = "homelab-pulumi" },
     { name = "homelab-types" },
@@ -194,6 +168,32 @@ requires-dist = [
     { name = "homelab-types", editable = "libs/homelab-types" },
     { name = "pulumi", specifier = ">=3.247.0" },
     { name = "pulumiverse-talos", specifier = ">=0.8.0" },
+]
+
+[[package]]
+name = "homelab-common"
+version = "0.1.0"
+source = { editable = "libs/homelab-common" }
+
+[[package]]
+name = "homelab-config"
+version = "0.1.0"
+source = { editable = "libs/homelab-config" }
+dependencies = [
+    { name = "homelab-cluster" },
+    { name = "homelab-common" },
+    { name = "homelab-types" },
+    { name = "pulumi" },
+    { name = "py-nickel" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "homelab-cluster", editable = "libs/homelab-cluster" },
+    { name = "homelab-common", editable = "libs/homelab-common" },
+    { name = "homelab-types", editable = "libs/homelab-types" },
+    { name = "pulumi", specifier = ">=3.247.0" },
+    { name = "py-nickel", specifier = ">=1.17.0" },
 ]
 
 [[package]]

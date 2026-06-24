@@ -12,7 +12,12 @@ class Host(ComponentResource):
     RESOURCE_TYPE: ClassVar[str] = "host"
 
     def __init__(
-        self, name: str, config: HostConfig, *, opts: ResourceOptions | None
+        self,
+        name: str,
+        config: HostConfig,
+        *,
+        opts: ResourceOptions | None,
+        version: str,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
@@ -21,7 +26,7 @@ class Host(ComponentResource):
         self._config = config
 
         self._extensions = talos.imagefactory.get_extensions_versions_output(
-            talos_version=self._config.image.version,
+            talos_version=version,
             filters=talos.imagefactory.GetExtensionsVersionsFiltersArgs(
                 names=self._config.image.extensions
             ),
@@ -51,7 +56,7 @@ class Host(ComponentResource):
             Output.format(
                 "https://factory.talos.dev/image/{}/{}/metal-amd64.iso",
                 self._schematic.id,
-                self._config.image.version,
+                version,
             ),
         )
 

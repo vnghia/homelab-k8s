@@ -2,8 +2,8 @@ import tempfile
 from typing import Self
 
 import pulumi
+from homelab_cluster.config import ClusterConfig
 from homelab_common import constant
-from homelab_host.config import ClusterConfig
 from homelab_types import BaseModel
 from nickel import nickel
 

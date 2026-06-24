@@ -1,5 +1,5 @@
+from homelab_cluster.cluster import Cluster
 from homelab_config import Config
-from homelab_host.cluster import Cluster
 
 
 class Homelab:
