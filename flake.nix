@@ -29,6 +29,7 @@
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
           uv
+          nickel
 
           pulumi-bin
 

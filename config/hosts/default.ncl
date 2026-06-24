@@ -1,0 +1,3 @@
+{
+  sun = import "sun.ncl",
+}
