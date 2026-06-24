@@ -45,6 +45,7 @@ members = ["libs/homelab-*"]
 [tool.uv.sources]
 homelab-common = { workspace = true }
 homelab-config = { workspace = true }
+homelab-host = { workspace = true }
 homelab-types = { workspace = true }
 
 [tool.ty.rules]
@@ -55,6 +56,7 @@ root = [
     "./src",
     "./libs/homelab-common/src",
     "./libs/homelab-config/src",
+    "./libs/homelab-host/src",
     "./libs/homelab-types/src",
 ]
 
@@ -94,3 +96,4 @@ preview = true
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "pydantic.BaseModel".msg = "Use homelab_types.BaseModel instead"
+"pydantic.RootModel".msg = "Use homelab_types.RootModel instead"

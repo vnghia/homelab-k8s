@@ -11,6 +11,7 @@ members = [
     "homelab",
     "homelab-common",
     "homelab-config",
+    "homelab-host",
     "homelab-types",
 ]
 
@@ -158,6 +159,7 @@ version = "0.1.0"
 source = { editable = "libs/homelab-config" }
 dependencies = [
     { name = "homelab-common" },
+    { name = "homelab-host" },
     { name = "homelab-types" },
     { name = "pulumi" },
     { name = "py-nickel" },
@@ -166,10 +168,22 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "homelab-common", editable = "libs/homelab-common" },
+    { name = "homelab-host", editable = "libs/homelab-host" },
     { name = "homelab-types", editable = "libs/homelab-types" },
     { name = "pulumi", specifier = ">=3.247.0" },
     { name = "py-nickel", specifier = ">=1.17.0" },
 ]
+
+[[package]]
+name = "homelab-host"
+version = "0.1.0"
+source = { editable = "libs/homelab-host" }
+dependencies = [
+    { name = "homelab-types" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "homelab-types", editable = "libs/homelab-types" }]
 
 [[package]]
 name = "homelab-types"
