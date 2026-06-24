@@ -1,3 +1,3 @@
 {
-  hosts = import "hosts/default.ncl",
+  hosts = import "hosts/hosts.ncl",
 }
