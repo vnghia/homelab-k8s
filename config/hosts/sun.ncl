@@ -1,2 +1,4 @@
 let host = import "../libs/host.ncl" in
-host.Schema
+{
+  image = { extensions = host.common_extensions }
+} | host.Schema

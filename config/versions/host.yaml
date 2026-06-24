@@ -1,0 +1,4 @@
+github:
+  image:
+    package: siderolabs/talos
+    release: v1.13.5

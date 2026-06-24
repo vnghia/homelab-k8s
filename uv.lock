@@ -10,6 +10,7 @@ resolution-markers = [
 members = [
     "homelab",
     "homelab-common",
+    "homelab-config",
     "homelab-types",
 ]
 
@@ -122,6 +123,7 @@ name = "homelab"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "homelab-config" },
     { name = "pulumi" },
     { name = "pydantic" },
 ]
@@ -134,6 +136,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "homelab-config", editable = "libs/homelab-config" },
     { name = "pulumi", specifier = ">=3.247.0" },
     { name = "pydantic", specifier = ">=2.13.4" },
 ]
@@ -148,6 +151,25 @@ dev = [
 name = "homelab-common"
 version = "0.1.0"
 source = { editable = "libs/homelab-common" }
+
+[[package]]
+name = "homelab-config"
+version = "0.1.0"
+source = { editable = "libs/homelab-config" }
+dependencies = [
+    { name = "homelab-common" },
+    { name = "homelab-types" },
+    { name = "pulumi" },
+    { name = "py-nickel" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "homelab-common", editable = "libs/homelab-common" },
+    { name = "homelab-types", editable = "libs/homelab-types" },
+    { name = "pulumi", specifier = ">=3.247.0" },
+    { name = "py-nickel", specifier = ">=1.17.0" },
+]
 
 [[package]]
 name = "homelab-types"
@@ -397,6 +419,12 @@ dependencies = [
 wheels = [
     { url = "https://files.pythonhosted.org/packages/22/03/e14c9fe2e6e7fb57e80ceaab0f5b5678ad96388e6eb5cf04f16870820aee/pulumi-3.247.0-py3-none-any.whl", hash = "sha256:ca21453de7d410fc072343379cc905175c8214ab6077d941a76ff7308fdbfee7", size = 408018, upload-time = "2026-06-18T14:12:01.302Z" },
 ]
+
+[[package]]
+name = "py-nickel"
+version = "1.17.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/50/52/66cc9724668d3a3cce89673833b9cba40c13ead3d07cc8e93e889a678fe7/py_nickel-1.17.0.tar.gz", hash = "sha256:a239c77bb640c9504d3a9099ed7839c4bdfd3a424e0d1fd3a4ed066830496ca3", size = 760175, upload-time = "2026-06-09T21:29:13.696Z" }
 
 [[package]]
 name = "pydantic"

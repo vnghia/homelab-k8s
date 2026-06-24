@@ -1,2 +1,1 @@
-class Homelab:
-    pass
+from .homelab import Homelab as Homelab
