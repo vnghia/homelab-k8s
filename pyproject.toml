@@ -47,6 +47,7 @@ members = ["libs/homelab-*"]
 homelab-common = { workspace = true }
 homelab-config = { workspace = true }
 homelab-host = { workspace = true }
+homelab-pulumi = { workspace = true }
 homelab-types = { workspace = true }
 
 [tool.ty.rules]
@@ -58,6 +59,7 @@ root = [
     "./libs/homelab-common/src",
     "./libs/homelab-config/src",
     "./libs/homelab-host/src",
+    "./libs/homelab-pulumi/src",
     "./libs/homelab-types/src",
 ]
 

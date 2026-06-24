@@ -1,6 +1,8 @@
 from typing import ClassVar
 
+import pulumi
 import pulumiverse_talos as talos
+from homelab_pulumi.data import OutputSerializer
 from pulumi import ComponentResource, ResourceOptions
 
 from .config import HostConfig
@@ -24,5 +26,25 @@ class Host(ComponentResource):
                 names=self._config.image.extensions
             ),
         )
+
+        self._schematic = talos.imagefactory.Schematic(
+            self._name,
+            opts=self._child_opts,
+            schematic=OutputSerializer.yaml(
+                {
+                    "customization": {
+                        "systemExtensions": {
+                            "officialExtensions": self._extensions.apply(
+                                lambda result: [
+                                    info.name for info in result.extensions_infos
+                                ]
+                            )
+                        }
+                    }
+                }
+            ),
+        )
+
+        pulumi.export(f"host.{self._name}.image.schematic", self._schematic.id)
 
         self.register_outputs({})
