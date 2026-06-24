@@ -30,7 +30,11 @@ init_typed = true
 warn_required_dynamic_aliases = true
 
 [tool.uv.workspace]
-members = ["libs/homelab-common", "libs/homelab-types"]
+members = ["libs/homelab-*"]
+
+[tool.uv.sources]
+homelab-common = { workspace = true }
+homelab-types = { workspace = true }
 
 [tool.ruff.lint]
 extend-select = [
