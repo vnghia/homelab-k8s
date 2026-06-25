@@ -47,7 +47,7 @@ class Host(ComponentResource):
         ]
 
         self.apply_patches(
-            "install",
+            "bootstrap",
             [
                 OutputSerializer.yaml(
                     {
@@ -60,7 +60,37 @@ class Host(ComponentResource):
                             }
                         }
                     }
-                )
+                ),
+                OutputSerializer.yaml(
+                    {
+                        "apiVersion": "v1alpha1",
+                        "kind": "HostnameConfig",
+                        "hostname": self._config.endpoint,
+                        "auto": "off",
+                    }
+                ),
+                OutputSerializer.yaml(
+                    {
+                        "apiVersion": "v1alpha1",
+                        "kind": "VolumeConfig",
+                        "name": "STATE",
+                        "encryption": {
+                            "provider": "luks2",
+                            "keys": [{"nodeID": {}, "slot": 0}],
+                        },
+                    }
+                ),
+                OutputSerializer.yaml(
+                    {
+                        "apiVersion": "v1alpha1",
+                        "kind": "VolumeConfig",
+                        "name": "EPHEMERAL",
+                        "encryption": {
+                            "provider": "luks2",
+                            "keys": [{"nodeID": {}, "slot": 0, "lockToState": True}],
+                        },
+                    }
+                ),
             ],
         )
 
