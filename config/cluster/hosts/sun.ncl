@@ -1,6 +1,9 @@
 {
   cluster.hosts.sun = {
-    controlplane = true,
-    worker = true,
+    features = {
+      controlplane = true,
+      worker = true,
+      loadbalancer = true,
+    },
   },
 }

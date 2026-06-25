@@ -7,7 +7,7 @@ from pulumi import ComponentResource, Input, Output, ResourceOptions
 from homelab_cluster.image import Image
 from homelab_cluster.secrets import Secrets
 
-from .config import ClusterConfig, HostConfig
+from .config import ClusterConfig, HostConfig, HostStageConfig
 
 
 class Host(ComponentResource):
@@ -35,7 +35,9 @@ class Host(ComponentResource):
             talos.machine.get_configuration_output(
                 cluster_endpoint=cluster_config.endpoint,
                 cluster_name=cluster_config.name,
-                machine_type="controlplane" if self._config.worker else "worker",
+                machine_type="controlplane"
+                if self._config.features.worker
+                else "worker",
                 machine_secrets=self._machine_secrets.to_args(),
                 talos_version=cluster_config.version.talos,
                 kubernetes_version=cluster_config.version.k8s,
@@ -47,7 +49,7 @@ class Host(ComponentResource):
         ]
 
         self.apply_patches(
-            "bootstrap",
+            "initial",
             [
                 OutputSerializer.yaml(
                     {
@@ -93,6 +95,37 @@ class Host(ComponentResource):
                 ),
             ],
         )
+
+        if self._config.stage == HostStageConfig.INITIAL:
+            self.register_outputs({})
+            return
+
+        if self._config.features.controlplane and self._config.features.worker:
+            self.apply_patches(
+                "worker",
+                [
+                    OutputSerializer.yaml(
+                        {"cluster": {"allowSchedulingOnControlPlanes": True}}
+                    )
+                ],
+            )
+            if self._config.features.loadbalancer:
+                self.apply_patches(
+                    "loadbalancer",
+                    [
+                        OutputSerializer.yaml(
+                            {
+                                "machine": {
+                                    "nodeLabels": {
+                                        "node.kubernetes.io/exclude-from-external-load-balancers": {
+                                            "$patch": "delete"
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    ],
+                )
 
         self.register_outputs({})
 

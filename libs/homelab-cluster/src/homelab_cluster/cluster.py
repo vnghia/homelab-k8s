@@ -58,7 +58,7 @@ class Cluster(ComponentResource):
                 endpoints=[
                     host._config.endpoint
                     for host in self._hosts.values()
-                    if host._config.controlplane
+                    if host._config.features.controlplane
                 ],
                 nodes=[host._config.endpoint for host in self._hosts.values()],
             ).apply(lambda result: result.talos_config),

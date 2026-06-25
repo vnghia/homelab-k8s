@@ -1,3 +1,5 @@
+from enum import StrEnum, auto
+
 from homelab_types import BaseModel
 
 
@@ -15,11 +17,22 @@ class HostInstallConfig(BaseModel):
     image: str
 
 
-class HostConfig(BaseModel):
-    endpoint: str
+class HostFeaturesConfig(BaseModel):
     controlplane: bool
     worker: bool
+    loadbalancer: bool
+
+
+class HostStageConfig(StrEnum):
+    INITIAL = auto()
+    READY = auto()
+
+
+class HostConfig(BaseModel):
+    endpoint: str
+    features: HostFeaturesConfig
     install: HostInstallConfig
+    stage: HostStageConfig
 
 
 class ClusterConfig(BaseModel):
