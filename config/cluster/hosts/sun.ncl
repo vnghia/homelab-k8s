@@ -1,5 +1,1 @@
-{
-  cluster = {
-    entrypoint = "sun",
-  }
-}
+{}

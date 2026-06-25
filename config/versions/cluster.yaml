@@ -1,4 +1,7 @@
 github:
-  cluster:
+  talos:
     package: siderolabs/talos
     release: v1.13.5
+  k8s:
+    package: kubernetes/kubernetes
+    release: v1.36.2

@@ -1,2 +1,14 @@
-let { ClusterSchema, .. } = import "../libs/cluster.ncl" in
-(import "hosts/hosts.ncl") | { cluster | ClusterSchema }
+let
+  cluster_lib = import "../libs/cluster.ncl",
+  cluster_version = import "../versions/cluster.yaml",
+  hosts = import "hosts/hosts.ncl",
+in
+{
+  cluster | cluster_lib.ClusterSchema = {
+    version = {
+      talos = cluster_version.github.talos.release,
+      k8s = cluster_version.github.k8s.release,
+    }
+  }
+}
+& hosts

@@ -1,5 +1,9 @@
-let versions = import "../versions/cluster.yaml" in
 {
+  VersionSchema = {
+    talos | String,
+    k8s | String,
+  },
+
   ImageSchema = {
     extensions | Array String | default = [],
   },
@@ -11,9 +15,8 @@ let versions = import "../versions/cluster.yaml" in
 
   ClusterSchema = {
     name | String | default = "homelab",
-    version = versions.github.cluster.release,
-    entrypoint | String | not_exported,
-    endpoint | String = "https://%{hosts."%{entrypoint}".address}:6443",
+    version | VersionSchema,
+    endpoint | String,
     images | { _ : ImageSchema } | default = {
       default = {
         extensions = ["tailscale"],
