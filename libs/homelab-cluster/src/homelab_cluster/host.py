@@ -1,5 +1,6 @@
 from typing import ClassVar
 
+import pulumi_tailscale as tailscale
 import pulumiverse_talos as talos
 from homelab_common import string
 from homelab_pulumi import OutputSerializer
@@ -151,6 +152,45 @@ class Host(ComponentResource):
                         )
                     ],
                 )
+
+        self.apply_patches(
+            "tailscale",
+            [
+                OutputSerializer.yaml(
+                    {
+                        "apiVersion": "v1alpha1",
+                        "kind": "ExtensionServiceConfig",
+                        "name": "tailscale",
+                        "environment": [
+                            Output.concat(
+                                "TS_AUTHKEY=",
+                                tailscale.TailnetKey(
+                                    self._name,
+                                    opts=self._child_opts,
+                                    ephemeral=False,
+                                    expiry=5 * 60,
+                                    preauthorized=True,
+                                    reusable=False,
+                                ).key,
+                            ),
+                            "TS_AUTH_ONCE=true",
+                            "TS_TAILSCALED_EXTRA_ARGS=--no-logs-no-support",
+                            f"TS_HOSTNAME={
+                                string.add_prefix(
+                                    STACK,
+                                    string.add_prefix(
+                                        cluster_config.domain.prefix,
+                                        self._name,
+                                        separator='.',
+                                    ),
+                                    separator='.',
+                                )
+                            }",
+                        ],
+                    }
+                )
+            ],
+        )
 
         self.register_outputs({})
 

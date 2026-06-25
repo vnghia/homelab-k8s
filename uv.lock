@@ -160,6 +160,7 @@ dependencies = [
     { name = "homelab-pulumi" },
     { name = "homelab-types" },
     { name = "pulumi" },
+    { name = "pulumi-tailscale" },
     { name = "pulumiverse-talos" },
 ]
 
@@ -169,6 +170,7 @@ requires-dist = [
     { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
     { name = "homelab-types", editable = "libs/homelab-types" },
     { name = "pulumi", specifier = ">=3.247.0" },
+    { name = "pulumi-tailscale", specifier = ">=0.28.0" },
     { name = "pulumiverse-talos", specifier = ">=0.8.0" },
 ]
 
@@ -494,6 +496,20 @@ dependencies = [
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/22/03/e14c9fe2e6e7fb57e80ceaab0f5b5678ad96388e6eb5cf04f16870820aee/pulumi-3.247.0-py3-none-any.whl", hash = "sha256:ca21453de7d410fc072343379cc905175c8214ab6077d941a76ff7308fdbfee7", size = 408018, upload-time = "2026-06-18T14:12:01.302Z" },
+]
+
+[[package]]
+name = "pulumi-tailscale"
+version = "0.28.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "parver" },
+    { name = "pulumi" },
+    { name = "semver" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/dc/90/bcd6e64a390ee3d92a0c7bd461ed34a793885a66cf63d211a5ca1702deec/pulumi_tailscale-0.28.0.tar.gz", hash = "sha256:68b373d57623d29da5702fe2989e69775c4b8a42640107c8d241ba0d03f0c80f", size = 47866, upload-time = "2026-05-22T12:35:03.073Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/81/5d/96a7d78db6813efcfa656dfbe42a005dcbd95397e07d4a47af7221b94a4b/pulumi_tailscale-0.28.0-py3-none-any.whl", hash = "sha256:ca062ca51ffb29fc09b45b13425baa8c3a80a8b716506a5e8c4500da2070cd58", size = 79275, upload-time = "2026-05-22T12:35:01.058Z" },
 ]
 
 [[package]]
