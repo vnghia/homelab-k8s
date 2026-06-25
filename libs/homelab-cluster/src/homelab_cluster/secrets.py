@@ -33,7 +33,7 @@ class ClientConfiguration(BaseModel):
         return talos.machine.ClientConfigurationArgs(
             ca_certificate=self.ca_certificate,
             client_certificate=self.client_certificate,
-            client_key=self.client_certificate,
+            client_key=self.client_key,
         )
 
 

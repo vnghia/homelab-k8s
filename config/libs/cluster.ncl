@@ -3,6 +3,7 @@
   ClusterSchema = {
     name | String | default = "homelab",
     endpoint | String,
+    bootstrap | String,
     version
       | {
         talos | String,

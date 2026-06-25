@@ -38,6 +38,7 @@ class HostConfig(BaseModel):
 class ClusterConfig(BaseModel):
     name: str
     endpoint: str
+    bootstrap: str
     version: VersionConfig
     images: dict[str, ImageConfig]
     hosts: dict[str, HostConfig]

@@ -30,6 +30,7 @@ class Host(ComponentResource):
 
         self._client_configuration = cluster_secrets.client_configuration
         self._machine_secrets = cluster_secrets.machine_secrets
+        self._machine_bootstrap = None
 
         self._machine_configurations: list[Output[str]] = [
             talos.machine.get_configuration_output(
@@ -100,6 +101,17 @@ class Host(ComponentResource):
             self.register_outputs({})
             return
 
+        self._machine_bootstrap = (
+            talos.machine.Bootstrap(
+                self._name,
+                opts=self._child_opts,
+                client_configuration=cluster_secrets.client_configuration.to_args(),
+                node=self._config.endpoint,
+            )
+            if cluster_config.bootstrap == self._name
+            else None
+        )
+
         if self._config.features.controlplane and self._config.features.worker:
             self.apply_patches(
                 "worker",
@@ -133,7 +145,9 @@ class Host(ComponentResource):
         self._machine_configurations.append(
             talos.machine.ConfigurationApply(
                 name,
-                opts=self._child_opts,
+                opts=self._child_opts.merge(
+                    ResourceOptions(depends_on=self._machine_bootstrap)
+                ),
                 node=self._config.endpoint,
                 client_configuration=self._client_configuration.to_args(),
                 machine_configuration_input=self._machine_configurations[-1],
