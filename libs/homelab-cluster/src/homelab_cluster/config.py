@@ -1,5 +1,8 @@
+import functools
 from enum import StrEnum, auto
 
+from homelab_common import string
+from homelab_pulumi.constant import STACK
 from homelab_types import BaseModel
 
 
@@ -29,16 +32,30 @@ class HostStageConfig(StrEnum):
 
 
 class HostConfig(BaseModel):
-    endpoint: str
     features: HostFeaturesConfig
     install: HostInstallConfig
     stage: HostStageConfig
 
 
+class ClusterDomainConfig(BaseModel):
+    prefix: str | None
+    name: str
+
+
 class ClusterConfig(BaseModel):
     name: str
-    endpoint: str
     bootstrap: str
+    domain: ClusterDomainConfig
     version: VersionConfig
     images: dict[str, ImageConfig]
     hosts: dict[str, HostConfig]
+
+    @functools.cached_property
+    def endpoint(self) -> str:
+        return f"https://{
+            string.add_prefix(
+                STACK,
+                string.add_prefix(self.domain.prefix, self.domain.name, separator='.'),
+                separator='.',
+            )
+        }:6443"

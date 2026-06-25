@@ -7,6 +7,7 @@ dependencies = [
     "pulumiverse-talos>=0.8.0",
 
     # Workspace
+    "homelab-common",
     "homelab-pulumi",
     "homelab-types",
 ]

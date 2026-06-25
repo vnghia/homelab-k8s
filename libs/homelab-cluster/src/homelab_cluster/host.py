@@ -1,7 +1,9 @@
 from typing import ClassVar
 
 import pulumiverse_talos as talos
+from homelab_common import string
 from homelab_pulumi import OutputSerializer
+from homelab_pulumi.constant import STACK
 from pulumi import ComponentResource, Input, Output, ResourceOptions
 
 from homelab_cluster.image import Image
@@ -27,6 +29,17 @@ class Host(ComponentResource):
         self._child_opts = ResourceOptions(parent=self)
 
         self._config = config
+        self._endpoint = string.add_prefix(
+            STACK,
+            string.add_prefix(
+                cluster_config.domain.prefix,
+                string.add_prefix(
+                    self._name, cluster_config.domain.name, separator="."
+                ),
+                separator=".",
+            ),
+            separator=".",
+        )
 
         self._client_configuration = cluster_secrets.client_configuration
         self._machine_secrets = cluster_secrets.machine_secrets
@@ -68,7 +81,7 @@ class Host(ComponentResource):
                     {
                         "apiVersion": "v1alpha1",
                         "kind": "HostnameConfig",
-                        "hostname": self._config.endpoint,
+                        "hostname": self._endpoint,
                         "auto": "off",
                     }
                 ),
@@ -106,7 +119,7 @@ class Host(ComponentResource):
                 self._name,
                 opts=self._child_opts,
                 client_configuration=cluster_secrets.client_configuration.to_args(),
-                node=self._config.endpoint,
+                node=self._endpoint,
             )
             if cluster_config.bootstrap == self._name
             else None
@@ -148,7 +161,7 @@ class Host(ComponentResource):
                 opts=self._child_opts.merge(
                     ResourceOptions(depends_on=self._machine_bootstrap)
                 ),
-                node=self._config.endpoint,
+                node=self._endpoint,
                 client_configuration=self._client_configuration.to_args(),
                 machine_configuration_input=self._machine_configurations[-1],
                 config_patches=patches,

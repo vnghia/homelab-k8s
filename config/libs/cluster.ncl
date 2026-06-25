@@ -1,9 +1,14 @@
+let { Nullable, .. } = import "contracts.ncl" in
 {
 
   ClusterSchema = {
-    name | String | default = "homelab",
-    endpoint | String,
+    name | String,
     bootstrap | String,
+    domain
+      | {
+        prefix | Nullable String,
+        name | String,
+      },
     version
       | {
         talos | String,
@@ -24,7 +29,6 @@
     hosts
       | {
         _ : {
-          endpoint | String,
           features
             | {
               controlplane | Bool,

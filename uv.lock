@@ -156,6 +156,7 @@ name = "homelab-cluster"
 version = "0.1.0"
 source = { editable = "libs/homelab-cluster" }
 dependencies = [
+    { name = "homelab-common" },
     { name = "homelab-pulumi" },
     { name = "homelab-types" },
     { name = "pulumi" },
@@ -164,6 +165,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "homelab-common", editable = "libs/homelab-common" },
     { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
     { name = "homelab-types", editable = "libs/homelab-types" },
     { name = "pulumi", specifier = ">=3.247.0" },
