@@ -1,9 +1,14 @@
 from collections.abc import Callable
-from typing import Any, ClassVar
+from typing import Annotated, Any, ClassVar
 
 import orjson
 import yaml_rs
 from pulumi import Output
+from pydantic import GetPydanticSchema
+
+type PydanticOutput[T] = Annotated[
+    Output[T], GetPydanticSchema(lambda _s, handler: handler(Any))
+]
 
 
 class OutputSerializer:

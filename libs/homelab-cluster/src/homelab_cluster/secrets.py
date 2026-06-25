@@ -1,17 +1,15 @@
 from typing import Self
 
 import pulumiverse_talos as talos
+from homelab_pulumi import PydanticOutput
 from homelab_types import BaseModel
 from pulumi import Output, ResourceOptions
-from pydantic import ConfigDict
 
 
 class ClientConfiguration(BaseModel):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    ca_certificate: Output[str]
-    client_certificate: Output[str]
-    client_key: Output[str]
+    ca_certificate: PydanticOutput[str]
+    client_certificate: PydanticOutput[str]
+    client_key: PydanticOutput[str]
 
     @classmethod
     def from_output(
@@ -38,10 +36,8 @@ class ClientConfiguration(BaseModel):
 
 
 class Certificate(BaseModel):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    cert: Output[str]
-    key: Output[str]
+    cert: PydanticOutput[str]
+    key: PydanticOutput[str]
 
     @classmethod
     def from_output(
@@ -60,9 +56,7 @@ class Certificate(BaseModel):
 
 
 class Key(BaseModel):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    key: Output[str]
+    key: PydanticOutput[str]
 
     @classmethod
     def from_output(cls, output: Output[talos.machine.outputs.KeyResult]) -> Self:
@@ -75,8 +69,6 @@ class Key(BaseModel):
 
 
 class Certificates(BaseModel):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
     etcd: Certificate
     k8s: Certificate
     k8s_aggregator: Certificate
@@ -116,10 +108,8 @@ class Certificates(BaseModel):
 
 
 class Cluster(BaseModel):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    id: Output[str]
-    secret: Output[str]
+    id: PydanticOutput[str]
+    secret: PydanticOutput[str]
 
     @classmethod
     def from_output(cls, output: Output[talos.machine.outputs.ClusterResult]) -> Self:
@@ -136,11 +126,9 @@ class Cluster(BaseModel):
 
 
 class KubernetesSecrets(BaseModel):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    bootstrap_token: Output[str]
-    secretbox_encryption_secret: Output[str]
-    aescbc_encryption_secret: Output[str | None]
+    bootstrap_token: PydanticOutput[str]
+    secretbox_encryption_secret: PydanticOutput[str]
+    aescbc_encryption_secret: PydanticOutput[str | None]
 
     @classmethod
     def from_output(
@@ -169,9 +157,7 @@ class KubernetesSecrets(BaseModel):
 
 
 class TrustdInfo(BaseModel):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    token: Output[str]
+    token: PydanticOutput[str]
 
     @classmethod
     def from_output(
@@ -186,8 +172,6 @@ class TrustdInfo(BaseModel):
 
 
 class MachineSecrets(BaseModel):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
     certs: Certificates
     cluster: Cluster
     secrets: KubernetesSecrets

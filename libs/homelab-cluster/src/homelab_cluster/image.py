@@ -2,7 +2,7 @@ from typing import ClassVar
 
 import pulumi
 import pulumiverse_talos as talos
-from homelab_pulumi.data import OutputSerializer
+from homelab_pulumi import OutputSerializer
 from pulumi import ComponentResource, Output, ResourceOptions
 
 from .config import ClusterConfig, ImageConfig
