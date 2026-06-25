@@ -227,7 +227,10 @@ class Secrets:
             "secrets", opts=opts, talos_version=version
         )
 
+        self.client_configuration_output = self._secrets.client_configuration
         self.client_configuration = ClientConfiguration.from_output(
-            self._secrets.client_configuration
+            self.client_configuration_output
         )
-        self.machine_secrets = MachineSecrets.from_output(self._secrets.machine_secrets)
+
+        self.machine_secrets_output = self._secrets.machine_secrets
+        self.machine_secrets = MachineSecrets.from_output(self.machine_secrets_output)

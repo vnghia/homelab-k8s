@@ -26,7 +26,6 @@ class Host(ComponentResource):
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
 
-        self._name = name
         self._config = config
 
         self._client_configuration = cluster_secrets.client_configuration

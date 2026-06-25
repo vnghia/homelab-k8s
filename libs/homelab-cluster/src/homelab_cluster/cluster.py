@@ -1,5 +1,7 @@
 from typing import ClassVar
 
+import pulumi
+import pulumiverse_talos as talos
 from pulumi import ComponentResource, ResourceOptions
 
 from homelab_cluster.image import Image
@@ -17,7 +19,7 @@ class Cluster(ComponentResource):
         self._child_opts = ResourceOptions(parent=self)
 
         self._config = config
-        self._secret = Secrets(
+        self._secrets = Secrets(
             opts=self._child_opts, version=self._config.version.talos
         )
 
@@ -34,10 +36,32 @@ class Cluster(ComponentResource):
                 config,
                 opts=self._child_opts,
                 cluster_config=self._config,
-                cluster_secrets=self._secret,
+                cluster_secrets=self._secrets,
                 cluster_images=self._images,
             )
             for name, config in self._config.hosts.items()
         }
+
+        pulumi.export(
+            "cluster.talosconfig",
+            talos.client.get_configuration_output(
+                client_configuration=self._secrets.client_configuration_output.apply(
+                    lambda client_configuration: (
+                        talos.client.GetConfigurationClientConfigurationArgs(
+                            ca_certificate=client_configuration.ca_certificate,
+                            client_certificate=client_configuration.client_certificate,
+                            client_key=client_configuration.client_key,
+                        )
+                    )
+                ),
+                cluster_name=self._name,
+                endpoints=[
+                    host._config.endpoint
+                    for host in self._hosts.values()
+                    if host._config.controlplane
+                ],
+                nodes=[host._config.endpoint for host in self._hosts.values()],
+            ).apply(lambda result: result.talos_config),
+        )
 
         self.register_outputs({})
