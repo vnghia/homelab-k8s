@@ -5,16 +5,20 @@ let versions = import "../versions/cluster.yaml" in
   },
 
   HostSchema = {
+    image | String | default = "default",
     address | String,
-    image | ImageSchema | default = {},
   },
 
-  CluserSchema = {
+  ClusterSchema = {
     name | String | default = "homelab",
     version = versions.github.cluster.release,
-    endpoint | String = "sun",
+    entrypoint | String | not_exported,
+    endpoint | String = "https://%{hosts."%{entrypoint}".address}:6443",
+    images | { _ : ImageSchema } | default = {
+      default = {
+        extensions = ["tailscale"],
+      },
+    },
     hosts | { _ : HostSchema },
   },
-
-  common_extensions = ["tailscale"],
 }

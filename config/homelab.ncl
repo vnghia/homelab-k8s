@@ -1,3 +1,1 @@
-{
-  cluster = import "cluster/cluster.ncl",
-}
+(import "cluster/cluster.ncl")

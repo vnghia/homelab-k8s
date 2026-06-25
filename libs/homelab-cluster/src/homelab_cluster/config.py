@@ -7,11 +7,12 @@ class ImageConfig(BaseModel):
 
 class HostConfig(BaseModel):
     address: str
-    image: ImageConfig
+    image: str
 
 
 class ClusterConfig(BaseModel):
     name: str
     version: str
     endpoint: str
+    images: dict[str, ImageConfig]
     hosts: dict[str, HostConfig]

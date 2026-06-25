@@ -1,4 +1,2 @@
-let cluster = import "../libs/cluster.ncl" in
-{
-  hosts = import "hosts/hosts.ncl",
-} | cluster.CluserSchema
+let { ClusterSchema, .. } = import "../libs/cluster.ncl" in
+(import "hosts/hosts.ncl") | { cluster | ClusterSchema }

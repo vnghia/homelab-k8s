@@ -1,3 +1,1 @@
-{
-  sun = import "sun.ncl",
-}
+(import "sun.ncl")

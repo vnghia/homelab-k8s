@@ -1,7 +1,7 @@
 default:
     just --list
 
-[arg("host")]
+[arg("image")]
 [group("host")]
-host-download-image host:
-    curl -L -o $PWD/dev/vms/{{ host }}/metal-amd64.iso $(pulumi stack output host.{{ host }}.image.url)
+image-download image:
+    curl -L -O --output-dir $PWD/ $(pulumi stack output cluster.image.{{ image }}.url)
