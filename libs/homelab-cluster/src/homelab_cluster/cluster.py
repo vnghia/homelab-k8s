@@ -6,7 +6,7 @@ from homelab_cluster.image import Image
 
 from .config import ClusterConfig
 from .host import Host
-from .secrets import ClusterSecrets
+from .secrets import Secrets
 
 
 class Cluster(ComponentResource):
@@ -17,8 +17,8 @@ class Cluster(ComponentResource):
         self._child_opts = ResourceOptions(parent=self)
 
         self._config = config
-        self._secret = ClusterSecrets(
-            opts=self._child_opts, version=self._config.version
+        self._secret = Secrets(
+            opts=self._child_opts, version=self._config.version.talos
         )
 
         self._images = {
@@ -34,7 +34,8 @@ class Cluster(ComponentResource):
                 config,
                 opts=self._child_opts,
                 cluster_config=self._config,
-                cluser_secrets=self._secret,
+                cluster_secrets=self._secret,
+                cluster_images=self._images,
             )
             for name, config in self._config.hosts.items()
         }

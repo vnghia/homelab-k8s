@@ -9,14 +9,20 @@
   },
 
   HostSchema = {
-    image | String | default = "default",
-    address | String,
+    endpoint | String,
+    controlplane | Bool,
+    worker | Bool,
+    install
+      | {
+        disk | String,
+        image | String | default = "default",
+      },
   },
 
   ClusterSchema = {
     name | String | default = "homelab",
-    version | VersionSchema,
     endpoint | String,
+    version | VersionSchema,
     images | { _ : ImageSchema } | default = {
       default = {
         extensions = ["tailscale"],

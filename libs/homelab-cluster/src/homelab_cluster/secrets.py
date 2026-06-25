@@ -6,7 +6,7 @@ from pulumi import Output, ResourceOptions
 from pydantic import ConfigDict
 
 
-class ClusterClientConfiguration(BaseModel):
+class ClientConfiguration(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     ca_certificate: Output[str]
@@ -37,7 +37,7 @@ class ClusterClientConfiguration(BaseModel):
         )
 
 
-class ClusterCertificate(BaseModel):
+class Certificate(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     cert: Output[str]
@@ -59,7 +59,7 @@ class ClusterCertificate(BaseModel):
         )
 
 
-class ClusterKey(BaseModel):
+class Key(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     key: Output[str]
@@ -74,33 +74,33 @@ class ClusterKey(BaseModel):
         )
 
 
-class ClusterCertificates(BaseModel):
+class Certificates(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    etcd: ClusterCertificate
-    k8s: ClusterCertificate
-    k8s_aggregator: ClusterCertificate
-    k8s_serviceaccount: ClusterKey
-    os: ClusterCertificate
+    etcd: Certificate
+    k8s: Certificate
+    k8s_aggregator: Certificate
+    k8s_serviceaccount: Key
+    os: Certificate
 
     @classmethod
     def from_output(
         cls, output: Output[talos.machine.outputs.CertificatesResult]
     ) -> Self:
         return cls(
-            etcd=ClusterCertificate.from_output(
+            etcd=Certificate.from_output(
                 output.apply(lambda certificates: certificates.etcd)
             ),
-            k8s=ClusterCertificate.from_output(
+            k8s=Certificate.from_output(
                 output.apply(lambda certificates: certificates.k8s)
             ),
-            k8s_aggregator=ClusterCertificate.from_output(
+            k8s_aggregator=Certificate.from_output(
                 output.apply(lambda certificates: certificates.k8s_aggregator)
             ),
-            k8s_serviceaccount=ClusterKey.from_output(
+            k8s_serviceaccount=Key.from_output(
                 output.apply(lambda certificates: certificates.k8s_serviceaccount)
             ),
-            os=ClusterCertificate.from_output(
+            os=Certificate.from_output(
                 output.apply(lambda certificates: certificates.os)
             ),
         )
@@ -116,6 +116,8 @@ class ClusterCertificates(BaseModel):
 
 
 class Cluster(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     id: Output[str]
     secret: Output[str]
 
@@ -133,7 +135,9 @@ class Cluster(BaseModel):
         )
 
 
-class ClusterKubernetesSecrets(BaseModel):
+class KubernetesSecrets(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     bootstrap_token: Output[str]
     secretbox_encryption_secret: Output[str]
     aescbc_encryption_secret: Output[str | None]
@@ -164,7 +168,9 @@ class ClusterKubernetesSecrets(BaseModel):
         )
 
 
-class ClusterTrustdInfo(BaseModel):
+class TrustdInfo(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     token: Output[str]
 
     @classmethod
@@ -179,27 +185,29 @@ class ClusterTrustdInfo(BaseModel):
         )
 
 
-class ClusterMachineSecrets(BaseModel):
-    certs: ClusterCertificates
+class MachineSecrets(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    certs: Certificates
     cluster: Cluster
-    secrets: ClusterKubernetesSecrets
-    trustdinfo: ClusterTrustdInfo
+    secrets: KubernetesSecrets
+    trustdinfo: TrustdInfo
 
     @classmethod
     def from_output(
         cls, output: Output[talos.machine.outputs.MachineSecretsResult]
     ) -> Self:
         return cls(
-            certs=ClusterCertificates.from_output(
+            certs=Certificates.from_output(
                 output.apply(lambda machine_secrets: machine_secrets.certs)
             ),
             cluster=Cluster.from_output(
                 output.apply(lambda machine_secrets: machine_secrets.cluster)
             ),
-            secrets=ClusterKubernetesSecrets.from_output(
+            secrets=KubernetesSecrets.from_output(
                 output.apply(lambda machine_secrets: machine_secrets.secrets)
             ),
-            trustdinfo=ClusterTrustdInfo.from_output(
+            trustdinfo=TrustdInfo.from_output(
                 output.apply(lambda machine_secrets: machine_secrets.trustdinfo)
             ),
         )
@@ -213,15 +221,13 @@ class ClusterMachineSecrets(BaseModel):
         )
 
 
-class ClusterSecrets:
+class Secrets:
     def __init__(self, *, opts: ResourceOptions | None, version: str) -> None:
         self._secrets = talos.machine.Secrets(
             "secrets", opts=opts, talos_version=version
         )
 
-        self.client_configuration = ClusterClientConfiguration.from_output(
+        self.client_configuration = ClientConfiguration.from_output(
             self._secrets.client_configuration
         )
-        self.machine_secrets = ClusterMachineSecrets.from_output(
-            self._secrets.machine_secrets
-        )
+        self.machine_secrets = MachineSecrets.from_output(self._secrets.machine_secrets)

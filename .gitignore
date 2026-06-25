@@ -283,4 +283,8 @@ $RECYCLE.BIN/
 # VMs
 dev/vms
 
+# Config
+.config/talosconfig/
+.config/kubeconfig/
+
 # End of https://www.toptal.com/developers/gitignore/api/linux,macos,python,windows,pulumi+stacks,visualstudiocode,direnv
