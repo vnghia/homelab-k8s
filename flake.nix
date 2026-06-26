@@ -33,6 +33,7 @@
 
           pulumi-bin
           talosctl
+          kubectl
 
           just
 

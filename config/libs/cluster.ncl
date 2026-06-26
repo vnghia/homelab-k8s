@@ -29,6 +29,10 @@ let { Nullable, .. } = import "contracts.ncl" in
     hosts
       | {
         _ : {
+          ips
+            | {
+              tailscale : String,
+            },
           features
             | {
               controlplane | Bool,

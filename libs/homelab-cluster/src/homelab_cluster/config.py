@@ -1,5 +1,6 @@
 import functools
 from enum import StrEnum, auto
+from ipaddress import IPv4Address
 
 from homelab_common import string
 from homelab_pulumi.constant import STACK
@@ -13,6 +14,10 @@ class VersionConfig(BaseModel):
 
 class ImageConfig(BaseModel):
     extensions: list[str]
+
+
+class HostIpsConfig(BaseModel):
+    tailscale: IPv4Address
 
 
 class HostInstallConfig(BaseModel):
@@ -32,6 +37,7 @@ class HostStageConfig(StrEnum):
 
 
 class HostConfig(BaseModel):
+    ips: HostIpsConfig
     features: HostFeaturesConfig
     install: HostInstallConfig
     stage: HostStageConfig

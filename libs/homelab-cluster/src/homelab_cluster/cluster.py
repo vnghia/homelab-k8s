@@ -41,6 +41,31 @@ class Cluster(ComponentResource):
             )
             for name, config in self._config.hosts.items()
         }
+        self._host_bootstrap = self._hosts[self._config.bootstrap]
+
+        self._controlplane_endpoints = [
+            host._endpoint
+            for host in self._hosts.values()
+            if host._config.features.controlplane
+        ]
+        self._host_endpoints = [host._endpoint for host in self._hosts.values()]
+
+        self._cluster_kubeconfig = talos.cluster.Kubeconfig(
+            self._name,
+            opts=self._child_opts.merge(
+                ResourceOptions(depends_on=self._host_bootstrap._machine_bootstrap)
+            ),
+            client_configuration=self._secrets.client_configuration_output.apply(
+                lambda client_configuration: (
+                    talos.cluster.KubeconfigClientConfigurationArgs(
+                        ca_certificate=client_configuration.ca_certificate,
+                        client_certificate=client_configuration.client_certificate,
+                        client_key=client_configuration.client_key,
+                    )
+                )
+            ),
+            node=self._hosts[self._config.bootstrap]._endpoint,
+        )
 
         pulumi.export(
             "cluster.talosconfig",
@@ -55,13 +80,10 @@ class Cluster(ComponentResource):
                     )
                 ),
                 cluster_name=self._name,
-                endpoints=[
-                    host._endpoint
-                    for host in self._hosts.values()
-                    if host._config.features.controlplane
-                ],
-                nodes=[host._endpoint for host in self._hosts.values()],
+                endpoints=self._controlplane_endpoints,
+                nodes=self._host_endpoints,
             ).apply(lambda result: result.talos_config),
         )
+        pulumi.export("cluster.kubeconfig", self._cluster_kubeconfig.kubeconfig_raw)
 
         self.register_outputs({})

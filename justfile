@@ -9,3 +9,7 @@ image-download image:
 [group("config")]
 config-dump-talos:
     pulumi stack output --show-secrets cluster.talosconfig > ".config/talosconfig/$(pulumi stack --show-name).yaml"
+
+[group("config")]
+config-dump-kube:
+    pulumi stack output --show-secrets cluster.kubeconfig > ".config/kubeconfig/$(pulumi stack --show-name).yaml"
