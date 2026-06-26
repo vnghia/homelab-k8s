@@ -30,15 +30,14 @@ class Host(ComponentResource):
         self._child_opts = ResourceOptions(parent=self)
 
         self._config = config
-        self._endpoint = string.add_prefix(
+        self._hostname = string.add_prefix(
             STACK,
-            string.add_prefix(
-                cluster_config.domain.prefix,
-                string.add_prefix(
-                    self._name, cluster_config.domain.name, separator="."
-                ),
-                separator=".",
-            ),
+            string.add_prefix(cluster_config.domain.prefix, self._name, separator="-"),
+            separator="-",
+        )
+        self._endpoint = string.add_suffix(
+            self._hostname,
+            cluster_config.domain.name,
             separator=".",
         )
 
@@ -175,17 +174,7 @@ class Host(ComponentResource):
                             ),
                             "TS_AUTH_ONCE=true",
                             "TS_TAILSCALED_EXTRA_ARGS=--no-logs-no-support",
-                            f"TS_HOSTNAME={
-                                string.add_prefix(
-                                    STACK,
-                                    string.add_prefix(
-                                        cluster_config.domain.prefix,
-                                        self._name,
-                                        separator='.',
-                                    ),
-                                    separator='.',
-                                )
-                            }",
+                            f"TS_HOSTNAME={self._hostname}",
                         ],
                     }
                 )
