@@ -12,6 +12,10 @@ Vagrant.configure("2") do |config|
     libvirt.boot "cdrom"
     libvirt.mgmt_attach = true
 
+    libvirt.cpu_mode = 'host-passthrough'
+
+    libvirt.loader = "/run/libvirt/nix-ovmf/edk2-x86_64-code.fd"
+    libvirt.nvram = pwd + "/dev/vms/nvram/edk2-i386-vars.fd"
     libvirt.tpm_type = "emulator"
     libvirt.tpm_version = "2.0"
   end
