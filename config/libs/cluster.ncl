@@ -2,6 +2,7 @@ let { Nullable, .. } = import "contracts.ncl" in
 {
   HostVolumeSchema = {
     selector | String,
+    min_size | Nullable String | default = null,
     max_size | Nullable String | default = null,
   },
 

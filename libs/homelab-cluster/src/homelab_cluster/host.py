@@ -153,6 +153,7 @@ class Host(ComponentResource):
                             "diskSelector": {
                                 "match": self._config.install.volumes.ephemeral.selector,
                             },
+                            "minSize": self._config.install.volumes.ephemeral.min_size,
                             "maxSize": self._config.install.volumes.ephemeral.max_size,
                             "grow": True,
                         },

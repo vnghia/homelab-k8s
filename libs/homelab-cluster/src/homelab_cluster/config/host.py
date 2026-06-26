@@ -10,6 +10,7 @@ class IpsConfig(BaseModel):
 
 class VolumeConfig(BaseModel):
     selector: str
+    min_size: str | None
     max_size: str | None
 
 
