@@ -4,7 +4,7 @@ import homelab_pulumi as pulumi
 import pulumiverse_talos as talos
 from pulumi import ComponentResource, Output, ResourceOptions
 
-from . import config
+from .. import config
 
 
 class Image(ComponentResource):
@@ -13,7 +13,7 @@ class Image(ComponentResource):
     def __init__(
         self,
         name: str,
-        config: config.image.Config,
+        config: config.host.image.Config,
         *,
         opts: ResourceOptions | None,
         cluster_config: config.Config,

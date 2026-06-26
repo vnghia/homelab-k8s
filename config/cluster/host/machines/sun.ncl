@@ -1,7 +1,7 @@
 {
-  cluster = {
+  cluster.host = {
     bootstrap = "sun",
-    hosts.sun = {
+    machines.sun = {
       features = {
         controlplane = true,
         worker = true,

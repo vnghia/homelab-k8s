@@ -1,6 +1,6 @@
 let { Nullable, .. } = import "contracts.ncl" in
 {
-  HostVolumeSchema = {
+  ClusterHostMachineProvisioningVolumeSchema = {
     selector | String,
     min_size | Nullable String | default = null,
     max_size | Nullable String | default = null,
@@ -8,7 +8,6 @@ let { Nullable, .. } = import "contracts.ncl" in
 
   ClusterSchema = {
     name | String,
-    bootstrap | String,
     domain
       | {
         prefix | Nullable String,
@@ -19,46 +18,50 @@ let { Nullable, .. } = import "contracts.ncl" in
         talos | String,
         k8s | String,
       },
-    images
+    host
       | {
-        _ : {
-          extensions | Array String | default = [],
-        }
-      },
-    hosts
-      | {
-        _ : {
-          ips
-            | {
-              tailscale : String,
-            },
-          features
-            | {
-              controlplane | Bool,
-              worker | Bool,
-              loadbalancer | Bool,
-            },
-          install
-            | {
-              disk | String,
-              image | String | default = "default",
-              volumes
+        bootstrap | String,
+        images
+          | {
+            _ : {
+              extensions | Array String | default = [],
+            }
+          },
+        machines
+          | {
+            _ : {
+              ips
                 | {
-                  ephemeral
-                    | HostVolumeSchema
-                    & {
-                      selector | String | default = "system_disk",
+                  tailscale : String,
+                },
+              features
+                | {
+                  controlplane | Bool,
+                  worker | Bool,
+                  loadbalancer | Bool,
+                },
+              install
+                | {
+                  disk | String,
+                  image | String | default = "default",
+                  volumes
+                    | {
+                      ephemeral
+                        | ClusterHostMachineProvisioningVolumeSchema
+                        & {
+                          selector | String | default = "system_disk",
+                        }
+                        | default
+                        = {},
                     }
                     | default
                     = {},
-                }
-                | default
-                = {},
-            },
-          stage
-            | std.enum.TagOrString
-            | [| 'initial, 'ready |],
-        }
+                },
+              stage
+                | std.enum.TagOrString
+                | [| 'initial, 'ready |],
+            }
+          },
       },
   },
 }

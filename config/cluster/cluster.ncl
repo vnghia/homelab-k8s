@@ -1,7 +1,7 @@
 let
   cluster_lib = import "../libs/cluster.ncl",
   cluster_version = import "../versions/cluster.yaml",
-  hosts = import "hosts/hosts.ncl",
+  hosts = import "host/host.ncl",
 in
 {
   cluster | cluster_lib.ClusterSchema = {
@@ -10,11 +10,6 @@ in
       talos = cluster_version.github.talos.release,
       k8s = cluster_version.github.k8s.release,
     },
-    images = {
-      default = {
-        extensions = ["tailscale"],
-      },
-    }
   }
 }
 & hosts

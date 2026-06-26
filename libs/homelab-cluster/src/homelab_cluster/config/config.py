@@ -4,21 +4,14 @@ import homelab_common as common
 import homelab_pulumi as pulumi
 from homelab_types import BaseModel
 
-from . import host, image, version
-
-
-class DomainConfig(BaseModel):
-    prefix: str | None
-    name: str
+from . import domain, host, version
 
 
 class Config(BaseModel):
     name: str
-    bootstrap: str
-    domain: DomainConfig
+    domain: domain.Config
     version: version.Config
-    images: dict[str, image.Config]
-    hosts: dict[str, host.Config]
+    host: host.Config
 
     @functools.cached_property
     def endpoint(self) -> str:
