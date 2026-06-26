@@ -1,15 +1,15 @@
 import tempfile
 from typing import Self
 
+import homelab_cluster as cluster
+import homelab_common as common
 import pulumi
-from homelab_cluster.config import ClusterConfig
-from homelab_common import constant
 from homelab_types import BaseModel
 from nickel import nickel
 
 
 class Config(BaseModel):
-    cluster: ClusterConfig
+    cluster: cluster.config.Config
 
     @classmethod
     def load(cls) -> Self:
@@ -22,7 +22,9 @@ class Config(BaseModel):
             homelab_config.flush()
 
             nickel_config = (
-                (constant.path.ROOT / "config" / "homelab.ncl").resolve(True).as_posix()
+                (common.constant.path.ROOT / "config" / "homelab.ncl")
+                .resolve(True)
+                .as_posix()
             )
 
             return cls.model_validate_json(

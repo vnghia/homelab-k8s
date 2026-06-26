@@ -1,15 +1,15 @@
 from typing import Self
 
 import pulumiverse_talos as talos
-from homelab_pulumi import PydanticOutput
+from homelab_pulumi import Output
 from homelab_types import BaseModel
-from pulumi import Output, ResourceOptions
+from pulumi import ResourceOptions
 
 
 class ClientConfiguration(BaseModel):
-    ca_certificate: PydanticOutput[str]
-    client_certificate: PydanticOutput[str]
-    client_key: PydanticOutput[str]
+    ca_certificate: Output[str]
+    client_certificate: Output[str]
+    client_key: Output[str]
 
     @classmethod
     def from_output(
@@ -36,8 +36,8 @@ class ClientConfiguration(BaseModel):
 
 
 class Certificate(BaseModel):
-    cert: PydanticOutput[str]
-    key: PydanticOutput[str]
+    cert: Output[str]
+    key: Output[str]
 
     @classmethod
     def from_output(
@@ -56,7 +56,7 @@ class Certificate(BaseModel):
 
 
 class Key(BaseModel):
-    key: PydanticOutput[str]
+    key: Output[str]
 
     @classmethod
     def from_output(cls, output: Output[talos.machine.outputs.KeyResult]) -> Self:
@@ -108,8 +108,8 @@ class Certificates(BaseModel):
 
 
 class Cluster(BaseModel):
-    id: PydanticOutput[str]
-    secret: PydanticOutput[str]
+    id: Output[str]
+    secret: Output[str]
 
     @classmethod
     def from_output(cls, output: Output[talos.machine.outputs.ClusterResult]) -> Self:
@@ -126,9 +126,9 @@ class Cluster(BaseModel):
 
 
 class KubernetesSecrets(BaseModel):
-    bootstrap_token: PydanticOutput[str]
-    secretbox_encryption_secret: PydanticOutput[str]
-    aescbc_encryption_secret: PydanticOutput[str | None]
+    bootstrap_token: Output[str]
+    secretbox_encryption_secret: Output[str]
+    aescbc_encryption_secret: Output[str | None]
 
     @classmethod
     def from_output(
@@ -157,7 +157,7 @@ class KubernetesSecrets(BaseModel):
 
 
 class TrustdInfo(BaseModel):
-    token: PydanticOutput[str]
+    token: Output[str]
 
     @classmethod
     def from_output(

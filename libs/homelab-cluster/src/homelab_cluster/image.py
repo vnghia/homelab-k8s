@@ -1,11 +1,10 @@
 from typing import ClassVar
 
-import pulumi
+import homelab_pulumi as pulumi
 import pulumiverse_talos as talos
-from homelab_pulumi import OutputSerializer
 from pulumi import ComponentResource, Output, ResourceOptions
 
-from .config import ClusterConfig, ImageConfig
+from . import config
 
 
 class Image(ComponentResource):
@@ -14,10 +13,10 @@ class Image(ComponentResource):
     def __init__(
         self,
         name: str,
-        config: ImageConfig,
+        config: config.image.Config,
         *,
         opts: ResourceOptions | None,
-        cluster_config: ClusterConfig,
+        cluster_config: config.Config,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
@@ -34,7 +33,7 @@ class Image(ComponentResource):
         self._schematic = talos.imagefactory.Schematic(
             self._name,
             opts=self._child_opts,
-            schematic=OutputSerializer.yaml(
+            schematic=pulumi.data.serialize.yaml(
                 {
                     "customization": {
                         "systemExtensions": {
@@ -45,7 +44,8 @@ class Image(ComponentResource):
                             )
                         }
                     }
-                }
+                },
+                False,
             ),
         )
 
@@ -61,7 +61,7 @@ class Image(ComponentResource):
             cluster_config.version.talos,
         )
 
-        pulumi.export(f"cluster.image.{self._name}.schematic", self.id)
-        pulumi.export(f"cluster.image.{self._name}.url", self.url)
+        pulumi.data.export(f"cluster.image.{self._name}.schematic", self.id)
+        pulumi.data.export(f"cluster.image.{self._name}.url", self.url)
 
         self.register_outputs({})
