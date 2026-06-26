@@ -110,6 +110,23 @@ class Host(ComponentResource):
             ],
         )
 
+        valid_subnets = ["192.168.0.0/16", "100.64.0.0/10"]
+        self.apply_patches(
+            "networking-multihoming",
+            [
+                OutputSerializer.yaml(
+                    {
+                        "machine": {
+                            "kubelet": {"nodeIP": {"validSubnets": valid_subnets}}
+                        }
+                    }
+                ),
+                OutputSerializer.yaml(
+                    {"cluster": {"etcd": {"advertisedSubnets": valid_subnets}}}
+                ),
+            ],
+        )
+
         if self._config.stage == HostStageConfig.INITIAL:
             self.register_outputs({})
             return
