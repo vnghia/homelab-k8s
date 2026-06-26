@@ -40,6 +40,7 @@
           vagrant
           swtpm
           rubocop
+          wlvncc
         ];
       };
     };
