@@ -9,6 +9,11 @@ in
     version = {
       talos = cluster_version.github.talos.release,
       k8s = cluster_version.github.k8s.release,
+    },
+    images = {
+      default = {
+        extensions = ["tailscale"],
+      },
     }
   }
 }

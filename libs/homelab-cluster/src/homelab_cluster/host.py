@@ -149,6 +149,13 @@ class Host(ComponentResource):
                             "provider": "luks2",
                             "keys": [{"nodeID": {}, "slot": 0, "lockToState": True}],
                         },
+                        "provisioning": {
+                            "diskSelector": {
+                                "match": self._config.install.volumes.ephemeral.selector,
+                            },
+                            "maxSize": self._config.install.volumes.ephemeral.max_size,
+                            "grow": True,
+                        },
                     },
                     True,
                 ),

@@ -8,9 +8,19 @@ class IpsConfig(BaseModel):
     tailscale: IPv4Address
 
 
+class VolumeConfig(BaseModel):
+    selector: str
+    max_size: str | None
+
+
+class InstallVolumesConfig(BaseModel):
+    ephemeral: VolumeConfig
+
+
 class InstallConfig(BaseModel):
     disk: str
     image: str
+    volumes: InstallVolumesConfig
 
 
 class FeaturesConfig(BaseModel):

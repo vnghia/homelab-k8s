@@ -1,5 +1,9 @@
 let { Nullable, .. } = import "contracts.ncl" in
 {
+  HostVolumeSchema = {
+    selector | String,
+    max_size | Nullable String | default = null,
+  },
 
   ClusterSchema = {
     name | String,
@@ -19,12 +23,6 @@ let { Nullable, .. } = import "contracts.ncl" in
         _ : {
           extensions | Array String | default = [],
         }
-      }
-      | default
-      = {
-        default = {
-          extensions = ["tailscale"],
-        },
       },
     hosts
       | {
@@ -43,6 +41,18 @@ let { Nullable, .. } = import "contracts.ncl" in
             | {
               disk | String,
               image | String | default = "default",
+              volumes
+                | {
+                  ephemeral
+                    | HostVolumeSchema
+                    & {
+                      selector | String | default = "system_disk",
+                    }
+                    | default
+                    = {},
+                }
+                | default
+                = {},
             },
           stage
             | std.enum.TagOrString
