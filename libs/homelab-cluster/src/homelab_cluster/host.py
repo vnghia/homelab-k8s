@@ -234,6 +234,7 @@ class Host(ComponentResource):
                             ),
                             "TS_AUTH_ONCE=true",
                             "TS_TAILSCALED_EXTRA_ARGS=--no-logs-no-support",
+                            "TS_ACCEPT_DNS=false",
                             f"TS_HOSTNAME={self._hostname}",
                         ],
                     },
