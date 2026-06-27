@@ -50,18 +50,17 @@ class Machine(ComponentResource):
         self._machine_secrets = cluster_secrets.machine_secrets
         self._machine_bootstrap = None
 
-        self._machine_configurations: list[Output[str]] = [
-            self.get_machine_configuration()
-        ]
+        self._machine_configuration = self.get_machine_configuration()
+        self._applied_configurations: list[talos.machine.ConfigurationApply] = []
 
-        initial_applied_configuration = self.apply_initial_patches()
-        self.apply_multihoming_patches()
+        self.apply_initial_patches()
+        self.apply_networking_initial_patches()
 
         self._machine_bootstrap = (
             talos.machine.Bootstrap(
                 self._name,
                 opts=self._child_opts.merge(
-                    ResourceOptions(depends_on=initial_applied_configuration)
+                    ResourceOptions(depends_on=self._applied_configurations[-1])
                 ),
                 client_configuration=cluster_secrets.client_configuration.to_args(),
                 node=self._endpoint,
@@ -91,25 +90,27 @@ class Machine(ComponentResource):
             lambda machine_configuration: machine_configuration.machine_configuration
         )
 
-    def apply_patches(
-        self, name: str, patches: list[Input[str]]
-    ) -> talos.machine.ConfigurationApply:
-        applied_configuration = talos.machine.ConfigurationApply(
-            name,
-            opts=self._child_opts.merge(
-                ResourceOptions(depends_on=self._machine_bootstrap)
-            ),
-            node=self._endpoint,
-            client_configuration=self._client_configuration.to_args(),
-            machine_configuration_input=self._machine_configurations[-1],
-            config_patches=patches,
+    def apply_patches(self, name: str, patches: list[Input[str]]) -> None:
+        machine_configuration = (
+            self._applied_configurations[-1].machine_configuration
+            if self._applied_configurations
+            else self._machine_configuration
         )
-        self._machine_configurations.append(applied_configuration.machine_configuration)
+        self._applied_configurations.append(
+            talos.machine.ConfigurationApply(
+                name,
+                opts=self._child_opts.merge(
+                    ResourceOptions(depends_on=self._machine_bootstrap)
+                ),
+                node=self._endpoint,
+                client_configuration=self._client_configuration.to_args(),
+                machine_configuration_input=machine_configuration,
+                config_patches=patches,
+            )
+        )
 
-        return applied_configuration
-
-    def apply_initial_patches(self) -> talos.machine.ConfigurationApply:
-        return self.apply_patches(
+    def apply_initial_patches(self) -> None:
+        self.apply_patches(
             "initial",
             [
                 pulumi.data.serialize.yaml(
@@ -169,10 +170,10 @@ class Machine(ComponentResource):
             ],
         )
 
-    def apply_multihoming_patches(self) -> talos.machine.ConfigurationApply:
+    def apply_networking_initial_patches(self) -> None:
         valid_subnets = ["192.168.0.0/16", "100.64.0.0/10"]
-        return self.apply_patches(
-            "networking-multihoming",
+        self.apply_patches(
+            "networking-initial",
             [
                 pulumi.data.serialize.yaml(
                     {
@@ -188,9 +189,9 @@ class Machine(ComponentResource):
             ],
         )
 
-    def apply_features_patches(self) -> talos.machine.ConfigurationApply | None:
+    def apply_features_patches(self) -> None:
         if self._config.features.controlplane and self._config.features.worker:
-            applied_configuration = self.apply_patches(
+            self.apply_patches(
                 "worker",
                 [
                     pulumi.data.serialize.yaml(
@@ -199,7 +200,7 @@ class Machine(ComponentResource):
                 ],
             )
             if self._config.features.loadbalancer:
-                applied_configuration = self.apply_patches(
+                self.apply_patches(
                     "loadbalancer",
                     [
                         pulumi.data.serialize.yaml(
@@ -216,11 +217,9 @@ class Machine(ComponentResource):
                         )
                     ],
                 )
-            return applied_configuration
-        return None
 
-    def apply_tailscale_patches(self) -> talos.machine.ConfigurationApply:
-        return self.apply_patches(
+    def apply_tailscale_patches(self) -> None:
+        self.apply_patches(
             "tailscale",
             [
                 pulumi.data.serialize.yaml(
