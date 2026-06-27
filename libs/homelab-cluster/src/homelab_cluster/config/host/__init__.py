@@ -5,4 +5,4 @@ from . import ips as ips
 from . import machine as machine
 from . import stage as stage
 from . import volume as volume
-from .config import Config as Config
+from .host import Config as Config
