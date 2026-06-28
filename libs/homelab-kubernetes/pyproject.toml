@@ -1,15 +1,12 @@
 [project]
-name = "homelab-cluster"
+name = "homelab-kubernetes"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
     "pulumi>=3.247.0",
-    "pulumiverse-talos>=0.8.0",
-    "pulumi-tailscale>=0.27.1",
 
     # Workspace
     "homelab-common",
-    "homelab-kubernetes",
     "homelab-pulumi",
     "homelab-types",
 ]

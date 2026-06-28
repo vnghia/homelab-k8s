@@ -8,18 +8,18 @@ let { Nullable, .. } = import "contracts.ncl" in
 
   ClusterSchema = {
     name | String,
-    domain
+    kubernetes
       | {
-        prefix | Nullable String,
-        name | String,
-      },
-    version
-      | {
-        talos | String,
-        k8s | String,
+        version | String,
+        domain
+          | {
+            prefix | Nullable String,
+            name | String,
+          },
       },
     host
       | {
+        version | String,
         bootstrap | String,
         images
           | {

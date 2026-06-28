@@ -1,5 +1,6 @@
 from typing import ClassVar
 
+import homelab_kubernetes as kubernetes
 from pulumi import ComponentResource, ResourceOptions
 
 from .. import config
@@ -17,14 +18,18 @@ class Host(ComponentResource):
         config: config.host.Config,
         *,
         opts: ResourceOptions | None,
-        cluster_config: config.Config,
+        kubernetes_config: kubernetes.config.Config,
+        cluster_name: str,
+        cluster_endpoint: str,
         cluster_secrets: Secrets,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
 
         self._config = config
-        self._cluster_config = cluster_config
+        self._kubernetes_config = kubernetes_config
+        self._cluster_name = cluster_name
+        self._cluster_endpoint = cluster_endpoint
         self._cluster_secrets = cluster_secrets
 
         self.build_images()
@@ -32,9 +37,7 @@ class Host(ComponentResource):
 
     def build_images(self) -> None:
         self._images = {
-            name: Image(
-                name, config, opts=self._child_opts, cluster_config=self._cluster_config
-            )
+            name: Image(name, config, opts=self._child_opts, host_config=self._config)
             for name, config in self._config.images.items()
         }
 
@@ -46,7 +49,9 @@ class Host(ComponentResource):
                 opts=self._child_opts,
                 host_config=self._config,
                 host_images=self._images,
-                cluster_config=self._cluster_config,
+                kubernetes_config=self._kubernetes_config,
+                cluster_name=self._cluster_name,
+                cluster_endpoint=self._cluster_endpoint,
                 cluster_secrets=self._cluster_secrets,
             )
             for name, config in self._config.machines.items()

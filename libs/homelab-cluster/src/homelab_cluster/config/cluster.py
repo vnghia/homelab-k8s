@@ -1,16 +1,16 @@
 import functools
 
 import homelab_common as common
+import homelab_kubernetes as kubernetes
 import homelab_pulumi as pulumi
 from homelab_types import BaseModel
 
-from . import domain, host, version
+from . import host
 
 
 class Config(BaseModel):
     name: str
-    domain: domain.Config
-    version: version.Config
+    kubernetes: kubernetes.config.Config
     host: host.Config
 
     @functools.cached_property
@@ -19,7 +19,9 @@ class Config(BaseModel):
             common.string.add_prefix(
                 pulumi.constant.STACK,
                 common.string.add_prefix(
-                    self.domain.prefix, self.domain.name, separator='.'
+                    self.kubernetes.domain.prefix,
+                    self.kubernetes.domain.name,
+                    separator='.',
                 ),
                 separator='.',
             )

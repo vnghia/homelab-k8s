@@ -16,7 +16,7 @@ class Image(ComponentResource):
         config: config.host.image.Config,
         *,
         opts: ResourceOptions | None,
-        cluster_config: config.Config,
+        host_config: config.host.Config,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
@@ -24,7 +24,7 @@ class Image(ComponentResource):
         self._config = config
 
         self._extensions = talos.imagefactory.get_extensions_versions_output(
-            talos_version=cluster_config.version.talos,
+            talos_version=host_config.version,
             filters=talos.imagefactory.GetExtensionsVersionsFiltersArgs(
                 names=self._config.extensions
             ),
@@ -53,12 +53,12 @@ class Image(ComponentResource):
         self.url = Output.format(
             "https://factory.talos.dev/image/{}/{}/metal-amd64.iso",
             self._schematic.id,
-            cluster_config.version.talos,
+            host_config.version,
         )
         self.installer = Output.format(
             "factory.talos.dev/installer-secureboot/{}:{}",
             self._schematic.id,
-            cluster_config.version.talos,
+            host_config.version,
         )
 
         pulumi.data.export(f"cluster.image.{self._name}.schematic", self.id)

@@ -1,6 +1,7 @@
 from typing import ClassVar
 
 import homelab_common as common
+import homelab_kubernetes as kubernetes
 import homelab_pulumi as pulumi
 import pulumi_tailscale as tailscale
 import pulumiverse_talos as talos
@@ -22,7 +23,9 @@ class Machine(ComponentResource):
         opts: ResourceOptions | None,
         host_config: config.host.Config,
         host_images: dict[str, Image],
-        cluster_config: config.Config,
+        kubernetes_config: kubernetes.config.Config,
+        cluster_name: str,
+        cluster_endpoint: str,
         cluster_secrets: Secrets,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
@@ -31,18 +34,20 @@ class Machine(ComponentResource):
         self._config = config
         self._host_config = host_config
         self._host_images = host_images
-        self._cluster_config = cluster_config
+        self._kubernetes_config = kubernetes_config
+        self._cluster_name = cluster_name
+        self._cluster_endpoint = cluster_endpoint
 
         self._hostname = common.string.add_prefix(
             pulumi.constant.STACK,
             common.string.add_prefix(
-                self._cluster_config.domain.prefix, self._name, separator="-"
+                self._kubernetes_config.domain.prefix, self._name, separator="-"
             ),
             separator="-",
         )
         self._endpoint = common.string.add_suffix(
             self._hostname,
-            self._cluster_config.domain.name,
+            self._kubernetes_config.domain.name,
             separator=".",
         )
 
@@ -80,12 +85,12 @@ class Machine(ComponentResource):
 
     def get_machine_configuration(self) -> Output[str]:
         return talos.machine.get_configuration_output(
-            cluster_endpoint=self._cluster_config.endpoint,
-            cluster_name=self._cluster_config.name,
+            cluster_name=self._cluster_name,
+            cluster_endpoint=self._cluster_endpoint,
             machine_type="controlplane" if self._config.features.worker else "worker",
             machine_secrets=self._machine_secrets.to_args(),
-            talos_version=self._cluster_config.version.talos,
-            kubernetes_version=self._cluster_config.version.k8s,
+            talos_version=self._host_config.version,
+            kubernetes_version=self._kubernetes_config.version,
         ).apply(
             lambda machine_configuration: machine_configuration.machine_configuration
         )

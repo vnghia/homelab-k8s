@@ -29,7 +29,7 @@ class Cluster(ComponentResource):
 
     def build_secrets(self) -> None:
         self._secrets = Secrets(
-            opts=self._child_opts, version=self._config.version.talos
+            opts=self._child_opts, version=self._config.host.version
         )
 
     def build_host(self) -> None:
@@ -37,7 +37,9 @@ class Cluster(ComponentResource):
             self._config.name,
             self._config.host,
             opts=self._child_opts,
-            cluster_config=self._config,
+            kubernetes_config=self._config.kubernetes,
+            cluster_name=self._name,
+            cluster_endpoint=self._config.endpoint,
             cluster_secrets=self._secrets,
         )
 
