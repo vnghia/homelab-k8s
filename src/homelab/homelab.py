@@ -7,4 +7,4 @@ class Homelab:
     def __init__(self) -> None:
         self._context = context.Context()
         self._config = config.Config.load(self._context)
-        self._cluster = cluster.Cluster(self._config.cluster, opts=None)
+        self._cluster = cluster.Cluster(self._context, self._config.cluster, opts=None)

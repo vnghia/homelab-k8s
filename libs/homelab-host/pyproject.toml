@@ -9,6 +9,7 @@ dependencies = [
 
     # Workspace
     "homelab-common",
+    "homelab-context",
     "homelab-kubernetes",
     "homelab-model",
     "homelab-pulumi",

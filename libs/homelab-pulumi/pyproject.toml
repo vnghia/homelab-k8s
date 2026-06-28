@@ -6,6 +6,9 @@ dependencies = [
     "orjson>=3.11.9",
     "pulumi>=3.247.0",
     "yaml-rs>=0.1.4",
+
+    # Workspace
+    "homelab-context",
 ]
 
 [build-system]

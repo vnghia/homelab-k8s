@@ -3,6 +3,7 @@ from typing import Any
 
 import orjson
 import yaml_rs
+from homelab_context import Context
 from pulumi import Output
 
 DEFAULT_LOADER: Callable[[str], Any] = orjson.loads
@@ -10,9 +11,10 @@ DEFAULT_DUMPER: Callable[[Any], str] = lambda data: orjson.dumps(data).decode()
 
 
 def serialize(
+    context: Context,
     data: Any,
-    direct: bool,
     *,
+    direct: bool,
     loader: Callable[[str], Any] | None = None,
     dumper: Callable[[Any], str] | None = None,
 ) -> str | Output[str]:
@@ -24,5 +26,11 @@ def serialize(
     return Output.json_dumps(data).apply(lambda data: dumper_(loader_(data)))
 
 
-def yaml(data: Any, direct: bool) -> str | Output[str]:
-    return serialize(data, direct, dumper=yaml_rs.dumps)
+def yaml(
+    context: Context,
+    data: Any,
+    *,
+    direct: bool,
+    resolve: bool = False,
+) -> str | Output[str]:
+    return serialize(context, data, direct=direct, dumper=yaml_rs.dumps)

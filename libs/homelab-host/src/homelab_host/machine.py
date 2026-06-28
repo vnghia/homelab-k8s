@@ -5,6 +5,7 @@ import homelab_kubernetes as kubernetes
 import homelab_pulumi as pulumi
 import pulumi_tailscale as tailscale
 import pulumiverse_talos as talos
+from homelab_context import Context
 from pulumi import ComponentResource, Input, Output, ResourceOptions
 
 from . import config
@@ -17,6 +18,7 @@ class Machine(ComponentResource):
 
     def __init__(
         self,
+        context: Context,
         name: str,
         config: config.machine.Config,
         *,
@@ -31,6 +33,7 @@ class Machine(ComponentResource):
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
 
+        self._context = context
         self._config = config
         self._host_config = host_config
         self._host_images = host_images
@@ -120,6 +123,7 @@ class Machine(ComponentResource):
             "initial",
             [
                 pulumi.data.serialize.yaml(
+                    self._context,
                     {
                         "machine": {
                             "install": {
@@ -130,18 +134,20 @@ class Machine(ComponentResource):
                             }
                         }
                     },
-                    False,
+                    direct=False,
                 ),
                 pulumi.data.serialize.yaml(
+                    self._context,
                     {
                         "apiVersion": "v1alpha1",
                         "kind": "HostnameConfig",
                         "hostname": self._endpoint,
                         "auto": "off",
                     },
-                    True,
+                    direct=True,
                 ),
                 pulumi.data.serialize.yaml(
+                    self._context,
                     {
                         "apiVersion": "v1alpha1",
                         "kind": "VolumeConfig",
@@ -151,9 +157,10 @@ class Machine(ComponentResource):
                             "keys": [{"nodeID": {}, "slot": 0}],
                         },
                     },
-                    True,
+                    direct=True,
                 ),
                 pulumi.data.serialize.yaml(
+                    self._context,
                     {
                         "apiVersion": "v1alpha1",
                         "kind": "VolumeConfig",
@@ -171,7 +178,7 @@ class Machine(ComponentResource):
                             "grow": True,
                         },
                     },
-                    True,
+                    direct=True,
                 ),
             ],
         )
@@ -182,15 +189,18 @@ class Machine(ComponentResource):
             "networking-initial",
             [
                 pulumi.data.serialize.yaml(
+                    self._context,
                     {
                         "machine": {
                             "kubelet": {"nodeIP": {"validSubnets": valid_subnets}}
                         }
                     },
-                    True,
+                    direct=True,
                 ),
                 pulumi.data.serialize.yaml(
-                    {"cluster": {"etcd": {"advertisedSubnets": valid_subnets}}}, True
+                    self._context,
+                    {"cluster": {"etcd": {"advertisedSubnets": valid_subnets}}},
+                    direct=True,
                 ),
             ],
         )
@@ -202,6 +212,7 @@ class Machine(ComponentResource):
                 "networking-gateway-api",
                 [
                     pulumi.data.serialize.yaml(
+                        self._context,
                         {
                             "cluster": {
                                 "extraManifests": [
@@ -209,7 +220,7 @@ class Machine(ComponentResource):
                                 ]
                             }
                         },
-                        True,
+                        direct=True,
                     ),
                 ],
             )
@@ -220,7 +231,9 @@ class Machine(ComponentResource):
                 "worker",
                 [
                     pulumi.data.serialize.yaml(
-                        {"cluster": {"allowSchedulingOnControlPlanes": True}}, True
+                        self._context,
+                        {"cluster": {"allowSchedulingOnControlPlanes": True}},
+                        direct=True,
                     )
                 ],
             )
@@ -229,6 +242,7 @@ class Machine(ComponentResource):
                     "loadbalancer",
                     [
                         pulumi.data.serialize.yaml(
+                            self._context,
                             {
                                 "machine": {
                                     "nodeLabels": {
@@ -238,7 +252,7 @@ class Machine(ComponentResource):
                                     }
                                 }
                             },
-                            True,
+                            direct=True,
                         )
                     ],
                 )
@@ -248,6 +262,7 @@ class Machine(ComponentResource):
             "tailscale",
             [
                 pulumi.data.serialize.yaml(
+                    self._context,
                     {
                         "apiVersion": "v1alpha1",
                         "kind": "ExtensionServiceConfig",
@@ -270,7 +285,7 @@ class Machine(ComponentResource):
                             f"TS_HOSTNAME={self._hostname}",
                         ],
                     },
-                    False,
+                    direct=False,
                 )
             ],
         )

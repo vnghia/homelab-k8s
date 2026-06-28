@@ -2,6 +2,7 @@ from typing import ClassVar
 
 import homelab_pulumi as pulumi
 import pulumiverse_talos as talos
+from homelab_context import Context
 from pulumi import ComponentResource, Output, ResourceOptions
 
 from . import config
@@ -12,6 +13,7 @@ class Image(ComponentResource):
 
     def __init__(
         self,
+        context: Context,
         name: str,
         config: config.image.Config,
         *,
@@ -34,6 +36,7 @@ class Image(ComponentResource):
             self._name,
             opts=self._child_opts,
             schematic=pulumi.data.serialize.yaml(
+                context,
                 {
                     "customization": {
                         "systemExtensions": {
@@ -45,7 +48,7 @@ class Image(ComponentResource):
                         }
                     }
                 },
-                False,
+                direct=False,
             ),
         )
 
