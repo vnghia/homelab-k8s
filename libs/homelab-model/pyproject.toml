@@ -1,17 +1,10 @@
 [project]
-name = "homelab-cluster"
+name = "homelab-model"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
-    "pulumi>=3.247.0",
-    "pulumiverse-talos>=0.8.0",
-
     # Workspace
-    "homelab-common",
-    "homelab-host",
-    "homelab-kubernetes",
-    "homelab-model",
-    "homelab-pulumi",
+    "homelab-types",
 ]
 
 [build-system]
@@ -20,3 +13,5 @@ build-backend = "uv_build"
 
 [tool.ruff]
 extend = "../../pyproject.toml"
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]

@@ -9,7 +9,7 @@ dependencies = [
     "homelab-cluster",
     "homelab-common",
     "homelab-context",
-    "homelab-types",
+    "homelab-model",
 ]
 
 [build-system]

@@ -4,7 +4,7 @@ import homelab_common as common
 import homelab_host as host
 import homelab_kubernetes as kubernetes
 import homelab_pulumi as pulumi
-from homelab_types import BaseModel
+from homelab_model import BaseModel
 
 
 class Config(BaseModel):

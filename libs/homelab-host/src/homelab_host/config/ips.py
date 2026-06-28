@@ -1,6 +1,6 @@
 from ipaddress import IPv4Address
 
-from homelab_types import BaseModel
+from homelab_model import BaseModel
 
 
 class Config(BaseModel):

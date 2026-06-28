@@ -1,8 +1,8 @@
 from typing import Self
 
 import pulumiverse_talos as talos
+from homelab_model import BaseModel
 from homelab_pulumi import Output
-from homelab_types import BaseModel
 from pulumi import ResourceOptions
 
 

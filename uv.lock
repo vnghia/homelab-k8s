@@ -15,6 +15,7 @@ members = [
     "homelab-context",
     "homelab-host",
     "homelab-kubernetes",
+    "homelab-model",
     "homelab-pulumi",
     "homelab-types",
 ]
@@ -164,8 +165,8 @@ dependencies = [
     { name = "homelab-common" },
     { name = "homelab-host" },
     { name = "homelab-kubernetes" },
+    { name = "homelab-model" },
     { name = "homelab-pulumi" },
-    { name = "homelab-types" },
     { name = "pulumi" },
     { name = "pulumiverse-talos" },
 ]
@@ -175,8 +176,8 @@ requires-dist = [
     { name = "homelab-common", editable = "libs/homelab-common" },
     { name = "homelab-host", editable = "libs/homelab-host" },
     { name = "homelab-kubernetes", editable = "libs/homelab-kubernetes" },
+    { name = "homelab-model", editable = "libs/homelab-model" },
     { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
-    { name = "homelab-types", editable = "libs/homelab-types" },
     { name = "pulumi", specifier = ">=3.247.0" },
     { name = "pulumiverse-talos", specifier = ">=0.8.0" },
 ]
@@ -194,7 +195,7 @@ dependencies = [
     { name = "homelab-cluster" },
     { name = "homelab-common" },
     { name = "homelab-context" },
-    { name = "homelab-types" },
+    { name = "homelab-model" },
     { name = "py-nickel" },
 ]
 
@@ -203,7 +204,7 @@ requires-dist = [
     { name = "homelab-cluster", editable = "libs/homelab-cluster" },
     { name = "homelab-common", editable = "libs/homelab-common" },
     { name = "homelab-context", editable = "libs/homelab-context" },
-    { name = "homelab-types", editable = "libs/homelab-types" },
+    { name = "homelab-model", editable = "libs/homelab-model" },
     { name = "py-nickel", specifier = ">=1.17.0" },
 ]
 
@@ -225,8 +226,8 @@ source = { editable = "libs/homelab-host" }
 dependencies = [
     { name = "homelab-common" },
     { name = "homelab-kubernetes" },
+    { name = "homelab-model" },
     { name = "homelab-pulumi" },
-    { name = "homelab-types" },
     { name = "pulumi" },
     { name = "pulumi-tailscale" },
     { name = "pulumiverse-talos" },
@@ -236,8 +237,8 @@ dependencies = [
 requires-dist = [
     { name = "homelab-common", editable = "libs/homelab-common" },
     { name = "homelab-kubernetes", editable = "libs/homelab-kubernetes" },
+    { name = "homelab-model", editable = "libs/homelab-model" },
     { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
-    { name = "homelab-types", editable = "libs/homelab-types" },
     { name = "pulumi", specifier = ">=3.247.0" },
     { name = "pulumi-tailscale", specifier = ">=0.27.1" },
     { name = "pulumiverse-talos", specifier = ">=0.8.0" },
@@ -249,18 +250,29 @@ version = "0.1.0"
 source = { editable = "libs/homelab-kubernetes" }
 dependencies = [
     { name = "homelab-common" },
+    { name = "homelab-model" },
     { name = "homelab-pulumi" },
-    { name = "homelab-types" },
     { name = "pulumi" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "homelab-common", editable = "libs/homelab-common" },
+    { name = "homelab-model", editable = "libs/homelab-model" },
     { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
-    { name = "homelab-types", editable = "libs/homelab-types" },
     { name = "pulumi", specifier = ">=3.247.0" },
 ]
+
+[[package]]
+name = "homelab-model"
+version = "0.1.0"
+source = { editable = "libs/homelab-model" }
+dependencies = [
+    { name = "homelab-types" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "homelab-types", editable = "libs/homelab-types" }]
 
 [[package]]
 name = "homelab-pulumi"

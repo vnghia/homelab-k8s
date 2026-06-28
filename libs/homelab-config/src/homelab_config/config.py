@@ -4,7 +4,7 @@ from typing import Self
 import homelab_cluster as cluster
 import homelab_common as common
 import homelab_context as context
-from homelab_types import BaseModel
+from homelab_model import BaseModel
 from nickel import nickel
 
 

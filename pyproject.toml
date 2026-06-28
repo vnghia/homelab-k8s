@@ -51,6 +51,7 @@ homelab-config = { workspace = true }
 homelab-context = { workspace = true }
 homelab-host = { workspace = true }
 homelab-kubernetes = { workspace = true }
+homelab-model = { workspace = true }
 homelab-pulumi = { workspace = true }
 homelab-types = { workspace = true }
 
@@ -66,6 +67,7 @@ root = [
     "./libs/homelab-context/src",
     "./libs/homelab-host/src",
     "./libs/homelab-kubernetes/src",
+    "./libs/homelab-model/src",
     "./libs/homelab-pulumi/src",
     "./libs/homelab-types/src",
 ]
@@ -105,5 +107,7 @@ ignore = [
 preview = true
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
-"pydantic.BaseModel".msg = "Use homelab_types.BaseModel instead"
-"pydantic.RootModel".msg = "Use homelab_types.RootModel instead"
+"pydantic.BaseModel".msg = "Use homelab_model.BaseModel instead"
+"pydantic.RootModel".msg = "Use homelab_model.RootModel instead"
+"homelab_types.BaseModel".msg = "Use homelab_model.BaseModel instead"
+"homelab_types.RootModel".msg = "Use homelab_model.RootModel instead"
