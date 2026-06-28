@@ -16,6 +16,16 @@ let { Nullable, .. } = import "contracts.ncl" in
             prefix | Nullable String,
             name | String,
           },
+        networking
+          | {
+            gateway
+              | {
+                version | String,
+                type
+                  | std.enum.TagOrString
+                  | [| 'standard, 'experimental |],
+              },
+          }
       },
     host
       | {

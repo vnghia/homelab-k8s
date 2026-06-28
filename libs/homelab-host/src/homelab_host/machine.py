@@ -60,6 +60,7 @@ class Machine(ComponentResource):
 
         self.apply_initial_patches()
         self.apply_networking_initial_patches()
+        self.apply_networking_gateway_api_patches()
 
         self._machine_bootstrap = (
             talos.machine.Bootstrap(
@@ -193,6 +194,25 @@ class Machine(ComponentResource):
                 ),
             ],
         )
+
+    def apply_networking_gateway_api_patches(self) -> None:
+        if self._config.features.controlplane:
+            gateway_config = self._kubernetes_config.networking.gateway
+            self.apply_patches(
+                "networking-gateway-api",
+                [
+                    pulumi.data.serialize.yaml(
+                        {
+                            "cluster": {
+                                "extraManifests": [
+                                    f"https://github.com/kubernetes-sigs/gateway-api/releases/download/{gateway_config.version}/{gateway_config.type}-install.yaml"
+                                ]
+                            }
+                        },
+                        True,
+                    ),
+                ],
+            )
 
     def apply_features_patches(self) -> None:
         if self._config.features.controlplane and self._config.features.worker:
