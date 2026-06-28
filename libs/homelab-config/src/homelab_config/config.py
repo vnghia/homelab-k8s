@@ -3,7 +3,7 @@ from typing import Self
 
 import homelab_cluster as cluster
 import homelab_common as common
-import pulumi
+import homelab_context as context
 from homelab_types import BaseModel
 from nickel import nickel
 
@@ -12,13 +12,11 @@ class Config(BaseModel):
     cluster: cluster.config.Config
 
     @classmethod
-    def load(cls) -> Self:
-        pulumi_config = pulumi.Config()
-
+    def load(cls, context: context.Context) -> Self:
         with tempfile.NamedTemporaryFile(
             mode="w+", encoding="utf-8", suffix=".json"
         ) as homelab_config:
-            homelab_config.write(pulumi_config.require("config"))
+            homelab_config.write(context.pulumi.require("config"))
             homelab_config.flush()
 
             nickel_config = (

@@ -1,9 +1,10 @@
+import homelab_cluster as cluster
 import homelab_config as config
-from homelab_cluster.cluster import Cluster
+import homelab_context as context
 
 
 class Homelab:
     def __init__(self) -> None:
-        self._config = config.Config.load()
-
-        self._cluster = Cluster(self._config.cluster, opts=None)
+        self._context = context.Context()
+        self._config = config.Config.load(self._context)
+        self._cluster = cluster.Cluster(self._config.cluster, opts=None)

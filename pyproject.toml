@@ -9,8 +9,9 @@ dependencies = [
     "pydantic>=2.13.4",
 
     # Workspace
-    "homelab-cluster",
     "homelab-config",
+    "homelab-context",
+    "homelab-cluster",
 ]
 
 [build-system]
@@ -47,6 +48,7 @@ members = ["libs/homelab-*"]
 homelab-cluster = { workspace = true }
 homelab-common = { workspace = true }
 homelab-config = { workspace = true }
+homelab-context = { workspace = true }
 homelab-host = { workspace = true }
 homelab-kubernetes = { workspace = true }
 homelab-pulumi = { workspace = true }
@@ -61,6 +63,7 @@ root = [
     "./libs/homelab-cluster/src",
     "./libs/homelab-common/src",
     "./libs/homelab-config/src",
+    "./libs/homelab-context/src",
     "./libs/homelab-host/src",
     "./libs/homelab-kubernetes/src",
     "./libs/homelab-pulumi/src",
