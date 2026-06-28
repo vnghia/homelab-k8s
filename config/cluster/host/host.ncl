@@ -1,6 +1,6 @@
 {
   cluster.host = {
-    # renovate: datasource=github-releases depName=talos packageName=siderolabs/talos
+    # renovate: datasource=github-releases packageName=siderolabs/talos
     version = "v1.13.5",
   },
 }
