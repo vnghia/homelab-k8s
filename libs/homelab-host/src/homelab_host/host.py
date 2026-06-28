@@ -3,7 +3,7 @@ from typing import ClassVar
 import homelab_kubernetes as kubernetes
 from pulumi import ComponentResource, ResourceOptions
 
-from .. import config
+from . import config
 from .image import Image
 from .machine import Machine
 from .secrets import Secrets
@@ -15,7 +15,7 @@ class Host(ComponentResource):
     def __init__(
         self,
         name: str,
-        config: config.host.Config,
+        config: config.Config,
         *,
         opts: ResourceOptions | None,
         kubernetes_config: kubernetes.config.Config,

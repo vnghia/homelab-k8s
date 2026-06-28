@@ -12,6 +12,7 @@ members = [
     "homelab-cluster",
     "homelab-common",
     "homelab-config",
+    "homelab-host",
     "homelab-kubernetes",
     "homelab-pulumi",
     "homelab-types",
@@ -158,22 +159,22 @@ version = "0.1.0"
 source = { editable = "libs/homelab-cluster" }
 dependencies = [
     { name = "homelab-common" },
+    { name = "homelab-host" },
     { name = "homelab-kubernetes" },
     { name = "homelab-pulumi" },
     { name = "homelab-types" },
     { name = "pulumi" },
-    { name = "pulumi-tailscale" },
     { name = "pulumiverse-talos" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "homelab-common", editable = "libs/homelab-common" },
+    { name = "homelab-host", editable = "libs/homelab-host" },
     { name = "homelab-kubernetes", editable = "libs/homelab-kubernetes" },
     { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
     { name = "homelab-types", editable = "libs/homelab-types" },
     { name = "pulumi", specifier = ">=3.247.0" },
-    { name = "pulumi-tailscale", specifier = ">=0.27.1" },
     { name = "pulumiverse-talos", specifier = ">=0.8.0" },
 ]
 
@@ -201,6 +202,31 @@ requires-dist = [
     { name = "homelab-types", editable = "libs/homelab-types" },
     { name = "pulumi", specifier = ">=3.247.0" },
     { name = "py-nickel", specifier = ">=1.17.0" },
+]
+
+[[package]]
+name = "homelab-host"
+version = "0.1.0"
+source = { editable = "libs/homelab-host" }
+dependencies = [
+    { name = "homelab-common" },
+    { name = "homelab-kubernetes" },
+    { name = "homelab-pulumi" },
+    { name = "homelab-types" },
+    { name = "pulumi" },
+    { name = "pulumi-tailscale" },
+    { name = "pulumiverse-talos" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "homelab-common", editable = "libs/homelab-common" },
+    { name = "homelab-kubernetes", editable = "libs/homelab-kubernetes" },
+    { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
+    { name = "homelab-types", editable = "libs/homelab-types" },
+    { name = "pulumi", specifier = ">=3.247.0" },
+    { name = "pulumi-tailscale", specifier = ">=0.27.1" },
+    { name = "pulumiverse-talos", specifier = ">=0.8.0" },
 ]
 
 [[package]]

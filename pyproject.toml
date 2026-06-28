@@ -47,6 +47,7 @@ members = ["libs/homelab-*"]
 homelab-cluster = { workspace = true }
 homelab-common = { workspace = true }
 homelab-config = { workspace = true }
+homelab-host = { workspace = true }
 homelab-kubernetes = { workspace = true }
 homelab-pulumi = { workspace = true }
 homelab-types = { workspace = true }
@@ -60,6 +61,7 @@ root = [
     "./libs/homelab-cluster/src",
     "./libs/homelab-common/src",
     "./libs/homelab-config/src",
+    "./libs/homelab-host/src",
     "./libs/homelab-kubernetes/src",
     "./libs/homelab-pulumi/src",
     "./libs/homelab-types/src",

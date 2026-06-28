@@ -1,3 +1,4 @@
+from . import config as config
 from . import image as image
 from . import machine as machine
 from . import secrets as secrets

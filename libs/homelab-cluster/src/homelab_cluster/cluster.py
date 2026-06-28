@@ -1,11 +1,11 @@
 from typing import ClassVar
 
+import homelab_host as host
 import homelab_pulumi as pulumi
 import pulumiverse_talos as talos
 from pulumi import ComponentResource, ResourceOptions
 
 from . import config
-from .host import Host
 
 
 class Cluster(ComponentResource):
@@ -26,7 +26,7 @@ class Cluster(ComponentResource):
         self.register_outputs({})
 
     def build_host(self) -> None:
-        self._host = Host(
+        self._host = host.Host(
             self._config.name,
             self._config.host,
             opts=self._child_opts,

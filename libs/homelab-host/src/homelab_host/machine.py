@@ -7,7 +7,7 @@ import pulumi_tailscale as tailscale
 import pulumiverse_talos as talos
 from pulumi import ComponentResource, Input, Output, ResourceOptions
 
-from .. import config
+from . import config
 from .image import Image
 from .secrets import Secrets
 
@@ -18,10 +18,10 @@ class Machine(ComponentResource):
     def __init__(
         self,
         name: str,
-        config: config.host.machine.Config,
+        config: config.machine.Config,
         *,
         opts: ResourceOptions | None,
-        host_config: config.host.Config,
+        host_config: config.Config,
         host_secrets: Secrets,
         host_images: dict[str, Image],
         kubernetes_config: kubernetes.config.Config,
