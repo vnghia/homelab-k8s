@@ -25,6 +25,12 @@ let { Nullable, .. } = import "contracts.ncl" in
                   | std.enum.TagOrString
                   | [| 'standard, 'experimental |],
               },
+            cilium
+              | {
+                namespace | String,
+                manifests
+                  | Array { _ : Dyn },
+              },
           }
       },
     host

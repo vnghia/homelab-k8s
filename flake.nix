@@ -30,10 +30,13 @@
         packages = with pkgs; [
           uv
           nickel
+          jq
 
           pulumi-bin
           talosctl
           kubectl
+          kubernetes-helm
+          cilium-cli
 
           just
 

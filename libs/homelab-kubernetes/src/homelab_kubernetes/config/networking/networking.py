@@ -1,7 +1,8 @@
 from homelab_model import BaseModel
 
-from . import gateway
+from . import cilium, gateway
 
 
 class Config(BaseModel):
     gateway: gateway.Config
+    cilium: cilium.Config
