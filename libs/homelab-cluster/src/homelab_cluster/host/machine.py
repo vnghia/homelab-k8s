@@ -8,8 +8,8 @@ import pulumiverse_talos as talos
 from pulumi import ComponentResource, Input, Output, ResourceOptions
 
 from .. import config
-from ..secrets import Secrets
 from .image import Image
+from .secrets import Secrets
 
 
 class Machine(ComponentResource):
@@ -22,11 +22,11 @@ class Machine(ComponentResource):
         *,
         opts: ResourceOptions | None,
         host_config: config.host.Config,
+        host_secrets: Secrets,
         host_images: dict[str, Image],
         kubernetes_config: kubernetes.config.Config,
         cluster_name: str,
         cluster_endpoint: str,
-        cluster_secrets: Secrets,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
@@ -51,8 +51,8 @@ class Machine(ComponentResource):
             separator=".",
         )
 
-        self._client_configuration = cluster_secrets.client_configuration
-        self._machine_secrets = cluster_secrets.machine_secrets
+        self._client_configuration = host_secrets.client_configuration
+        self._machine_secrets = host_secrets.machine_secrets
         self._machine_bootstrap = None
 
         self._machine_configuration = self.get_machine_configuration()
@@ -67,7 +67,7 @@ class Machine(ComponentResource):
                 opts=self._child_opts.merge(
                     ResourceOptions(depends_on=self._applied_configurations[-1])
                 ),
-                client_configuration=cluster_secrets.client_configuration.to_args(),
+                client_configuration=self._client_configuration.to_args(),
                 node=self._endpoint,
             )
             if self._host_config.bootstrap == self._name

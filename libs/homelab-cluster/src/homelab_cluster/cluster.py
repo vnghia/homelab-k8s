@@ -6,7 +6,6 @@ from pulumi import ComponentResource, ResourceOptions
 
 from . import config
 from .host import Host
-from .secrets import Secrets
 
 
 class Cluster(ComponentResource):
@@ -18,7 +17,6 @@ class Cluster(ComponentResource):
 
         self._config = config
 
-        self.build_secrets()
         self.build_host()
 
         self.build_config()
@@ -26,11 +24,6 @@ class Cluster(ComponentResource):
         pulumi.data.export("cluster.kubeconfig", self._kubeconfig)
 
         self.register_outputs({})
-
-    def build_secrets(self) -> None:
-        self._secrets = Secrets(
-            opts=self._child_opts, version=self._config.host.version
-        )
 
     def build_host(self) -> None:
         self._host = Host(
@@ -40,7 +33,6 @@ class Cluster(ComponentResource):
             kubernetes_config=self._config.kubernetes,
             cluster_name=self._name,
             cluster_endpoint=self._config.endpoint,
-            cluster_secrets=self._secrets,
         )
 
     def build_config(self) -> None:
@@ -49,7 +41,7 @@ class Cluster(ComponentResource):
             opts=self._child_opts.merge(
                 ResourceOptions(depends_on=self._host.bootstrap._machine_bootstrap)
             ),
-            client_configuration=self._secrets.client_configuration_output.apply(
+            client_configuration=self._host._secrets.client_configuration_output.apply(
                 lambda client_configuration: (
                     talos.cluster.KubeconfigClientConfigurationArgs(
                         ca_certificate=client_configuration.ca_certificate,
@@ -62,7 +54,7 @@ class Cluster(ComponentResource):
         ).kubeconfig_raw
 
         self._talosconfig = talos.client.get_configuration_output(
-            client_configuration=self._secrets.client_configuration_output.apply(
+            client_configuration=self._host._secrets.client_configuration_output.apply(
                 lambda client_configuration: (
                     talos.client.GetConfigurationClientConfigurationArgs(
                         ca_certificate=client_configuration.ca_certificate,

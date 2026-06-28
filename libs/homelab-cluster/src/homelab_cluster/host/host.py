@@ -4,9 +4,9 @@ import homelab_kubernetes as kubernetes
 from pulumi import ComponentResource, ResourceOptions
 
 from .. import config
-from ..secrets import Secrets
 from .image import Image
 from .machine import Machine
+from .secrets import Secrets
 
 
 class Host(ComponentResource):
@@ -21,7 +21,6 @@ class Host(ComponentResource):
         kubernetes_config: kubernetes.config.Config,
         cluster_name: str,
         cluster_endpoint: str,
-        cluster_secrets: Secrets,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
@@ -30,7 +29,8 @@ class Host(ComponentResource):
         self._kubernetes_config = kubernetes_config
         self._cluster_name = cluster_name
         self._cluster_endpoint = cluster_endpoint
-        self._cluster_secrets = cluster_secrets
+
+        self._secrets = Secrets(opts=self._child_opts, version=self._config.version)
 
         self.build_images()
         self.build_machines()
@@ -49,10 +49,10 @@ class Host(ComponentResource):
                 opts=self._child_opts,
                 host_config=self._config,
                 host_images=self._images,
+                host_secrets=self._secrets,
                 kubernetes_config=self._kubernetes_config,
                 cluster_name=self._cluster_name,
                 cluster_endpoint=self._cluster_endpoint,
-                cluster_secrets=self._cluster_secrets,
             )
             for name, config in self._config.machines.items()
         }

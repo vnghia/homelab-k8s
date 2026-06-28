@@ -16,15 +16,9 @@ class ClientConfiguration(BaseModel):
         cls, output: Output[talos.machine.outputs.ClientConfiguration]
     ) -> Self:
         return cls(
-            ca_certificate=output.apply(
-                lambda client_configuration: client_configuration.ca_certificate
-            ),
-            client_certificate=output.apply(
-                lambda client_configuration: client_configuration.client_certificate
-            ),
-            client_key=output.apply(
-                lambda client_configuration: client_configuration.client_key
-            ),
+            ca_certificate=output.apply(lambda result: result.ca_certificate),
+            client_certificate=output.apply(lambda result: result.client_certificate),
+            client_key=output.apply(lambda result: result.client_key),
         )
 
     def to_args(self) -> talos.machine.ClientConfigurationArgs:
@@ -44,8 +38,8 @@ class Certificate(BaseModel):
         cls, output: Output[talos.machine.outputs.CertificateResult]
     ) -> Self:
         return cls(
-            cert=output.apply(lambda certificate: certificate.cert),
-            key=output.apply(lambda certificate: certificate.key),
+            cert=output.apply(lambda result: result.cert),
+            key=output.apply(lambda result: result.key),
         )
 
     def to_args(self) -> talos.machine.CertificateArgs:
@@ -60,7 +54,7 @@ class Key(BaseModel):
 
     @classmethod
     def from_output(cls, output: Output[talos.machine.outputs.KeyResult]) -> Self:
-        return cls(key=output.apply(lambda key: key.key))
+        return cls(key=output.apply(lambda result: result.key))
 
     def to_args(self) -> talos.machine.KeyArgs:
         return talos.machine.KeyArgs(
@@ -80,21 +74,15 @@ class Certificates(BaseModel):
         cls, output: Output[talos.machine.outputs.CertificatesResult]
     ) -> Self:
         return cls(
-            etcd=Certificate.from_output(
-                output.apply(lambda certificates: certificates.etcd)
-            ),
-            k8s=Certificate.from_output(
-                output.apply(lambda certificates: certificates.k8s)
-            ),
+            etcd=Certificate.from_output(output.apply(lambda result: result.etcd)),
+            k8s=Certificate.from_output(output.apply(lambda result: result.k8s)),
             k8s_aggregator=Certificate.from_output(
-                output.apply(lambda certificates: certificates.k8s_aggregator)
+                output.apply(lambda result: result.k8s_aggregator)
             ),
             k8s_serviceaccount=Key.from_output(
-                output.apply(lambda certificates: certificates.k8s_serviceaccount)
+                output.apply(lambda result: result.k8s_serviceaccount)
             ),
-            os=Certificate.from_output(
-                output.apply(lambda certificates: certificates.os)
-            ),
+            os=Certificate.from_output(output.apply(lambda result: result.os)),
         )
 
     def to_args(self) -> talos.machine.CertificatesArgs:
@@ -135,16 +123,12 @@ class KubernetesSecrets(BaseModel):
         cls, output: Output[talos.machine.outputs.KubernetesSecretsResult]
     ) -> Self:
         return cls(
-            bootstrap_token=output.apply(
-                lambda kubernetes_secrets: kubernetes_secrets.bootstrap_token
-            ),
+            bootstrap_token=output.apply(lambda result: result.bootstrap_token),
             secretbox_encryption_secret=output.apply(
-                lambda kubernetes_secrets: (
-                    kubernetes_secrets.secretbox_encryption_secret
-                )
+                lambda result: result.secretbox_encryption_secret
             ),
             aescbc_encryption_secret=output.apply(
-                lambda kubernetes_secrets: kubernetes_secrets.aescbc_encryption_secret
+                lambda result: result.aescbc_encryption_secret
             ),
         )
 
@@ -163,7 +147,7 @@ class TrustdInfo(BaseModel):
     def from_output(
         cls, output: Output[talos.machine.outputs.TrustdInfoResult]
     ) -> Self:
-        return cls(token=output.apply(lambda trustd_info: trustd_info.token))
+        return cls(token=output.apply(lambda result: result.token))
 
     def to_args(self) -> talos.machine.TrustdInfoArgs:
         return talos.machine.TrustdInfoArgs(
@@ -182,17 +166,13 @@ class MachineSecrets(BaseModel):
         cls, output: Output[talos.machine.outputs.MachineSecretsResult]
     ) -> Self:
         return cls(
-            certs=Certificates.from_output(
-                output.apply(lambda machine_secrets: machine_secrets.certs)
-            ),
-            cluster=Cluster.from_output(
-                output.apply(lambda machine_secrets: machine_secrets.cluster)
-            ),
+            certs=Certificates.from_output(output.apply(lambda result: result.certs)),
+            cluster=Cluster.from_output(output.apply(lambda result: result.cluster)),
             secrets=KubernetesSecrets.from_output(
-                output.apply(lambda machine_secrets: machine_secrets.secrets)
+                output.apply(lambda result: result.secrets)
             ),
             trustdinfo=TrustdInfo.from_output(
-                output.apply(lambda machine_secrets: machine_secrets.trustdinfo)
+                output.apply(lambda result: result.trustdinfo)
             ),
         )
 
