@@ -1,8 +1,27 @@
+bpf:
+  hostLegacyRouting: false
+  masquerade: true
+
+cgroup:
+  autoMount:
+    enabled: false
+  hostRoot: /sys/fs/cgroup
+
+gatewayAPI:
+  enabled: true
+  enableAlpn: true
+  enableAppProtocol: true
+
 ipam:
   mode: kubernetes
+
 kubeProxyReplacement: true
 k8sServiceHost: localhost
 k8sServicePort: 7445
+
+operator:
+  replicas: 1
+
 securityContext:
   capabilities:
     ciliumAgent:
@@ -21,14 +40,3 @@ securityContext:
       - NET_ADMIN
       - SYS_ADMIN
       - SYS_RESOURCE
-bpf:
-  hostLegacyRouting: false
-  masquerade: true
-cgroup:
-  autoMount:
-    enabled: false
-  hostRoot: /sys/fs/cgroup
-gatewayAPI:
-  enabled: true
-  enableAlpn: true
-  enableAppProtocol: true

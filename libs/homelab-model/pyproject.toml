@@ -3,7 +3,10 @@ name = "homelab-model"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
+    "pydantic>=2.13.4",
+
     # Workspace
+    "homelab-context",
     "homelab-types",
 ]
 

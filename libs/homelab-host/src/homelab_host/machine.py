@@ -64,6 +64,7 @@ class Machine(ComponentResource):
         self.apply_initial_patches()
         self.apply_networking_initial_patches()
         self.apply_networking_gateway_api_patches()
+        self.apply_networking_cilium_patches()
 
         self._machine_bootstrap = (
             talos.machine.Bootstrap(
@@ -221,6 +222,76 @@ class Machine(ComponentResource):
                             }
                         },
                         direct=True,
+                    ),
+                ],
+            )
+
+    def apply_networking_cilium_patches(self) -> None:
+        if self._config.features.controlplane:
+            cilium_config = self._kubernetes_config.networking.cilium
+            self.apply_patches(
+                "networking-cilium",
+                [
+                    pulumi.data.serialize.yaml(
+                        self._context,
+                        {
+                            "cluster": {
+                                "network": {"cni": {"name": "none"}},
+                                "proxy": {"disabled": True},
+                            }
+                        },
+                        direct=True,
+                    ),
+                    pulumi.data.serialize.yaml(
+                        self._context,
+                        {
+                            "machine": {
+                                "features": {
+                                    "hostDNS": {
+                                        # See this discussion for more context: https://github.com/siderolabs/talos/pull/9200
+                                        "forwardKubeDNSToHost": False
+                                    }
+                                },
+                            }
+                        },
+                        direct=True,
+                    ),
+                    pulumi.data.serialize.yaml(
+                        self._context,
+                        {
+                            "cluster": {
+                                "inlineManifests": [
+                                    {
+                                        "name": "cilium",
+                                        "contents": pulumi.data.serialize.yaml(
+                                            self._context,
+                                            [
+                                                {
+                                                    "apiVersion": "v1",
+                                                    "kind": "Namespace",
+                                                    "metadata": {
+                                                        "labels": {
+                                                            "pod-security.kubernetes.io/enforce": "privileged",
+                                                            "pod-security.kubernetes.io/audit": "privileged",
+                                                            "pod-security.kubernetes.io/warn": "privileged",
+                                                        },
+                                                        "name": cilium_config.namespace,
+                                                    },
+                                                }
+                                            ]
+                                            + [
+                                                manifest.model_dump(
+                                                    context={"context": self._context}
+                                                )
+                                                for manifest in cilium_config.manifests
+                                            ],
+                                            direct=False,
+                                        ),
+                                    }
+                                ]
+                            }
+                        },
+                        direct=False,
                     ),
                 ],
             )

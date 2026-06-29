@@ -1,8 +1,6 @@
-from typing import Any
-
-from homelab_model import BaseModel
+from homelab_model import BaseModel, JsonModel
 
 
 class Config(BaseModel):
     namespace: str
-    manifests: list[Any]
+    manifests: list[JsonModel]

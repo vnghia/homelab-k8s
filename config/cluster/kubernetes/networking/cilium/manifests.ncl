@@ -42,8 +42,8 @@
             {
               apiVersion = "v1",
               data = {
-                "ca.crt" = "#ref:pulumi/secrets:cluster/kubernetes/networking/cilium/cilium-ca/ca.crt",
-                "ca.key" = "#ref:pulumi/secrets:cluster/kubernetes/networking/cilium/cilium-ca/ca.key"
+                "ca.crt" = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.cilium-ca.ca.crt",
+                "ca.key" = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.cilium-ca.ca.key"
               },
               kind = "Secret",
               metadata = {
@@ -57,9 +57,9 @@
             {
               apiVersion = "v1",
               data = {
-                "ca.crt" = "#ref:pulumi/secrets:cluster/kubernetes/networking/cilium/hubble-server-certs/ca.crt",
-                "tls.crt" = "#ref:pulumi/secrets:cluster/kubernetes/networking/cilium/hubble-server-certs/tls.crt",
-                "tls.key" = "#ref:pulumi/secrets:cluster/kubernetes/networking/cilium/hubble-server-certs/tls.key"
+                "ca.crt" = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.hubble-server-certs.ca.crt",
+                "tls.crt" = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.hubble-server-certs.tls.crt",
+                "tls.key" = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.hubble-server-certs.tls.key"
               },
               kind = "Secret",
               metadata = {
@@ -2038,7 +2038,7 @@
                 namespace = cluster.kubernetes.networking.cilium.namespace
               },
               spec = {
-                replicas = 2,
+                replicas = 1,
                 selector = {
                   matchLabels = {
                     "io.cilium/app" = "operator",
@@ -2048,7 +2048,7 @@
                 strategy = {
                   rollingUpdate = {
                     maxSurge = "25%",
-                    maxUnavailable = "50%"
+                    maxUnavailable = "100%"
                   },
                   type = "RollingUpdate"
                 },

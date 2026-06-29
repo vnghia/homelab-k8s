@@ -26,11 +26,14 @@ def serialize(
     return Output.json_dumps(data).apply(lambda data: dumper_(loader_(data)))
 
 
-def yaml(
-    context: Context,
-    data: Any,
-    *,
-    direct: bool,
-    resolve: bool = False,
-) -> str | Output[str]:
-    return serialize(context, data, direct=direct, dumper=yaml_rs.dumps)
+def yaml(context: Context, data: Any, *, direct: bool) -> str | Output[str]:
+    return serialize(
+        context,
+        data,
+        direct=direct,
+        dumper=lambda data: (
+            "\n".join([yaml_rs.dumps(item) for item in data])
+            if isinstance(data, list)
+            else yaml_rs.dumps(data)
+        ),
+    )

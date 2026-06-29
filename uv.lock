@@ -215,11 +215,15 @@ name = "homelab-context"
 version = "0.1.0"
 source = { editable = "libs/homelab-context" }
 dependencies = [
+    { name = "homelab-common" },
     { name = "pulumi" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pulumi", specifier = ">=3.247.0" }]
+requires-dist = [
+    { name = "homelab-common", editable = "libs/homelab-common" },
+    { name = "pulumi", specifier = ">=3.247.0" },
+]
 
 [[package]]
 name = "homelab-host"
@@ -272,11 +276,17 @@ name = "homelab-model"
 version = "0.1.0"
 source = { editable = "libs/homelab-model" }
 dependencies = [
+    { name = "homelab-context" },
     { name = "homelab-types" },
+    { name = "pydantic" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "homelab-types", editable = "libs/homelab-types" }]
+requires-dist = [
+    { name = "homelab-context", editable = "libs/homelab-context" },
+    { name = "homelab-types", editable = "libs/homelab-types" },
+    { name = "pydantic", specifier = ">=2.13.4" },
+]
 
 [[package]]
 name = "homelab-pulumi"
