@@ -4,7 +4,6 @@ helmCharts:
   - name: cilium
     repo: https://helm.cilium.io
     releaseName: cilium
-    # renovate: datasource=github-releases packageName=cilium/cilium
     version: "1.19.5"
     namespace: __CILIUM_NAMESPACE__
     valuesInline:
