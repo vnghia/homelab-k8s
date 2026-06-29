@@ -12,6 +12,15 @@
       "matchStrings": [
         "[ ]*# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s[ ]*version = \"(?<currentValue>.+?)\",?\\s"
       ]
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "config/**/*.yaml"
+      ],
+      "matchStrings": [
+        "[ ]*# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s[ ]*version: \"(?<currentValue>.+?)\"\\s"
+      ]
     }
   ]
 }

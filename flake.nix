@@ -36,6 +36,7 @@
           talosctl
           kubectl
           kubernetes-helm
+          kustomize
           cilium-cli
 
           just
