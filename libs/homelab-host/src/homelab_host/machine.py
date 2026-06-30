@@ -263,30 +263,20 @@ class Machine(ComponentResource):
                                 "inlineManifests": [
                                     {
                                         "name": "cilium",
-                                        "contents": pulumi.data.serialize.yaml(
+                                        "contents": kubernetes.kustomize.Kustomize(
                                             self._context,
-                                            [
-                                                {
-                                                    "apiVersion": "v1",
-                                                    "kind": "Namespace",
-                                                    "metadata": {
-                                                        "labels": {
-                                                            "pod-security.kubernetes.io/enforce": "privileged",
-                                                            "pod-security.kubernetes.io/audit": "privileged",
-                                                            "pod-security.kubernetes.io/warn": "privileged",
-                                                        },
-                                                        "name": cilium_config.namespace,
-                                                    },
-                                                }
-                                            ]
-                                            + [
-                                                manifest.model_dump(
-                                                    context={"context": self._context}
-                                                )
-                                                for manifest in cilium_config.manifests
-                                            ],
-                                            direct=False,
-                                        ),
+                                            self._child_opts,
+                                            id="cilium",
+                                            namespace=kubernetes.kustomize.KustomizeProviderNamespaceProps(
+                                                name=cilium_config.namespace,
+                                                labels={
+                                                    "pod-security.kubernetes.io/enforce": "privileged",
+                                                    "pod-security.kubernetes.io/audit": "privileged",
+                                                    "pod-security.kubernetes.io/warn": "privileged",
+                                                },
+                                            ),
+                                            kustomization=cilium_config.kustomization,
+                                        ).manifests,
                                     }
                                 ]
                             }

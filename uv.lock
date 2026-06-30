@@ -261,6 +261,7 @@ dependencies = [
     { name = "homelab-model" },
     { name = "homelab-pulumi" },
     { name = "pulumi" },
+    { name = "yaml-rs" },
 ]
 
 [package.metadata]
@@ -269,6 +270,7 @@ requires-dist = [
     { name = "homelab-model", editable = "libs/homelab-model" },
     { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
     { name = "pulumi", specifier = ">=3.247.0" },
+    { name = "yaml-rs", specifier = ">=0.1.4" },
 ]
 
 [[package]]

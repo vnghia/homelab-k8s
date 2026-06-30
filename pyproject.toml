@@ -103,6 +103,7 @@ ignore = [
     "PLR0911",
     "PLC0415",
     "S104",
+    "S404",
 ]
 preview = true
 

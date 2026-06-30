@@ -3,4 +3,5 @@ from homelab_model import BaseModel, JsonModel
 
 class Config(BaseModel):
     namespace: str
-    manifests: list[JsonModel]
+    version: str
+    kustomization: JsonModel
