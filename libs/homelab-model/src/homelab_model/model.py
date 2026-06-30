@@ -4,6 +4,7 @@ from homelab_context import Context
 from homelab_types import BaseModel as TypesBaseModel
 from homelab_types import RootModel as TypesRootModel
 from pydantic import (
+    ConfigDict,
     SerializationInfo,
     SerializerFunctionWrapHandler,
     model_serializer,
@@ -11,7 +12,7 @@ from pydantic import (
 
 
 class BaseModel(TypesBaseModel):
-    pass
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
 class RootModel[T](TypesRootModel[T]):

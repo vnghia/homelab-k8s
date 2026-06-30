@@ -7,15 +7,14 @@ import homelab_common as common
 import yaml_rs
 from homelab_context import Context
 from homelab_model import BaseModel, JsonModel
-from homelab_pulumi import Input, Output
-from pulumi import ResourceOptions
+from pulumi import Output, ResourceOptions
 from pulumi.dynamic import CreateResult, Resource, ResourceProvider, UpdateResult
 from pydantic import ConfigDict
 
 
 class KustomizeProviderNamespaceProps(BaseModel):
-    name: Input[str]
-    labels: dict[str, Input[str]] = {}
+    name: str | Output[str]
+    labels: dict[str, str | Output[str]] = {}
 
 
 class KustomizeProviderProps(BaseModel):

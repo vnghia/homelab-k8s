@@ -2,8 +2,7 @@ from typing import Self
 
 import pulumiverse_talos as talos
 from homelab_model import BaseModel
-from homelab_pulumi import Output
-from pulumi import ResourceOptions
+from pulumi import Output, ResourceOptions
 
 
 class ClientConfiguration(BaseModel):
