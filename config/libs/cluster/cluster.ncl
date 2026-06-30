@@ -1,8 +1,6 @@
 {
   contracts = {},
-  cluster.Cluster = {
-    name | String,
-  }
+  cluster.Cluster = {}
 }
 & (import "kubernetes/kubernetes.ncl")
 & (import "host/host.ncl")

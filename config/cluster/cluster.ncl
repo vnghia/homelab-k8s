@@ -4,9 +4,7 @@ let
   host = import "host/host.ncl",
 in
 {
-  cluster | libs.cluster.Cluster = {
-    name = "homelab",
-  }
+  cluster | libs.cluster.Cluster
 }
 & kubernetes
 & host

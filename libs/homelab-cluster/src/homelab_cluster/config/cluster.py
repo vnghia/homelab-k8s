@@ -8,20 +8,21 @@ from homelab_model import BaseModel
 
 
 class Config(BaseModel):
-    name: str
     kubernetes: kubernetes.config.Config
     host: host.config.Config
 
     @functools.cached_property
-    def endpoint(self) -> str:
-        return f"https://{
+    def name(self) -> str:
+        return common.string.add_prefix(
+            pulumi.constant.STACK,
             common.string.add_prefix(
-                pulumi.constant.STACK,
-                common.string.add_prefix(
-                    self.kubernetes.domain.prefix,
-                    self.kubernetes.domain.name,
-                    separator='.',
-                ),
-                separator='.',
-            )
-        }:6443"
+                self.kubernetes.domain.prefix,
+                self.kubernetes.domain.name,
+                separator=".",
+            ),
+            separator=".",
+        )
+
+    @functools.cached_property
+    def endpoint(self) -> str:
+        return f"https://{self.name}:6443"
