@@ -20,17 +20,12 @@
             enableAlpn = true,
             enableAppProtocol = true
           },
-          hubble = {
-            enabled = true,
-            relay = { enabled = true },
-            ui = { enabled = true }
-          },
           ipam = { mode = "kubernetes" },
           ipv6 = { enabled = true },
           kubeProxyReplacement = true,
           k8sServiceHost = "localhost",
           k8sServicePort = 7445,
-          k8s = { requireIPv4PodCIDR = true, requireIPv6PodCIDR = false },
+          k8s = { requireIPv4PodCIDR = true, requireIPv6PodCIDR = true },
           operator = { replicas = 1 },
           securityContext = {
             capabilities = {
@@ -49,8 +44,14 @@
               ],
               cleanCiliumState = ["NET_ADMIN", "SYS_ADMIN", "SYS_RESOURCE"]
             }
-          }
-        }
+          },
+          tls = {
+            secretsNamespace = {
+              create = false,
+              name = cluster.kubernetes.networking.cilium.namespace,
+            },
+          },
+        },
       }
     ],
     replacements = [
@@ -98,7 +99,7 @@
             fieldPaths = ["data.[tls.key]"]
           }
         ]
-      }
+      },
     ]
   },
 }
