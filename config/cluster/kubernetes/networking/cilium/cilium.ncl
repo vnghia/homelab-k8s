@@ -1,7 +1,7 @@
 {
   cluster.kubernetes.networking.cilium = {
     namespace = "cilium-core",
-    # renovate: datasource=helm packageName=cilium
+    # renovate: datasource=github-releases packageName=cilium/cilium
     version = "1.19.5",
   },
 }
