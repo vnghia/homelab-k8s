@@ -18,10 +18,20 @@
           egressGateway = {
             enabled = true,
           },
+          envoyConfig = {
+            secretsNamespace = {
+              create = false,
+              name = cluster.kubernetes.networking.cilium.namespace,
+            },
+          },
           gatewayAPI = {
             enabled = true,
             enableAlpn = true,
-            enableAppProtocol = true
+            enableAppProtocol = true,
+            secretsNamespace = {
+              create = false,
+              name = cluster.kubernetes.networking.cilium.namespace,
+            },
           },
           hubble = {
             enabled = true,
