@@ -46,7 +46,7 @@ class Machine(ComponentResource):
         self._hostname = common.string.add_prefix(
             pulumi.constant.STACK,
             common.string.add_prefix(
-                self._kubernetes_config.domain.prefix, self._name, separator="-"
+                self._kubernetes_config.domain.cluster, self._name, separator="-"
             ),
             separator="-",
         )

@@ -7,7 +7,7 @@
         version | String,
         domain
           | {
-            prefix | contracts.Nullable String,
+            cluster | String,
             name | String,
           },
         networking

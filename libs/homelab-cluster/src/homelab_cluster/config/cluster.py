@@ -13,16 +13,18 @@ class Config(BaseModel):
 
     @functools.cached_property
     def name(self) -> str:
-        return common.string.add_prefix(
-            pulumi.constant.STACK,
-            common.string.add_prefix(
-                self.kubernetes.domain.prefix,
-                self.kubernetes.domain.name,
-                separator=".",
-            ),
-            separator=".",
-        )
+        return self.kubernetes.domain.cluster
 
     @functools.cached_property
     def endpoint(self) -> str:
-        return f"https://{self.name}:6443"
+        return f"https://{
+            common.string.add_prefix(
+                pulumi.constant.STACK,
+                common.string.add_prefix(
+                    self.name,
+                    self.kubernetes.domain.name,
+                    separator='.',
+                ),
+                separator='.',
+            )
+        }:6443"

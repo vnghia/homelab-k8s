@@ -3,6 +3,7 @@ import urllib.parse
 from typing import ClassVar
 
 import homelab_common as common
+import homelab_pulumi as pulumi
 import orjson
 import pulumi_cloudflare as cloudflare
 from homelab_context import Context
@@ -38,8 +39,10 @@ class Token(ComponentResource):
         self.cert_manager = cloudflare.ApiToken(
             "cert-manager",
             opts=self._child_opts.merge(ResourceOptions(delete_before_replace=True)),
-            name=common.string.add_suffix(
-                self._name.replace(".", "-"), "cert-manager", separator="-"
+            name=common.string.add_prefix(
+                pulumi.constant.STACK,
+                common.string.add_suffix(self._name, "cert-manager", separator="-"),
+                separator="-",
             ),
             policies=[
                 cloudflare.ApiTokenPolicyArgs(

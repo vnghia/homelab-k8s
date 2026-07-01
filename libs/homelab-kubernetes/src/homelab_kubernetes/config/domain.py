@@ -2,5 +2,5 @@ from homelab_model import BaseModel
 
 
 class Config(BaseModel):
-    prefix: str | None
+    cluster: str
     name: str
