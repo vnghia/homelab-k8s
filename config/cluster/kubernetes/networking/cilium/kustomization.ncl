@@ -29,6 +29,7 @@
             ui = { enabled = true },
           },
           ipam = { mode = "kubernetes" },
+          ipv6 = { enabled = true },
           kubeProxyReplacement = true,
           k8sServiceHost = "localhost",
           k8sServicePort = 7445,

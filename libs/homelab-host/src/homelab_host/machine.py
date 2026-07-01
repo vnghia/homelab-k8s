@@ -185,7 +185,7 @@ class Machine(ComponentResource):
         )
 
     def apply_networking_initial_patches(self) -> None:
-        valid_subnets = ["192.168.0.0/16", "100.64.0.0/10"]
+        valid_subnets = ["192.168.0.0/16", "100.64.0.0/10", "fc00::/7"]
         self.apply_patches(
             "networking-initial",
             [
