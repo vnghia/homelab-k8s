@@ -1,1 +1,1 @@
-(import "cluster/cluster.ncl")
+(import "dns/dns.ncl") & (import "cluster/cluster.ncl")

@@ -49,6 +49,7 @@ homelab-cluster = { workspace = true }
 homelab-common = { workspace = true }
 homelab-config = { workspace = true }
 homelab-context = { workspace = true }
+homelab-dns = { workspace = true }
 homelab-host = { workspace = true }
 homelab-kubernetes = { workspace = true }
 homelab-model = { workspace = true }
@@ -65,6 +66,7 @@ root = [
     "./libs/homelab-common/src",
     "./libs/homelab-config/src",
     "./libs/homelab-context/src",
+    "./libs/homelab-dns/src",
     "./libs/homelab-host/src",
     "./libs/homelab-kubernetes/src",
     "./libs/homelab-model/src",

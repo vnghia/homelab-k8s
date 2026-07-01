@@ -4,11 +4,13 @@ from typing import Self
 import homelab_cluster as cluster
 import homelab_common as common
 import homelab_context as context
+import homelab_dns as dns
 from homelab_model import BaseModel
 from nickel import nickel
 
 
 class Config(BaseModel):
+    dns: dns.config.Config
     cluster: cluster.config.Config
 
     @classmethod
