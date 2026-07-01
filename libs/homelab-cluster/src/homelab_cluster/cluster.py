@@ -1,7 +1,9 @@
 from typing import ClassVar
 
 import homelab_host as host
+import homelab_kubernetes as kubernetes
 import homelab_pulumi as pulumi
+import pulumi_kubernetes
 import pulumiverse_talos as talos
 from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
@@ -26,6 +28,8 @@ class Cluster(ComponentResource):
         self.build_config()
         pulumi.data.export("cluster.talosconfig", self._talosconfig)
         pulumi.data.export("cluster.kubeconfig", self._kubeconfig)
+
+        self.build_kubernetes()
 
         self.register_outputs({})
 
@@ -72,3 +76,19 @@ class Cluster(ComponentResource):
             endpoints=self._host.controlplane_endpoints,
             nodes=self._host.machine_endpoints,
         ).apply(lambda result: result.talos_config)
+
+    def build_kubernetes(self) -> None:
+        self._kubernetes = kubernetes.Kubernetes(
+            self._context,
+            self._config.name,
+            config=self._config.kubernetes,
+            opts=self._child_opts.merge(
+                ResourceOptions(
+                    providers={
+                        "kubernetes": pulumi_kubernetes.Provider(
+                            self._name, kubeconfig=self._kubeconfig
+                        )
+                    }
+                ),
+            ),
+        )
