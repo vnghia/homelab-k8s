@@ -284,8 +284,7 @@ $RECYCLE.BIN/
 dev/vms
 
 # Config
-.config/talosconfig/
-.config/kubeconfig/
+.config
 
 # Kubernetes
 .kubernetes
