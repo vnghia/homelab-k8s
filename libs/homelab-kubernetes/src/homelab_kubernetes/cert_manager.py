@@ -29,12 +29,12 @@ class CertManager(ComponentResource):
             opts=self._child_opts,
             metadata=kubernetes.meta.v1.ObjectMetaArgs(name=self._config.namespace),
         )
-        self._chart = kubernetes.helm.v4.Chart(
+        self._manager = kubernetes.helm.v4.Chart(
             self._config.namespace,
             opts=self._child_opts.merge(ResourceOptions(depends_on=[self._namespace])),
             namespace=self._config.namespace,
             chart=self._config.chart,
             version=self._config.version,
             skip_crds=False,
-            values={"crds": {"enabled": True}},
+            values={"crds": {"enabled": True}, "config": {"enableGatewayAPI": True}},
         )
