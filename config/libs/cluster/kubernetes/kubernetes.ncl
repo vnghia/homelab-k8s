@@ -22,7 +22,7 @@
             cilium
               | {
                 namespace | String,
-                version | String,
+                version | String | not_exported,
                 kustomization | cluster.kubernetes.Kustomization,
               },
           }
