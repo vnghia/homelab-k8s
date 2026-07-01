@@ -25,7 +25,13 @@
                 version | String | not_exported,
                 kustomization | cluster.kubernetes.Kustomization,
               },
-          }
+          },
+        cert_manager
+          | {
+            namespace | String,
+            chart | String,
+            version | String,
+          },
       },
   },
 }

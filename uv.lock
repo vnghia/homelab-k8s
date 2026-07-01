@@ -232,7 +232,7 @@ requires-dist = [
     { name = "homelab-model", editable = "libs/homelab-model" },
     { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
     { name = "pulumi", specifier = ">=3.247.0" },
-    { name = "pulumi-kubernetes", specifier = ">=4.32.0" },
+    { name = "pulumi-kubernetes", specifier = ">=4.30.0" },
     { name = "pulumiverse-talos", specifier = ">=0.8.0" },
 ]
 
@@ -325,7 +325,7 @@ requires-dist = [
     { name = "homelab-model", editable = "libs/homelab-model" },
     { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
     { name = "pulumi", specifier = ">=3.247.0" },
-    { name = "pulumi-kubernetes", specifier = ">=4.32.0" },
+    { name = "pulumi-kubernetes", specifier = ">=4.30.0" },
     { name = "yaml-rs", specifier = ">=0.1.4" },
 ]
 
@@ -657,7 +657,7 @@ wheels = [
 
 [[package]]
 name = "pulumi-kubernetes"
-version = "4.32.0"
+version = "4.30.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "parver" },
@@ -665,9 +665,9 @@ dependencies = [
     { name = "requests" },
     { name = "semver" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/dd/05/5dd6482278a6271681f1b27337464c923fd2ec7e9532c269e8f700a6cbb4/pulumi_kubernetes-4.32.0.tar.gz", hash = "sha256:c800c0d5d60dc8e0eccb745b64f59747c9108dd60279c960623c6dc784b109e4", size = 1976525, upload-time = "2026-06-09T00:32:13.241Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/63/d7/9b397f1328c15711210e06e25e6fead63b308edfc0298955746d23f043bb/pulumi_kubernetes-4.30.0.tar.gz", hash = "sha256:5d488be2a88ac9b3ea99d86c6d4a81be1fad449b3dcb2879f2c7757c63c92a72", size = 1981298, upload-time = "2026-04-25T00:05:30.513Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3a/12/8e2cb7dd2f6dbd24c4bb3225e161c7a04675a81a9a335b66f3a3430850a8/pulumi_kubernetes-4.32.0-py3-none-any.whl", hash = "sha256:76e2f968194bad176747c3ca9f9dfd3fc856395289b014da268d55d805ef866d", size = 3099659, upload-time = "2026-06-09T00:32:10.975Z" },
+    { url = "https://files.pythonhosted.org/packages/f9/ff/7aede0e0a620a878f35c3aebf2d1cf0ed1642b208b38ed94269cf9293d1e/pulumi_kubernetes-4.30.0-py3-none-any.whl", hash = "sha256:e8c2534ed8cd91105edc4ce1c57356259976b1ad5c26eecc7a4456098b61ac7f", size = 3095280, upload-time = "2026-04-25T00:05:26.918Z" },
 ]
 
 [[package]]
