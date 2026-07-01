@@ -26,7 +26,7 @@ class CertManager(ComponentResource):
 
         self._namespace = kubernetes.core.v1.Namespace(
             self._config.namespace,
-            opts=self._child_opts,
+            opts=self._child_opts.merge(ResourceOptions(delete_before_replace=True)),
             metadata=kubernetes.meta.v1.ObjectMetaArgs(name=self._config.namespace),
         )
         self._manager = kubernetes.helm.v4.Chart(

@@ -183,6 +183,7 @@ dependencies = [
     { name = "homelab-cluster" },
     { name = "homelab-config" },
     { name = "homelab-context" },
+    { name = "homelab-dns" },
     { name = "pulumi" },
     { name = "pydantic" },
 ]
@@ -198,6 +199,7 @@ requires-dist = [
     { name = "homelab-cluster", editable = "libs/homelab-cluster" },
     { name = "homelab-config", editable = "libs/homelab-config" },
     { name = "homelab-context", editable = "libs/homelab-context" },
+    { name = "homelab-dns", editable = "libs/homelab-dns" },
     { name = "pulumi", specifier = ">=3.247.0" },
     { name = "pydantic", specifier = ">=2.13.4" },
 ]
@@ -288,7 +290,9 @@ dependencies = [
     { name = "homelab-common" },
     { name = "homelab-context" },
     { name = "homelab-model" },
+    { name = "orjson" },
     { name = "pulumi" },
+    { name = "pulumi-cloudflare" },
 ]
 
 [package.metadata]
@@ -296,7 +300,9 @@ requires-dist = [
     { name = "homelab-common", editable = "libs/homelab-common" },
     { name = "homelab-context", editable = "libs/homelab-context" },
     { name = "homelab-model", editable = "libs/homelab-model" },
+    { name = "orjson", specifier = ">=3.11.9" },
     { name = "pulumi", specifier = ">=3.247.0" },
+    { name = "pulumi-cloudflare", specifier = ">=6.17.0" },
 ]
 
 [[package]]
@@ -675,6 +681,20 @@ dependencies = [
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/22/03/e14c9fe2e6e7fb57e80ceaab0f5b5678ad96388e6eb5cf04f16870820aee/pulumi-3.247.0-py3-none-any.whl", hash = "sha256:ca21453de7d410fc072343379cc905175c8214ab6077d941a76ff7308fdbfee7", size = 408018, upload-time = "2026-06-18T14:12:01.302Z" },
+]
+
+[[package]]
+name = "pulumi-cloudflare"
+version = "6.17.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "parver" },
+    { name = "pulumi" },
+    { name = "semver" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/72/d7/5a7198c27384e0e3f6fe67a31dc4319bd7224961f8e8b78098ab77cdf1be/pulumi_cloudflare-6.17.0.tar.gz", hash = "sha256:13ede1d982fc3a1420c3775ed5eafdc83ae19d1a0084b5a68d2337f644e25d15", size = 1744951, upload-time = "2026-05-22T15:22:38.852Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b6/11/d82a291b33486227e58f2b01f2908001609757f1abb29a7c1335ecd4a2bc/pulumi_cloudflare-6.17.0-py3-none-any.whl", hash = "sha256:eb82562d697e06ee09405a9d77675a7bf8652c39e66f6a9bde99b73b21596690", size = 2638454, upload-time = "2026-05-22T15:22:36.489Z" },
 ]
 
 [[package]]

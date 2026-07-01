@@ -12,6 +12,7 @@ dependencies = [
     "homelab-config",
     "homelab-context",
     "homelab-cluster",
+    "homelab-dns",
 ]
 
 [build-system]
