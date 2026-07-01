@@ -7,7 +7,7 @@
         name = "cilium",
         releaseName = "cilium",
         namespace = cluster.kubernetes.networking.cilium.namespace,
-        repo = "https://helm.cilium.io/",
+        repo = "oci://quay.io/cilium/charts/cilium",
         version = cluster.kubernetes.networking.cilium.version,
         valuesInline = {
           bpf = { hostLegacyRouting = false, masquerade = true },
