@@ -1,3 +1,5 @@
+import functools
+import operator
 from typing import ClassVar
 
 import homelab_common as common
@@ -185,7 +187,9 @@ class Machine(ComponentResource):
         )
 
     def apply_networking_initial_patches(self) -> None:
+        networking_config = self._config.networking
         valid_subnets = ["192.168.0.0/16", "100.64.0.0/10", "fc00::/7"]
+
         self.apply_patches(
             "networking-initial",
             [
@@ -200,8 +204,54 @@ class Machine(ComponentResource):
                 ),
                 pulumi.data.serialize.yaml(
                     self._context,
-                    {"cluster": {"etcd": {"advertisedSubnets": valid_subnets}}},
+                    {
+                        "cluster": {
+                            "network": {
+                                "podSubnets": networking_config.cluster.pod_subnets
+                            },
+                            "etcd": {"advertisedSubnets": valid_subnets},
+                        }
+                    },
                     direct=True,
+                ),
+                *functools.reduce(
+                    operator.add,
+                    [
+                        (
+                            [
+                                pulumi.data.serialize.yaml(
+                                    self._context,
+                                    {
+                                        "apiVersion": "v1alpha1",
+                                        "kind": "DHCPv4Config",
+                                        "name": interface,
+                                        "ignoreHostname": True,
+                                    },
+                                    direct=True,
+                                )
+                            ]
+                            if config.dhcpv4
+                            else []
+                        )
+                        + (
+                            [
+                                pulumi.data.serialize.yaml(
+                                    self._context,
+                                    {
+                                        "apiVersion": "v1alpha1",
+                                        "kind": "DHCPv6Config",
+                                        "name": interface,
+                                        "ignoreHostname": True,
+                                    },
+                                    direct=True,
+                                )
+                            ]
+                            if config.dhcpv6
+                            else []
+                        )
+                        for interface, config in networking_config.interfaces.items()
+                    ],
+                    [],
                 ),
             ],
         )

@@ -13,10 +13,6 @@
       machines
         | {
           _ : {
-            ips
-              | {
-                tailscale : String,
-              },
             features
               | {
                 controlplane | Bool,
@@ -39,6 +35,20 @@
                   }
                   | default
                   = {},
+              },
+            networking
+              | {
+                interfaces
+                  | {
+                    _ : {
+                      dhcpv4 | Bool | default = true,
+                      dhcpv6 | Bool | default = true,
+                    }
+                  },
+                cluster
+                  | {
+                    pod_subnets | Array String
+                  }
               },
             stage
               | std.enum.TagOrString
