@@ -15,17 +15,23 @@
             autoMount = { enabled = false },
             hostRoot = "/sys/fs/cgroup"
           },
+          egressGateway = {
+            enabled = true,
+          },
           gatewayAPI = {
             enabled = true,
             enableAlpn = true,
             enableAppProtocol = true
           },
+          hubble = {
+            enabled = true,
+            relay = { enabled = true },
+            ui = { enabled = true },
+          },
           ipam = { mode = "kubernetes" },
-          ipv6 = { enabled = true },
           kubeProxyReplacement = true,
           k8sServiceHost = "localhost",
           k8sServicePort = 7445,
-          k8s = { requireIPv4PodCIDR = true, requireIPv6PodCIDR = true },
           operator = { replicas = 1 },
           securityContext = {
             capabilities = {
@@ -100,6 +106,33 @@
           }
         ]
       },
-    ]
+      {
+        sourceValue = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.hubble-relay-client-certs.ca.crt",
+        targets = [
+          {
+            select = { name = "hubble-relay-client-certs", kind = "Secret" },
+            fieldPaths = ["data.[ca.crt]"]
+          }
+        ]
+      },
+      {
+        sourceValue = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.hubble-relay-client-certs.tls.crt",
+        targets = [
+          {
+            select = { name = "hubble-relay-client-certs", kind = "Secret" },
+            fieldPaths = ["data.[tls.crt]"]
+          }
+        ]
+      },
+      {
+        sourceValue = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.hubble-relay-client-certs.tls.key",
+        targets = [
+          {
+            select = { name = "hubble-relay-client-certs", kind = "Secret" },
+            fieldPaths = ["data.[tls.key]"]
+          }
+        ]
+      },
+    ],
   },
 }
