@@ -19,7 +19,7 @@
         "config/**/*.ncl"
       ],
       "matchStrings": [
-        "[ ]*# renovate: datasource=docker\\s[ ]*repo = \"(?<packageName>.+?)\",?\\s[ ]*tag = \"(?<currentValue>.+?)\",?\\s"
+        "[ ]*# renovate: datasource=(?<datasource>docker)\\s[ ]*repo = \"(?<packageName>.+?)\",?\\s[ ]*tag = \"(?<currentValue>.+?)\",?\\s"
       ]
     }
   ]
