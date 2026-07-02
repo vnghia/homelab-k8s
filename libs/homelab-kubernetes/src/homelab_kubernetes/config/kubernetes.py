@@ -1,6 +1,6 @@
 from homelab_model import BaseModel
 
-from . import cert_manager, domain, networking
+from . import cert_manager, domain, networking, service
 
 
 class Config(BaseModel):
@@ -8,3 +8,4 @@ class Config(BaseModel):
     domain: domain.Config
     networking: networking.Config
     cert_manager: cert_manager.Config
+    services: dict[str, service.Config]

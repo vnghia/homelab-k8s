@@ -1,4 +1,5 @@
-{
+(import "service/service.ncl")
+& {
   contracts = {},
   cluster = {
     kubernetes.Kustomization = import "kustomization.ncl",
@@ -33,6 +34,10 @@
             version | String,
             issuer | String,
             email | String,
+          },
+        services
+          | {
+            _ : cluster.kubernetes.Service
           },
       },
   },
