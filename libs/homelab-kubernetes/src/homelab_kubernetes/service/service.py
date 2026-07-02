@@ -4,7 +4,7 @@ from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
 from .. import common, config
-from . import account
+from . import account, deployment
 
 
 class Service(ComponentResource):
@@ -26,6 +26,7 @@ class Service(ComponentResource):
 
         self.build_namespace()
         self.build_accounts()
+        self.build_deployments()
 
         self.register_outputs({})
 
@@ -45,4 +46,18 @@ class Service(ComponentResource):
                 namespace=self._namespace_name,
             )
             for name, config in self._config.accounts.items()
+        }
+
+    def build_deployments(self) -> None:
+        self._deployments = {
+            name: deployment.Deployment(
+                self._context,
+                name,
+                config,
+                opts=self._child_opts,
+                service=self._name,
+                namespace=self._namespace_name,
+                service_accounts=self._accounts,
+            )
+            for name, config in self._config.deployments.items()
         }

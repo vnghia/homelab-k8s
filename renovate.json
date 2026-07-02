@@ -16,10 +16,10 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "config/**/*.yaml"
+        "config/**/*.ncl"
       ],
       "matchStrings": [
-        "[ ]*# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s[ ]*version: \"(?<currentValue>.+?)\"\\s"
+        "[ ]*# renovate: datasource=docker\\s[ ]*repo = \"(?<packageName>.+?)\",?\\s[ ]*tag = \"(?<currentValue>.+?)\",?\\s"
       ]
     }
   ]

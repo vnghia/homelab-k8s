@@ -26,6 +26,7 @@ class Account(ComponentResource):
 
         self._context = context
         self._config = config
+        self._service = service
         self._namespace = namespace
 
         self._account = kubernetes.core.v1.ServiceAccount(
@@ -33,11 +34,14 @@ class Account(ComponentResource):
             opts=self._child_opts,
             metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace),
         )
+        self.name = common.metadata.name(self._account.metadata)
 
         if self._config.cluster:
             name = homelab_common.string.add_prefix(
                 "service",
-                homelab_common.string.add_prefix(service, self._name, separator=":"),
+                homelab_common.string.add_prefix(
+                    self._service, self._name, separator=":"
+                ),
                 separator=":",
             )
             self._role = kubernetes.rbac.v1.ClusterRole(

@@ -1,4 +1,5 @@
 (import "account.ncl")
+& (import "deployment/deployment.ncl")
 & {
   cluster.kubernetes.Service = {
     accounts
@@ -7,5 +8,9 @@
       }
       | default
       = {},
+    deployments
+      | {
+        _ : cluster.kubernetes.service.Deployment
+      },
   },
 }

@@ -27,5 +27,23 @@
         ],
       }
     },
+    deployments = {
+      dozzle = {
+        account = "pod-viewer",
+        containers = {
+          dozzle = {
+            image = {
+              # renovate: datasource=docker
+              repo = "ghcr.io/amir20/dozzle",
+              tag = "v10.6.6",
+            },
+            env = {
+              DOZZLE_MODE = "k8s",
+              DOZZLE_NO_ANALYTICS = "true",
+            },
+          },
+        },
+      },
+    },
   },
 }

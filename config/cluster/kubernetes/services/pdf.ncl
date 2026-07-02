@@ -1,3 +1,5 @@
 {
-  cluster.kubernetes.services.pdf = {},
+  cluster.kubernetes.services.pdf = {
+    deployments = {},
+  },
 }
