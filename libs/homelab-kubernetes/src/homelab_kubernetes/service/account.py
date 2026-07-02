@@ -3,9 +3,9 @@ from typing import ClassVar
 import homelab_common
 import pulumi_kubernetes as kubernetes
 from homelab_context import Context
-from pulumi import ComponentResource, Output, ResourceOptions
+from pulumi import ComponentResource, ResourceOptions
 
-from .. import common, config
+from .. import common, config, namespace
 
 
 class Account(ComponentResource):
@@ -19,7 +19,7 @@ class Account(ComponentResource):
         *,
         opts: ResourceOptions,
         service: str,
-        namespace: Output[str],
+        namespace: namespace.Namespace,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
@@ -32,7 +32,7 @@ class Account(ComponentResource):
         self._account = kubernetes.core.v1.ServiceAccount(
             self._name,
             opts=self._child_opts,
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace),
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace.name),
         )
         self.name = common.metadata.name(self._account.metadata)
 
@@ -63,7 +63,7 @@ class Account(ComponentResource):
                     kubernetes.rbac.v1.SubjectArgs(
                         kind="ServiceAccount",
                         name=common.metadata.name(self._account.metadata),
-                        namespace=self._namespace,
+                        namespace=self._namespace.name,
                     )
                 ],
                 role_ref=kubernetes.rbac.v1.RoleRefArgs(

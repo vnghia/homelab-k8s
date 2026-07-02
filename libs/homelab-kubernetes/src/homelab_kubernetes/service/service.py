@@ -3,7 +3,7 @@ from typing import ClassVar
 from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
-from .. import common, config
+from .. import config, namespace
 from . import account, deployment
 
 
@@ -31,9 +31,7 @@ class Service(ComponentResource):
         self.register_outputs({})
 
     def build_namespace(self) -> None:
-        self._namespace, self._namespace_name = common.namespace.create(
-            f"service-{self._name}", self._child_opts
-        )
+        self._namespace = namespace.Namespace(self._name, opts=self._child_opts)
 
     def build_accounts(self) -> None:
         self._accounts = {
@@ -43,7 +41,7 @@ class Service(ComponentResource):
                 config,
                 opts=self._child_opts,
                 service=self._name,
-                namespace=self._namespace_name,
+                namespace=self._namespace,
             )
             for name, config in self._config.accounts.items()
         }
@@ -56,7 +54,7 @@ class Service(ComponentResource):
                 config,
                 opts=self._child_opts,
                 service=self._name,
-                namespace=self._namespace_name,
+                namespace=self._namespace,
                 service_accounts=self._accounts,
             )
             for name, config in self._config.deployments.items()

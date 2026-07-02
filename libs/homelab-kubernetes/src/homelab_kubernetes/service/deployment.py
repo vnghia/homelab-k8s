@@ -2,9 +2,9 @@ from typing import ClassVar
 
 import pulumi_kubernetes as kubernetes
 from homelab_context import Context
-from pulumi import ComponentResource, Output, ResourceOptions
+from pulumi import ComponentResource, ResourceOptions
 
-from .. import config
+from .. import config, namespace
 from . import account
 
 
@@ -19,7 +19,7 @@ class Deployment(ComponentResource):
         *,
         opts: ResourceOptions,
         service: str,
-        namespace: Output[str],
+        namespace: namespace.Namespace,
         service_accounts: dict[str, account.Account],
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
@@ -36,7 +36,7 @@ class Deployment(ComponentResource):
             self._name,
             opts=self._child_opts,
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                labels=self._labels, namespace=self._namespace
+                labels=self._labels, namespace=self._namespace.name
             ),
             spec=kubernetes.apps.v1.DeploymentSpecArgs(
                 selector=kubernetes.meta.v1.LabelSelectorArgs(

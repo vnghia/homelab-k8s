@@ -6,7 +6,7 @@ import pulumi_kubernetes as kubernetes
 from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
-from . import common, config
+from . import common, config, namespace
 
 
 class CertManager(ComponentResource):
@@ -30,14 +30,14 @@ class CertManager(ComponentResource):
         self._config = config
         self._dns = dns
 
-        self._namespace, self._namespace_name = common.namespace.create(
+        self._namespace = namespace.Namespace(
             self._config.namespace, opts=self._child_opts
         )
 
         self._manager = kubernetes.helm.v4.Chart(
             self._config.namespace,
             opts=self._child_opts,
-            namespace=self._namespace_name,
+            namespace=self._namespace.name,
             chart=self._config.chart,
             version=self._config.version,
             skip_crds=False,
@@ -48,7 +48,7 @@ class CertManager(ComponentResource):
             f"{self._config.issuer}-token",
             opts=self._child_opts,
             immutable=True,
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace_name),
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace.name),
             type="Opaque",
             string_data={self.API_TOKEN_KEY: self._dns.token.cert_manager},
         )
