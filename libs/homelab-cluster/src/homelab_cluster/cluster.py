@@ -1,5 +1,6 @@
 from typing import ClassVar
 
+import homelab_dns as dns
 import homelab_host as host
 import homelab_kubernetes as kubernetes
 import homelab_pulumi as pulumi
@@ -15,13 +16,19 @@ class Cluster(ComponentResource):
     RESOURCE_TYPE: ClassVar[str] = "cluster"
 
     def __init__(
-        self, context: Context, config: config.Config, *, opts: ResourceOptions | None
+        self,
+        context: Context,
+        config: config.Config,
+        *,
+        opts: ResourceOptions | None,
+        dns: dns.Dns,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, config.name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
 
         self._context = context
         self._config = config
+        self._dns = dns
 
         self.build_host()
 
@@ -91,4 +98,5 @@ class Cluster(ComponentResource):
                     }
                 ),
             ),
+            dns=self._dns,
         )

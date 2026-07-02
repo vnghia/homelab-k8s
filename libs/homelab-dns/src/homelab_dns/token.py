@@ -54,7 +54,7 @@ class Token(ComponentResource):
                     resources=self._api_resources,
                 )
             ],
-        )
+        ).value
 
     @classmethod
     def get_permission_group_args(

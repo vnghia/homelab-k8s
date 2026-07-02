@@ -1,5 +1,6 @@
 from typing import ClassVar
 
+import homelab_dns as dns
 from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
@@ -16,16 +17,22 @@ class Kubernetes(ComponentResource):
         config: config.Config,
         *,
         opts: ResourceOptions,
+        dns: dns.Dns,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
 
         self._context = context
         self._config = config
+        self._dns = dns
 
         self.build_cert_manager()
 
     def build_cert_manager(self) -> None:
         self._cert_manager = cert_manager.CertManager(
-            self._context, self._name, self._config.cert_manager, opts=self._child_opts
+            self._context,
+            self._name,
+            self._config.cert_manager,
+            opts=self._child_opts,
+            dns=self._dns,
         )

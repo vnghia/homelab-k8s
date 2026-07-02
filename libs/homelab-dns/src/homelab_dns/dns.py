@@ -26,6 +26,6 @@ class Dns(ComponentResource):
         self.build_token()
 
     def build_token(self) -> None:
-        self._token = token.Token(
+        self.token = token.Token(
             self._name, self._context, self._config, opts=self._child_opts
         )

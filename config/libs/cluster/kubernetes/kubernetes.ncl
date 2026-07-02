@@ -31,6 +31,8 @@
             namespace | String,
             chart | String,
             version | String,
+            issuer | String,
+            email | String,
           },
       },
   },

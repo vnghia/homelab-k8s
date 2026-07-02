@@ -13,11 +13,3 @@ config-dump-talos:
 [group("config")]
 config-dump-kube:
     pulumi stack output --show-secrets cluster.kubeconfig > ".config/kubeconfig/$(pulumi stack --show-name).yaml"
-
-[group("kustomize")]
-kustomize-build-cilium:
-    kustomize build --enable-helm ./config/cluster/kubernetes/networking/cilium | \
-    nickel export --stdin-format yaml --format json | \
-    jq '{"cluster": {"kubernetes": {"networking": {"cilium": {"manifests": . } } } } }' | \
-    nickel convert --stdin-format json | \
-    sed -e 's/"__CILIUM_NAMESPACE__"/cluster.kubernetes.networking.cilium.namespace/g' > ./config/cluster/kubernetes/networking/cilium/manifests.ncl
