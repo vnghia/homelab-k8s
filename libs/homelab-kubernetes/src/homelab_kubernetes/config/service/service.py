@@ -1,5 +1,7 @@
 from homelab_model import BaseModel
 
+from . import account
+
 
 class Config(BaseModel):
-    pass
+    accounts: dict[str, account.Config]
