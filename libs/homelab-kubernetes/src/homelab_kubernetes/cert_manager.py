@@ -43,7 +43,14 @@ class CertManager(ComponentResource):
             chart=self._config.chart,
             version=self._config.version,
             skip_crds=False,
-            values={"crds": {"enabled": True}, "config": {"enableGatewayAPI": True}},
+            values={
+                "crds": {"enabled": True},
+                "config": {
+                    "enableGatewayAPI": True,
+                    "enableGatewayAPIListenerSet": True,
+                    "featureGates": {"ListenerSets": True},
+                },
+            },
         )
 
         self._issuer_token = kubernetes.core.v1.Secret(
