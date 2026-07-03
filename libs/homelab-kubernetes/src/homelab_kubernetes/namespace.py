@@ -18,4 +18,4 @@ class Namespace:
             opts=opts.merge(ResourceOptions(delete_before_replace=True)),
         )
         self.name = common.metadata.name(self._namespace.metadata)
-        pulumi.data.export(f"kubernetes.namespace.{name}", self.name)
+        pulumi.data.export(f"namespace.{name}", self.name)

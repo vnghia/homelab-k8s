@@ -47,14 +47,7 @@ class Account(ComponentResource):
             self._role = kubernetes.rbac.v1.ClusterRole(
                 name,
                 opts=self._child_opts,
-                rules=[
-                    kubernetes.rbac.v1.PolicyRuleArgs(
-                        api_groups=rule.api_groups,
-                        resources=rule.resources,
-                        verbs=rule.verbs,
-                    )
-                    for rule in self._config.rules
-                ],
+                rules=[rule.to_args() for rule in self._config.rules],
             )
             self._binding = kubernetes.rbac.v1.ClusterRoleBinding(
                 name,

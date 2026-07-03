@@ -1,10 +1,11 @@
 from typing import ClassVar
 
+import homelab_pulumi as pulumi
 import pulumi_kubernetes as kubernetes
 from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
-from .. import config, namespace
+from .. import common, config, namespace
 from . import account
 
 
@@ -50,20 +51,18 @@ class Deployment(ComponentResource):
                         ].name
                         if self._config.account
                         else None,
+                        security_context=self._config.security_context.to_args(),
                         containers=[
-                            kubernetes.core.v1.ContainerArgs(
-                                name=name,
-                                image=container.image.image,
-                                env=[
-                                    kubernetes.core.v1.EnvVarArgs(
-                                        name=name, value=value
-                                    )
-                                    for name, value in container.env.items()
-                                ],
-                            )
+                            container.to_args(name)
                             for name, container in self._config.containers.items()
                         ],
                     ),
                 ),
             ),
         )
+
+        pulumi.data.export(
+            f"deployment.{self._service}.{self._name}",
+            common.metadata.name(self._deployment.metadata),
+        )
+        self.register_outputs({})
