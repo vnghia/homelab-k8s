@@ -47,7 +47,8 @@
                   },
                 cluster
                   | {
-                    pod_subnets | Array String
+                    pod_subnets | Array String,
+                    service_subnets | Array String,
                   }
               },
             stage

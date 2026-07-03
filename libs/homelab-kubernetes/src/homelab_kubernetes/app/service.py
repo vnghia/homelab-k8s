@@ -1,8 +1,9 @@
+import homelab_pulumi as pulumi
 import pulumi_kubernetes as kubernetes
 from homelab_context import Context
 from pulumi import ResourceOptions
 
-from .. import config, namespace
+from .. import common, config, namespace
 from . import deployment
 
 
@@ -34,6 +35,7 @@ class Service:
                 namespace=self._namespace.name, labels=self._deployment.labels
             ),
             spec=kubernetes.core.v1.ServiceSpecArgs(
+                ip_family_policy="RequireDualStack",
                 ports=[
                     kubernetes.core.v1.ServicePortArgs(
                         name=name,
@@ -54,4 +56,9 @@ class Service:
                 ],
                 selector=self._deployment.labels,
             ),
+        )
+
+        pulumi.data.export(
+            f"service.{self._app}.{self._name}",
+            common.metadata.name(self._service.metadata),
         )

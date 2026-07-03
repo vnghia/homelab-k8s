@@ -207,7 +207,8 @@ class Machine(ComponentResource):
                     {
                         "cluster": {
                             "network": {
-                                "podSubnets": networking_config.cluster.pod_subnets
+                                "podSubnets": networking_config.cluster.pod_subnets,
+                                "serviceSubnets": networking_config.cluster.service_subnets,
                             },
                             "etcd": {"advertisedSubnets": valid_subnets},
                         }
