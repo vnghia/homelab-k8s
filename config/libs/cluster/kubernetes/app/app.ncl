@@ -2,7 +2,7 @@
 & (import "deployment/deployment.ncl")
 & {
   contracts = {},
-  cluster.kubernetes.Service = {
+  cluster.kubernetes.App = {
     namespace
       | {
         name | contracts.Nullable String | default = null,
@@ -18,13 +18,13 @@
       = {},
     accounts
       | {
-        _ : cluster.kubernetes.service.Account
+        _ : cluster.kubernetes.app.Account
       }
       | default
       = {},
     deployments
       | {
-        _ : cluster.kubernetes.service.Deployment
+        _ : cluster.kubernetes.app.Deployment
       },
   },
 }

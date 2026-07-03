@@ -1,5 +1,5 @@
 {
-  cluster.kubernetes.service.deployment.Container = {
+  cluster.kubernetes.app.deployment.Container = {
     image
       | {
         repo | String,

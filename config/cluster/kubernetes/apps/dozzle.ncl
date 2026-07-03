@@ -3,7 +3,7 @@ let
   port_value = 8080,
 in
 {
-  cluster.kubernetes.services.dozzle = {
+  cluster.kubernetes.apps.dozzle = {
     accounts = {
       pod-viewer = {
         cluster = true,

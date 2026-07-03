@@ -1,7 +1,7 @@
 (import "container.ncl")
 & {
   contracts = {},
-  cluster.kubernetes.service.Deployment = {
+  cluster.kubernetes.app.Deployment = {
     account | contracts.Nullable String | default = null,
     security_context
       | {
@@ -29,7 +29,7 @@
       = {},
     containers
       | {
-        _ : cluster.kubernetes.service.deployment.Container
+        _ : cluster.kubernetes.app.deployment.Container
       },
   },
 }

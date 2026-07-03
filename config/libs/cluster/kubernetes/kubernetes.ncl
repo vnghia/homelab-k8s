@@ -1,5 +1,5 @@
 (import "namespace.ncl")
-& (import "service/service.ncl")
+& (import "app/app.ncl")
 & {
   contracts = {},
   cluster = {
@@ -40,9 +40,9 @@
             issuer | String,
             email | String,
           },
-        services
+        apps
           | {
-            _ : cluster.kubernetes.Service
+            _ : cluster.kubernetes.App
           },
       },
   },

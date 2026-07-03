@@ -1,5 +1,5 @@
 {
-  cluster.kubernetes.service.Account = {
+  cluster.kubernetes.app.Account = {
     cluster | Bool,
     rules
       | Array {

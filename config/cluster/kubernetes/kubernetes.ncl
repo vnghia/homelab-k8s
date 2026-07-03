@@ -6,4 +6,4 @@
 }
 & (import "networking/networking.ncl")
 & (import "cert-manager.ncl")
-& (import "services/services.ncl")
+& (import "apps/apps.ncl")

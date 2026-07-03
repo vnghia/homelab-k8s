@@ -7,14 +7,14 @@ from .. import config, namespace
 from . import account, deployment
 
 
-class Service(ComponentResource):
-    RESOURCE_TYPE: ClassVar[str] = "service"
+class App(ComponentResource):
+    RESOURCE_TYPE: ClassVar[str] = "app"
 
     def __init__(
         self,
         context: Context,
         name: str,
-        config: config.service.Config,
+        config: config.app.Config,
         *,
         opts: ResourceOptions,
     ) -> None:
@@ -44,7 +44,7 @@ class Service(ComponentResource):
                 name,
                 config,
                 opts=self._child_opts,
-                service=self._name,
+                app=self._name,
                 namespace=self._namespace,
             )
             for name, config in self._config.accounts.items()
@@ -57,9 +57,9 @@ class Service(ComponentResource):
                 name,
                 config,
                 opts=self._child_opts,
-                service=self._name,
+                app=self._name,
                 namespace=self._namespace,
-                service_accounts=self._accounts,
+                accounts=self._accounts,
             )
             for name, config in self._config.deployments.items()
         }
