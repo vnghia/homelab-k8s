@@ -320,9 +320,8 @@ class Machine(ComponentResource):
                                             namespace=kubernetes.kustomize.KustomizeProviderNamespaceProps(
                                                 name=cilium_config.namespace,
                                                 labels={
-                                                    "pod-security.kubernetes.io/enforce": "privileged",
-                                                    "pod-security.kubernetes.io/audit": "privileged",
-                                                    "pod-security.kubernetes.io/warn": "privileged",
+                                                    mode.label: kubernetes.config.security.Level.PRIVILEGED
+                                                    for mode in kubernetes.config.security.Mode
                                                 },
                                             ),
                                             kustomization=cilium_config.kustomization,

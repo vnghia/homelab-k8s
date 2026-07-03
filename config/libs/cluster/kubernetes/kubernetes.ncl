@@ -1,4 +1,5 @@
-(import "service/service.ncl")
+(import "namespace.ncl")
+& (import "service/service.ncl")
 & {
   contracts = {},
   cluster = {
@@ -29,7 +30,11 @@
           },
         cert_manager
           | {
-            namespace | String,
+            namespace
+              | {
+                name | String,
+                config | cluster.kubernetes.Namespace | default = {},
+              },
             chart | String,
             version | String,
             issuer | String,

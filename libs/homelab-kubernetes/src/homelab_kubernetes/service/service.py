@@ -31,7 +31,11 @@ class Service(ComponentResource):
         self.register_outputs({})
 
     def build_namespace(self) -> None:
-        self._namespace = namespace.Namespace(self._name, opts=self._child_opts)
+        self._namespace = namespace.Namespace(
+            self._config.namespace.name or self._name,
+            self._config.namespace.config,
+            opts=self._child_opts,
+        )
 
     def build_accounts(self) -> None:
         self._accounts = {
