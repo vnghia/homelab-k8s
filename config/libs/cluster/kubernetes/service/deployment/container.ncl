@@ -9,6 +9,12 @@
       | {
         _ : String
       },
+    ports
+      | {
+        _ : {
+          container_port | Number,
+        }
+      },
     security_context
       | {
         allow_privilege_escalation | Bool | default = false,

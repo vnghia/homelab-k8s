@@ -1,3 +1,7 @@
+let
+  port_name = "dozzle",
+  port_value = 8080,
+in
 {
   cluster.kubernetes.services.dozzle = {
     accounts = {
@@ -38,8 +42,14 @@
               tag = "v10.6.6",
             },
             env = {
+              DOZZLE_ADDR = ":%{port_value}",
               DOZZLE_MODE = "k8s",
               DOZZLE_NO_ANALYTICS = "true",
+            },
+            ports = {
+              "%{port_name}" = {
+                container_port = port_value,
+              }
             },
           },
         },

@@ -1,12 +1,13 @@
 import pulumi_kubernetes as kubernetes
 from homelab_model import BaseModel
 
-from . import image, security_context
+from . import image, port, security_context
 
 
 class Config(BaseModel):
     image: image.Config
     env: dict[str, str]
+    ports: dict[str, port.Config]
     security_context: security_context.Config
 
     def to_args(self, name: str) -> kubernetes.core.v1.ContainerArgs:
@@ -17,5 +18,6 @@ class Config(BaseModel):
                 kubernetes.core.v1.EnvVarArgs(name=name, value=value)
                 for name, value in self.env.items()
             ],
+            ports=[port.to_args(name) for name, port in self.ports.items()],
             security_context=self.security_context.to_args(),
         )
