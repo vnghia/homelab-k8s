@@ -15,6 +15,7 @@
             autoMount = { enabled = false },
             hostRoot = "/sys/fs/cgroup"
           },
+          defaultLBServiceIPAM = "nodeipam",
           egressGateway = {
             enabled = true,
           },
@@ -46,6 +47,9 @@
           kubeProxyReplacement = true,
           k8sServiceHost = "localhost",
           k8sServicePort = 7445,
+          nodeIPAM = {
+            enabled = true,
+          },
           operator = { replicas = 1 },
           securityContext = {
             capabilities = {
