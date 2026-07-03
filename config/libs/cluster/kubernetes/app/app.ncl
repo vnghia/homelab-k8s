@@ -1,5 +1,6 @@
 (import "account.ncl")
 & (import "deployment/deployment.ncl")
+& (import "service.ncl")
 & {
   contracts = {},
   cluster.kubernetes.App = {
@@ -25,6 +26,14 @@
     deployments
       | {
         _ : cluster.kubernetes.app.Deployment
-      },
+      }
+      | default
+      = {},
+    services
+      | {
+        _ : cluster.kubernetes.app.Service
+      }
+      | default
+      = {},
   },
 }

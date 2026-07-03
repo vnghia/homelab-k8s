@@ -1,11 +1,15 @@
 let
+  account_name = "pod-viewer",
+  deployment_name = "dozzle",
+  container_name = "dozzle",
   port_name = "dozzle",
   port_value = 8080,
+  service_name = "dozzle",
 in
 {
   cluster.kubernetes.apps.dozzle = {
     accounts = {
-      pod-viewer = {
+      "%{account_name}" = {
         cluster = true,
         rules = [
           {
@@ -32,10 +36,10 @@ in
       }
     },
     deployments = {
-      dozzle = {
-        account = "pod-viewer",
+      "%{deployment_name}" = {
+        account = account_name,
         containers = {
-          dozzle = {
+          "%{container_name}" = {
             image = {
               # renovate: datasource=docker
               repo = "ghcr.io/amir20/dozzle",
@@ -51,6 +55,19 @@ in
                 container_port = port_value,
               }
             },
+          },
+        },
+      },
+    },
+    services = {
+      "%{service_name}" = {
+        deployment = deployment_name,
+        ports = {
+          "%{port_name}" = {
+            container = {
+              container = container_name,
+              port = port_name,
+            }
           },
         },
       },

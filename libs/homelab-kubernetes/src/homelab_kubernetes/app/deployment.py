@@ -32,19 +32,21 @@ class Deployment(ComponentResource):
         self._namespace = namespace
         self._accounts = accounts
 
-        self._labels = {"app": self._name, "deployment": self._name}
+        self.labels = {
+            "app.kubernetes.io/name": self._name,
+            "app.kubernetes.io/component": self._name,
+        }
+
         self._deployment = kubernetes.apps.v1.Deployment(
             self._name,
             opts=self._child_opts,
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                labels=self._labels, namespace=self._namespace.name
+                labels=self.labels, namespace=self._namespace.name
             ),
             spec=kubernetes.apps.v1.DeploymentSpecArgs(
-                selector=kubernetes.meta.v1.LabelSelectorArgs(
-                    match_labels=self._labels
-                ),
+                selector=kubernetes.meta.v1.LabelSelectorArgs(match_labels=self.labels),
                 template=kubernetes.core.v1.PodTemplateSpecArgs(
-                    metadata=kubernetes.meta.v1.ObjectMetaArgs(labels=self._labels),
+                    metadata=kubernetes.meta.v1.ObjectMetaArgs(labels=self.labels),
                     spec=kubernetes.core.v1.PodSpecArgs(
                         service_account_name=self._accounts[self._config.account].name
                         if self._config.account

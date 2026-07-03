@@ -1,5 +1,3 @@
 {
-  cluster.kubernetes.apps.pdf = {
-    deployments = {},
-  },
+  cluster.kubernetes.apps.pdf = {},
 }

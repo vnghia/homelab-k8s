@@ -1,7 +1,7 @@
 from homelab_model import BaseModel
 
 from .. import namespace
-from . import account, deployment
+from . import account, deployment, service
 
 
 class Namespace(BaseModel):
@@ -13,3 +13,4 @@ class Config(BaseModel):
     namespace: Namespace
     accounts: dict[str, account.Config]
     deployments: dict[str, deployment.Config]
+    services: dict[str, service.Config]
