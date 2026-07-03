@@ -33,6 +33,9 @@
               name = cluster.kubernetes.networking.cilium.namespace,
             },
           },
+          hostFirewall = {
+            enabled = true,
+          },
           hubble = {
             enabled = true,
             relay = { enabled = true },
