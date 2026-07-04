@@ -15,3 +15,4 @@
   },
 }
 & (import "kustomization.ncl")
+& (import "gateway.ncl")

@@ -17,7 +17,6 @@
               autoMount = { enabled = false },
               hostRoot = "/sys/fs/cgroup"
             },
-            defaultLBServiceIPAM = "nodeipam",
             egressGateway = {
               enabled = true,
             },

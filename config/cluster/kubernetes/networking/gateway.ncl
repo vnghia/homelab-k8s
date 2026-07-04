@@ -5,5 +5,8 @@
       version = "v1.5.1",
       type = "experimental",
     },
+    namespace = {
+      name = "gateway",
+    },
   },
 }

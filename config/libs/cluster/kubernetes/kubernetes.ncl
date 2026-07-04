@@ -23,6 +23,32 @@
                       | std.enum.TagOrString
                       | [| 'standard, 'experimental |],
                   },
+                namespace | cluster.kubernetes.Namespace,
+                cilium
+                  | {
+                    classes
+                      | {
+                        _ : {
+                          spec
+                            | {
+                              _ : Dyn
+                            }
+                        }
+                      }
+                  },
+                gateways
+                  | {
+                    _ : {
+                      class_ | String,
+                      listeners
+                        | {
+                          _ : {
+                            protocol | String,
+                            port | Number,
+                          }
+                        },
+                    }
+                  },
               },
             cilium
               | {

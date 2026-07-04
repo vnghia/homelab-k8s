@@ -4,7 +4,7 @@ import homelab_dns as dns
 from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
-from . import app, cert_manager, config
+from . import app, cert_manager, config, gateway
 
 
 class Kubernetes(ComponentResource):
@@ -27,6 +27,7 @@ class Kubernetes(ComponentResource):
         self._dns = dns
 
         self.build_cert_manager()
+        self.build_gateway()
         self.build_apps()
 
     def build_cert_manager(self) -> None:
@@ -36,6 +37,14 @@ class Kubernetes(ComponentResource):
             self._config.cert_manager,
             opts=self._child_opts,
             dns=self._dns,
+        )
+
+    def build_gateway(self) -> None:
+        self._gateway = gateway.Gateway(
+            self._context,
+            self._name,
+            self._config.networking.gateway,
+            opts=self._child_opts,
         )
 
     def build_apps(self) -> None:
