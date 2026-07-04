@@ -32,7 +32,9 @@ class Account(ComponentResource):
         self._account = kubernetes.core.v1.ServiceAccount(
             self._name,
             opts=self._child_opts,
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace.name),
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                namespace=self._namespace.name, labels=self._namespace.build_labels()
+            ),
         )
         self.name = common.metadata.name(self._account.metadata)
 

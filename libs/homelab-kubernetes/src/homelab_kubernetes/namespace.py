@@ -19,3 +19,8 @@ class Namespace:
         )
         self.name = common.metadata.name(self._namespace.metadata)
         pulumi.data.export(f"namespace.{name}", self.name)
+
+    def build_labels(self, *, apps: dict[str, str] | None = None) -> dict[str, str]:
+        return {
+            "app.kubernetes.io/name": self._name,
+        } | ({f"app.kubernetes.io/{key}": value for key, value in (apps or {}).items()})

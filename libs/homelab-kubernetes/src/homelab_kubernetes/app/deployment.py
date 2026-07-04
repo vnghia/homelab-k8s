@@ -32,10 +32,7 @@ class Deployment(ComponentResource):
         self._namespace = namespace
         self._accounts = accounts
 
-        self.labels = {
-            "app.kubernetes.io/name": self._name,
-            "app.kubernetes.io/component": self._name,
-        }
+        self.labels = self._namespace.build_labels(apps={"component": self._name})
 
         self._deployment = kubernetes.apps.v1.Deployment(
             self._name,
