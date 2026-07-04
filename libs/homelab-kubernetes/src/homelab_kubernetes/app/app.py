@@ -33,8 +33,11 @@ class App(ComponentResource):
 
     def build_namespace(self) -> None:
         self._namespace = namespace.Namespace(
-            self._config.namespace.name or self._name,
-            self._config.namespace.config,
+            self._config.namespace.model_copy(
+                update={
+                    "name": self._config.namespace.name or self._name,
+                }
+            ),
             opts=self._child_opts,
         )
 

@@ -259,7 +259,7 @@ class Machine(ComponentResource):
 
     def apply_networking_gateway_api_patches(self) -> None:
         if self._config.features.controlplane:
-            gateway_config = self._kubernetes_config.networking.gateway
+            gateway_config = self._kubernetes_config.networking.gateway.crd
             self.apply_patches(
                 "networking-gateway-api",
                 [
@@ -319,11 +319,8 @@ class Machine(ComponentResource):
                                             self._child_opts,
                                             id="cilium",
                                             namespace=kubernetes.kustomize.KustomizeProviderNamespaceProps(
-                                                name=cilium_config.namespace,
-                                                labels={
-                                                    mode.label: kubernetes.config.security.Level.PRIVILEGED
-                                                    for mode in kubernetes.config.security.Mode
-                                                },
+                                                name=cilium_config.namespace.name,
+                                                labels=cilium_config.namespace.spec.to_labels(),
                                             ),
                                             kustomization=cilium_config.kustomization,
                                         ).manifests,

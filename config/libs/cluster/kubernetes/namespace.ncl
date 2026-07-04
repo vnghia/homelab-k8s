@@ -1,10 +1,13 @@
 {
   cluster.kubernetes.Namespace = {
-    securities
-      | {
-        _ : String
-      }
-      | default
-      = {},
+    name | String,
+    spec = {
+      securities
+        | {
+          _ : String
+        }
+        | default
+        = {},
+    },
   },
 }

@@ -31,9 +31,7 @@ class CertManager(ComponentResource):
         self._dns = dns
 
         self._namespace = namespace.Namespace(
-            self._config.namespace.name,
-            self._config.namespace.config,
-            opts=self._child_opts,
+            self._config.namespace, opts=self._child_opts
         )
 
         self._manager = kubernetes.helm.v4.Chart(

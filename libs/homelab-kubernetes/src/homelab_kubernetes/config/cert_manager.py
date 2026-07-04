@@ -3,13 +3,8 @@ from homelab_model import BaseModel
 from . import namespace
 
 
-class Namespace(BaseModel):
-    name: str
-    config: namespace.Config
-
-
 class Config(BaseModel):
-    namespace: Namespace
+    namespace: namespace.Config
     chart: str
     version: str
     issuer: str

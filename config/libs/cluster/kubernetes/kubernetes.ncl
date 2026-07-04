@@ -16,25 +16,24 @@
           | {
             gateway
               | {
-                version | String,
-                type
-                  | std.enum.TagOrString
-                  | [| 'standard, 'experimental |],
+                crd
+                  | {
+                    version | String,
+                    type
+                      | std.enum.TagOrString
+                      | [| 'standard, 'experimental |],
+                  },
               },
             cilium
               | {
-                namespace | String,
+                namespace | cluster.kubernetes.Namespace,
                 version | String | not_exported,
                 kustomization | cluster.kubernetes.Kustomization,
               },
           },
         cert_manager
           | {
-            namespace
-              | {
-                name | String,
-                config | cluster.kubernetes.Namespace | default = {},
-              },
+            namespace | cluster.kubernetes.Namespace,
             chart | String,
             version | String,
             issuer | String,

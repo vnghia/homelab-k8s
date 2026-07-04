@@ -5,9 +5,10 @@
   contracts = {},
   cluster.kubernetes.App = {
     namespace
-      | {
-        name | contracts.Nullable String | default = null,
-        config | cluster.kubernetes.Namespace = {
+      | cluster.kubernetes.Namespace
+      & {
+        name | default = "",
+        spec = {
           securities = {
             enforce | default = "restricted",
             audit | default = "restricted",

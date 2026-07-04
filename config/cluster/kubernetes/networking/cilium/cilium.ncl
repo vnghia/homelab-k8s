@@ -1,6 +1,15 @@
 {
   cluster.kubernetes.networking.cilium = {
-    namespace = "cilium-core",
+    namespace = {
+      name = "cilium-core",
+      spec = {
+        securities = {
+          audit = "privileged",
+          enforce = "privileged",
+          warn = "privileged",
+        },
+      },
+    },
     # renovate: datasource=github-releases packageName=cilium/cilium
     version = "1.19.5",
   },

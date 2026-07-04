@@ -4,13 +4,8 @@ from .. import namespace
 from . import account, deployment, service
 
 
-class Namespace(BaseModel):
-    name: str | None
-    config: namespace.Config
-
-
 class Config(BaseModel):
-    namespace: Namespace
+    namespace: namespace.Config
     accounts: dict[str, account.Config]
     deployments: dict[str, deployment.Config]
     services: dict[str, service.Config]
