@@ -1,5 +1,5 @@
 {
-  cluster.kubernetes.cert_manager = {
+  cluster.kubernetes.apps.cert_manager = {
     namespace = {
       name = "cert-manager",
     },

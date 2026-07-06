@@ -7,7 +7,7 @@ let
   service_name = "dozzle",
 in
 {
-  cluster.kubernetes.apps.dozzle = {
+  cluster.kubernetes.apps.apps.dozzle = {
     accounts = {
       "%{account_name}" = {
         cluster = true,

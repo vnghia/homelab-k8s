@@ -4,35 +4,27 @@ import homelab_dns as dns
 import homelab_pulumi
 import pulumi_kubernetes as kubernetes
 from homelab_context import Context
-from pulumi import ComponentResource, ResourceOptions
+from pulumi import ResourceOptions
 
-from . import common, config, namespace
+from . import app, common, config
 
 
-class CertManager(ComponentResource):
-    RESOURCE_TYPE: ClassVar[str] = "cert-manager"
-
+class CertManager(app.App[config.cert_manager.Config]):
     API_TOKEN_KEY: ClassVar[str] = "api-token"  # noqa: S105
 
     def __init__(
         self,
         context: Context,
-        name: str,
         config: config.cert_manager.Config,
         *,
         opts: ResourceOptions,
         dns: dns.Dns,
     ) -> None:
-        super().__init__(self.RESOURCE_TYPE, name, None, opts)
-        self._child_opts = ResourceOptions(parent=self)
-
-        self._context = context
-        self._config = config
-        self._dns = dns
-
-        self._namespace = namespace.Namespace(
-            self._config.namespace, opts=self._child_opts
+        super().__init__(
+            context, config.namespace.name, config, opts=opts, register_output=False
         )
+
+        self._dns = dns
 
         self._manager = kubernetes.helm.v4.Chart(
             self._config.namespace.name,

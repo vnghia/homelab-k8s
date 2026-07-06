@@ -7,16 +7,17 @@ from .. import config, namespace
 from . import account, deployment, service
 
 
-class App(ComponentResource):
+class App[T: config.app.Config = config.app.Config](ComponentResource):
     RESOURCE_TYPE: ClassVar[str] = "app"
 
     def __init__(
         self,
         context: Context,
         name: str,
-        config: config.app.Config,
+        config: T,
         *,
         opts: ResourceOptions,
+        register_output: bool = True,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
@@ -29,7 +30,8 @@ class App(ComponentResource):
         self.build_deployments()
         self.build_services()
 
-        self.register_outputs({})
+        if register_output:
+            self.register_outputs({})
 
     def build_namespace(self) -> None:
         self._namespace = namespace.Namespace(

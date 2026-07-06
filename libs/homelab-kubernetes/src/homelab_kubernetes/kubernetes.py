@@ -33,8 +33,7 @@ class Kubernetes(ComponentResource):
     def build_cert_manager(self) -> None:
         self._cert_manager = cert_manager.CertManager(
             self._context,
-            self._name,
-            self._config.cert_manager,
+            self._config.apps.cert_manager,
             opts=self._child_opts,
             dns=self._dns,
         )
@@ -50,5 +49,5 @@ class Kubernetes(ComponentResource):
     def build_apps(self) -> None:
         self._apps = {
             name: app.App(self._context, name, config, opts=self._child_opts)
-            for name, config in self._config.apps.items()
+            for name, config in self._config.apps.apps.items()
         }

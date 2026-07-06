@@ -1,10 +1,7 @@
-from homelab_model import BaseModel
-
-from . import namespace
+from . import app
 
 
-class Config(BaseModel):
-    namespace: namespace.Config
+class Config(app.Config):
     chart: str
     version: str
     issuer: str

@@ -57,17 +57,20 @@
                 kustomization | cluster.kubernetes.Kustomization,
               },
           },
-        cert_manager
-          | {
-            namespace | cluster.kubernetes.Namespace,
-            chart | String,
-            version | String,
-            issuer | String,
-            email | String,
-          },
         apps
           | {
-            _ : cluster.kubernetes.App
+            cert_manager
+              | cluster.kubernetes.App
+              & {
+                chart | String,
+                version | String,
+                issuer | String,
+                email | String,
+              },
+            apps
+              | {
+                _ : cluster.kubernetes.App
+              },
           },
       },
   },
