@@ -1,11 +1,12 @@
-let class = "cilium-nodeipam" in
+let class_nodeipam = "cilium-nodeipam" in
 {
   cluster.kubernetes.networking.gateway = {
     cilium = {
       classes = {
-        "%{class}" = {
+        "%{class_nodeipam}" = {
           spec = {
             service = {
+              allocateLoadBalancerNodePorts = false,
               ipFamilyPolicy = "RequireDualStack",
               loadBalancerClass = "io.cilium/node",
               type = "LoadBalancer",
@@ -15,8 +16,8 @@ let class = "cilium-nodeipam" in
       },
     },
     gateways = {
-      cilium = {
-        class_ = class,
+      "%{class_nodeipam}" = {
+        class_ = class_nodeipam,
         listeners = {
           https = {
             protocol = "HTTPS",
