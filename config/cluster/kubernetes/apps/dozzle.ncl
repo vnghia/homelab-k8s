@@ -38,6 +38,16 @@ in
     deployments = {
       "%{deployment_name}" = {
         account = account_name,
+        resources = {
+          requests = {
+            cpu = "0.025",
+            memory = "64Mi",
+          },
+          limits = {
+            cpu = "0.05",
+            memory = "128Mi",
+          },
+        },
         containers = {
           "%{container_name}" = {
             image = {

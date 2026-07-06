@@ -48,6 +48,7 @@ class Deployment(ComponentResource):
                         service_account_name=self._accounts[self._config.account].name
                         if self._config.account
                         else None,
+                        resources=self._config.resources.to_args(),
                         security_context=self._config.security_context.to_args(),
                         containers=[
                             container.to_args(name)

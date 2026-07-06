@@ -5,5 +5,6 @@ from . import container, security_context
 
 class Config(BaseModel):
     account: str | None
+    resources: container.resources.Config
     security_context: security_context.Config
     containers: dict[str, container.Config]

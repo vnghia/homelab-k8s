@@ -3,6 +3,7 @@
   contracts = {},
   cluster.kubernetes.app.Deployment = {
     account | contracts.Nullable String | default = null,
+    resources | cluster.kubernetes.app.deployment.Container.resources,
     security_context
       | {
         fs_group | Number | default = 1000,
@@ -13,12 +14,7 @@
         run_as_group | Number | default = 1000,
         run_as_non_root | Bool | default = true,
         run_as_user | Number | default = 1000,
-        seccomp_profile
-          | {
-            type | String | default = "RuntimeDefault",
-          }
-          | default
-          = {},
+        seccomp_profile | cluster.kubernetes.app.deployment.Container.security_context.seccomp_profile | default = {},
         supplemental_groups | Array Number | default = [],
         supplemental_groups_policy
           | std.enum.TagOrString

@@ -15,6 +15,13 @@
           container_port | Number,
         }
       },
+    resources
+      | {
+        requests | { _ : String } | default = {},
+        limits | { _ : String } | default = {},
+      }
+      | default
+      = {},
     security_context
       | {
         allow_privilege_escalation | Bool | default = false,
