@@ -1,4 +1,3 @@
-import tempfile
 from typing import Self
 
 import homelab_cluster as cluster
@@ -15,25 +14,13 @@ class Config(BaseModel):
 
     @classmethod
     def load(cls, context: context.Context) -> Self:
-        with tempfile.NamedTemporaryFile(
-            mode="w+", encoding="utf-8", suffix=".json"
-        ) as homelab_config:
-            homelab_config.write(context.pulumi.require("config"))
-            homelab_config.flush()
-
-            nickel_config = (
-                (common.constant.path.ROOT / "config" / "homelab.ncl")
-                .resolve(True)
-                .as_posix()
+        nickel_config = (
+            (common.constant.path.ROOT / "config" / "homelab.ncl")
+            .resolve(True)
+            .as_posix()
+        )
+        return cls.model_validate_json(
+            nickel.run(
+                f'(import "{nickel_config}") & (std.deserialize \'Json (m%%%"{context.pulumi.require("config")}"%%%))'
             )
-
-            return cls.model_validate_json(
-                nickel.run(
-                    " & ".join(
-                        [
-                            f'(import "{path}")'
-                            for path in [homelab_config.name, nickel_config]
-                        ]
-                    )
-                )
-            )
+        )
