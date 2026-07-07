@@ -4,9 +4,11 @@ version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
     "pulumi>=3.247.0",
+    "pydantic>=2.13.4",
 
     # Workspace
     "homelab-common",
+    "homelab-types",
 ]
 
 [build-system]
@@ -15,3 +17,7 @@ build-backend = "uv_build"
 
 [tool.ruff]
 extend = "../../pyproject.toml"
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"pydantic.BaseModel".msg = "Use homelab_types.BaseModel instead"
+"pydantic.RootModel".msg = "Use homelab_types.RootModel instead"

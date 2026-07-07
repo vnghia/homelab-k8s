@@ -1,3 +1,4 @@
+let { contracts, .. } = import "../../../../libs/contracts.ncl" in
 {
   cluster.kubernetes.networking.cilium.kustomization =
     let namespace_name = cluster.kubernetes.networking.cilium.namespace.name in
@@ -81,7 +82,12 @@
       ],
       replacements = [
         {
-          sourceValue = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.cilium-ca.ca.crt",
+          sourceValue =
+            contracts.reference.pulumi.Secret
+            & {
+              type = "str",
+              path = "cluster.kubernetes.networking.cilium.cilium-ca.ca.crt",
+            },
           targets = [
             {
               select = { name = "cilium-ca", kind = "Secret" },
@@ -90,7 +96,12 @@
           ]
         },
         {
-          sourceValue = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.cilium-ca.ca.key",
+          sourceValue =
+            contracts.reference.pulumi.Secret
+            & {
+              type = "str",
+              path = "cluster.kubernetes.networking.cilium.cilium-ca.ca.key",
+            },
           targets = [
             {
               select = { name = "cilium-ca", kind = "Secret" },
@@ -99,7 +110,12 @@
           ]
         },
         {
-          sourceValue = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.hubble-server-certs.ca.crt",
+          sourceValue =
+            contracts.reference.pulumi.Secret
+            & {
+              type = "str",
+              path = "cluster.kubernetes.networking.cilium.hubble-server-certs.ca.crt",
+            },
           targets = [
             {
               select = { name = "hubble-server-certs", kind = "Secret" },
@@ -108,7 +124,12 @@
           ]
         },
         {
-          sourceValue = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.hubble-server-certs.tls.crt",
+          sourceValue =
+            contracts.reference.pulumi.Secret
+            & {
+              type = "str",
+              path = "cluster.kubernetes.networking.cilium.hubble-server-certs.tls.crt",
+            },
           targets = [
             {
               select = { name = "hubble-server-certs", kind = "Secret" },
@@ -117,7 +138,12 @@
           ]
         },
         {
-          sourceValue = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.hubble-server-certs.tls.key",
+          sourceValue =
+            contracts.reference.pulumi.Secret
+            & {
+              type = "str",
+              path = "cluster.kubernetes.networking.cilium.hubble-server-certs.tls.key",
+            },
           targets = [
             {
               select = { name = "hubble-server-certs", kind = "Secret" },
@@ -126,7 +152,12 @@
           ]
         },
         {
-          sourceValue = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.hubble-relay-client-certs.ca.crt",
+          sourceValue =
+            contracts.reference.pulumi.Secret
+            & {
+              type = "str",
+              path = "cluster.kubernetes.networking.cilium.hubble-relay-client-certs.ca.crt",
+            },
           targets = [
             {
               select = { name = "hubble-relay-client-certs", kind = "Secret" },
@@ -135,7 +166,12 @@
           ]
         },
         {
-          sourceValue = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.hubble-relay-client-certs.tls.crt",
+          sourceValue =
+            contracts.reference.pulumi.Secret
+            & {
+              type = "str",
+              path = "cluster.kubernetes.networking.cilium.hubble-relay-client-certs.tls.crt",
+            },
           targets = [
             {
               select = { name = "hubble-relay-client-certs", kind = "Secret" },
@@ -144,7 +180,12 @@
           ]
         },
         {
-          sourceValue = "#ref:pulumi/secrets:str:cluster.kubernetes.networking.cilium.hubble-relay-client-certs.tls.key",
+          sourceValue =
+            contracts.reference.pulumi.Secret
+            & {
+              type = "str",
+              path = "cluster.kubernetes.networking.cilium.hubble-relay-client-certs.tls.key",
+            },
           targets = [
             {
               select = { name = "hubble-relay-client-certs", kind = "Secret" },

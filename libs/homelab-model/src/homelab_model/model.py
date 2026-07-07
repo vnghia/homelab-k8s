@@ -1,13 +1,12 @@
-from typing import Any
+from typing import Any, Self
 
-from homelab_context import Context
+import homelab_context as context
 from homelab_types import BaseModel as TypesBaseModel
 from homelab_types import RootModel as TypesRootModel
 from pydantic import (
     ConfigDict,
-    SerializationInfo,
-    SerializerFunctionWrapHandler,
-    model_serializer,
+    ModelWrapValidatorHandler,
+    model_validator,
 )
 
 
@@ -20,11 +19,14 @@ class RootModel[T](TypesRootModel[T]):
 
 
 class JsonModel(RootModel[dict[str, Any]]):
-    @model_serializer(mode="wrap")
-    def serialize_model(
-        self, handler: SerializerFunctionWrapHandler, info: SerializationInfo
-    ) -> Any:
-        context = (info.context or {})["context"]
-        if not isinstance(context, Context):
-            raise TypeError("Serialization context is not an instance of type Context")
-        return context.resolve(handler(self))
+    @model_validator(mode="wrap")
+    @classmethod
+    def validate_reference(
+        cls, data: Any, handler: ModelWrapValidatorHandler[Self]
+    ) -> Self:
+        return handler(
+            {
+                key: context.reference.recursive_validate(value)
+                for key, value in data.items()
+            }
+        )

@@ -1,30 +1,22 @@
-from typing import Any
+from typing import Any, ClassVar, Self
 
 import pulumi
-
-from .resolve import ResolveSource, ResolveType, resolve
+from pydantic import SerializationInfo
 
 
 class Context:
+    CONTEXT_KEY: ClassVar[str] = "context"
+
     def __init__(self) -> None:
         self.pulumi = pulumi.Config()
         self.pulumi_secrets = self.pulumi.require_secret_object("secrets")
 
-    def resolve(self, data: Any) -> Any:
-        if isinstance(data, str) and data.startswith("#ref:"):
-            ref = data[5:].split(":", maxsplit=2)
+    @classmethod
+    def from_serialization_info(cls, info: SerializationInfo) -> Self:
+        context = (info.context or {})[cls.CONTEXT_KEY]
+        if not isinstance(context, cls):
+            raise TypeError("Serialization context is not an instance of type Context")
+        return context
 
-            source = ResolveSource(ref[0])
-            type = ResolveType(ref[1])
-            key = ref[2]
-
-            match source:
-                case ResolveSource.PULUMI_SECRETS:
-                    return self.pulumi_secrets.apply(
-                        lambda secrets: resolve(secrets, key, type)
-                    )
-        elif isinstance(data, list):
-            return [self.resolve(item) for item in data]
-        elif isinstance(data, dict):
-            return {key: self.resolve(value) for key, value in data.items()}
-        return data
+    def to_serialization_context(self) -> dict[str, Any]:
+        return {self.CONTEXT_KEY: self}

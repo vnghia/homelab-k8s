@@ -71,7 +71,7 @@ class Gateways(ComponentResource):
                                             namespace=self._namespace.name
                                         ),
                                         spec=config.spec.model_dump(
-                                            context={"context": self._context}
+                                            context=self._context.to_serialization_context()
                                         ),
                                     ).__dict__["metadata"]
                                 ),

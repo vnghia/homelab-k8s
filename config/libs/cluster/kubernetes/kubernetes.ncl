@@ -54,7 +54,7 @@
               | {
                 namespace | cluster.kubernetes.Namespace,
                 version | String | not_exported,
-                kustomization | cluster.kubernetes.Kustomization,
+                kustomization | { _ : Dyn },
               },
           },
         apps

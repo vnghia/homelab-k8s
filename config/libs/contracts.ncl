@@ -7,5 +7,17 @@
         else
           std.contract.check Contract label value
       ),
+
+    reference = {
+      pulumi = {
+        Secret = {
+          kind = "pulumi/secret",
+          type
+            | std.enum.TagOrString
+            | [| 'str, 'bool, 'int, 'float |],
+          path | String,
+        },
+      },
+    },
   },
 }

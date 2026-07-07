@@ -18,3 +18,5 @@ build-backend = "uv_build"
 extend = "../../pyproject.toml"
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
+"pydantic.BaseModel".msg = "Use homelab_types.BaseModel instead"
+"pydantic.RootModel".msg = "Use homelab_types.RootModel instead"
