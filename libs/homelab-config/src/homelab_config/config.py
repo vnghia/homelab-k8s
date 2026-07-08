@@ -21,6 +21,8 @@ class Config(BaseModel):
         )
         return cls.model_validate_json(
             nickel.run(
-                f'(import "{nickel_config}") & (std.deserialize \'Json (m%%%"{data.config}"%%%))'
+                f'(import "{nickel_config}") & '
+                f'(std.deserialize \'Json (m%%%"{data.config}"%%%)) & '
+                f"{{ stack = {('"' + pulumi.constant.STACK + '"') if pulumi.constant.STACK else 'null'} }}"
             )
         )
