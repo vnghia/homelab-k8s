@@ -20,7 +20,7 @@ class Kubernetes(ComponentResource):
         dns: dns.Dns,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
-        self._child_opts = ResourceOptions(parent=self)
+        self._child_opts = ResourceOptions(parent=self, delete_before_replace=True)
 
         self._context = context
         self._config = config

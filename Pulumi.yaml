@@ -13,3 +13,8 @@ config:
   pulumi:disable-default-providers:
     value:
       - kubernetes
+  pulumi:autonaming:
+    value:
+      providers:
+        kubernetes:
+          mode: verbatim

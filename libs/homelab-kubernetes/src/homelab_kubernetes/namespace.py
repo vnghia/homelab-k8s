@@ -14,9 +14,9 @@ class Namespace:
         self._namespace = kubernetes.core.v1.Namespace(
             self._name,
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                name=self._name, labels=self._config.spec.to_labels()
+                labels=self._config.spec.to_labels()
             ),
-            opts=opts.merge(ResourceOptions(delete_before_replace=True)),
+            opts=opts,
         )
         self.name = common.metadata.name(self._namespace.metadata)
         pulumi.data.export(f"namespace.{self._name}", self.name)
