@@ -184,6 +184,7 @@ dependencies = [
     { name = "homelab-config" },
     { name = "homelab-context" },
     { name = "homelab-dns" },
+    { name = "homelab-pulumi" },
     { name = "pulumi" },
     { name = "pydantic" },
 ]
@@ -200,6 +201,7 @@ requires-dist = [
     { name = "homelab-config", editable = "libs/homelab-config" },
     { name = "homelab-context", editable = "libs/homelab-context" },
     { name = "homelab-dns", editable = "libs/homelab-dns" },
+    { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
     { name = "pulumi", specifier = ">=3.247.0" },
     { name = "pydantic", specifier = ">=2.13.4" },
 ]
@@ -256,6 +258,7 @@ dependencies = [
     { name = "homelab-context" },
     { name = "homelab-dns" },
     { name = "homelab-model" },
+    { name = "homelab-pulumi" },
     { name = "py-nickel" },
 ]
 
@@ -266,6 +269,7 @@ requires-dist = [
     { name = "homelab-context", editable = "libs/homelab-context" },
     { name = "homelab-dns", editable = "libs/homelab-dns" },
     { name = "homelab-model", editable = "libs/homelab-model" },
+    { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
     { name = "py-nickel", specifier = ">=1.17.0" },
 ]
 
@@ -276,7 +280,6 @@ source = { editable = "libs/homelab-context" }
 dependencies = [
     { name = "homelab-common" },
     { name = "homelab-types" },
-    { name = "pulumi" },
     { name = "pydantic" },
 ]
 
@@ -284,7 +287,6 @@ dependencies = [
 requires-dist = [
     { name = "homelab-common", editable = "libs/homelab-common" },
     { name = "homelab-types", editable = "libs/homelab-types" },
-    { name = "pulumi", specifier = ">=3.247.0" },
     { name = "pydantic", specifier = ">=2.13.4" },
 ]
 

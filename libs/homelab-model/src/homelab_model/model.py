@@ -26,7 +26,7 @@ class JsonModel(RootModel[dict[str, Any]]):
     ) -> Self:
         return handler(
             {
-                key: context.reference.recursive_validate(value)
+                key: context.Reference.recursive_validate(value)
                 for key, value in data.items()
             }
         )

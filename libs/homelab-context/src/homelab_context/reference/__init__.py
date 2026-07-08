@@ -1,3 +1,3 @@
-from . import pulumi as pulumi
+from . import data as data
+from . import type as type
 from .reference import Reference as Reference
-from .reference import recursive_validate as recursive_validate

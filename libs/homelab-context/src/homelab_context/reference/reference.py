@@ -1,21 +1,50 @@
-from typing import Any
+import typing
+from typing import Any, ClassVar
 
-from pydantic import TypeAdapter, ValidationError
+from homelab_types import BaseModel
+from pydantic import field_validator
 
-from . import pulumi
-
-Reference = pulumi.Pulumi
-
-
-Adapter = TypeAdapter(Reference)
+from .data import resolve
+from .type import PythonType, Type
 
 
-def recursive_validate(data: Any) -> Any:
-    if isinstance(data, list):
-        return [recursive_validate(item) for item in data]
-    if isinstance(data, dict):
-        try:
-            return Adapter.validate_python(data, extra="forbid")
-        except ValidationError:
-            return {key: recursive_validate(value) for key, value in data.items()}
-    return data
+class Reference(BaseModel):
+    KINDS: ClassVar[dict[str, type[Reference]]] = {}
+
+    KIND: ClassVar[str]
+
+    kind: str = ""
+    type: Type
+    path: str
+
+    @classmethod
+    def __init_subclass__(cls, kind: str, **kwargs: Any) -> None:
+        super().__init_subclass__(**kwargs)
+
+    @typing.override
+    @classmethod
+    def __pydantic_init_subclass__(cls, **kwargs: Any) -> None:
+        kind = kwargs.pop("kind")
+        if not isinstance(kind, str):
+            raise TypeError("Reference kind has to be a string")
+
+        cls.KINDS[kind] = cls
+        cls.KIND = kind
+
+    @field_validator("kind", mode="plain")
+    @classmethod
+    def set_kind(cls, _: Any) -> str:
+        return cls.KIND
+
+    @classmethod
+    def recursive_validate(cls, data: Any) -> Any:
+        if isinstance(data, list):
+            return [cls.recursive_validate(item) for item in data]
+        if isinstance(data, dict):
+            if (kind := data.get("kind")) and (kind in cls.KINDS):
+                return cls.KINDS[kind].model_validate(data)
+            return {key: cls.recursive_validate(value) for key, value in data.items()}
+        return data
+
+    def resolve(self, data: Any) -> PythonType:
+        return resolve(data, self.type, self.path)

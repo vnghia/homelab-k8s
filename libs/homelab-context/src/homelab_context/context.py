@@ -1,15 +1,16 @@
 from typing import Any, ClassVar, Self
 
-import pulumi
+from homelab_types import BaseModel
 from pydantic import SerializationInfo
+
+from .reference import Reference
 
 
 class Context:
     CONTEXT_KEY: ClassVar[str] = "context"
 
     def __init__(self) -> None:
-        self.pulumi = pulumi.Config()
-        self.pulumi_secrets = self.pulumi.require_secret_object("secrets")
+        self.__data: dict[type[Reference], Any] = {}
 
     @classmethod
     def from_serialization_info(cls, info: SerializationInfo) -> Self:
@@ -20,3 +21,12 @@ class Context:
 
     def to_serialization_context(self) -> dict[str, Any]:
         return {self.CONTEXT_KEY: self}
+
+    def get[T: BaseModel](self, reference: type[Reference], type: type[T]) -> T:
+        data = self.__data[reference]
+        if not isinstance(data, type):
+            raise TypeError(f"Reference data is not an instance of {type}: {data}")
+        return data
+
+    def set(self, reference: type[Reference], data: Any) -> None:
+        self.__data[reference] = data
