@@ -219,7 +219,6 @@ source = { editable = "libs/homelab-cluster" }
 dependencies = [
     { name = "homelab-common" },
     { name = "homelab-context" },
-    { name = "homelab-dns" },
     { name = "homelab-host" },
     { name = "homelab-kubernetes" },
     { name = "homelab-model" },
@@ -233,7 +232,6 @@ dependencies = [
 requires-dist = [
     { name = "homelab-common", editable = "libs/homelab-common" },
     { name = "homelab-context", editable = "libs/homelab-context" },
-    { name = "homelab-dns", editable = "libs/homelab-dns" },
     { name = "homelab-host", editable = "libs/homelab-host" },
     { name = "homelab-kubernetes", editable = "libs/homelab-kubernetes" },
     { name = "homelab-model", editable = "libs/homelab-model" },
@@ -347,7 +345,6 @@ source = { editable = "libs/homelab-kubernetes" }
 dependencies = [
     { name = "homelab-common" },
     { name = "homelab-context" },
-    { name = "homelab-dns" },
     { name = "homelab-model" },
     { name = "homelab-pulumi" },
     { name = "pulumi" },
@@ -359,7 +356,6 @@ dependencies = [
 requires-dist = [
     { name = "homelab-common", editable = "libs/homelab-common" },
     { name = "homelab-context", editable = "libs/homelab-context" },
-    { name = "homelab-dns", editable = "libs/homelab-dns" },
     { name = "homelab-model", editable = "libs/homelab-model" },
     { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
     { name = "pulumi", specifier = ">=3.247.0" },

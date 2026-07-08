@@ -6,7 +6,7 @@ import pulumi
 from homelab_context import Context, Reference
 from homelab_model import BaseModel
 from pulumi import Output
-from pydantic import ConfigDict, SerializationInfo, model_serializer
+from pydantic import SerializationInfo, model_serializer
 
 
 class Data(BaseModel):
@@ -22,8 +22,6 @@ class Data(BaseModel):
 
 
 class Secret(Reference, kind="pulumi/secret"):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
     @model_serializer(mode="plain")
     def serialize(
         self, info: SerializationInfo

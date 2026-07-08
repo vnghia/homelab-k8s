@@ -16,6 +16,4 @@ class Homelab:
         self._dns = dns.Dns(
             self._config.cluster.name, self._context, self._config.dns, opts=None
         )
-        self._cluster = cluster.Cluster(
-            self._context, self._config.cluster, opts=None, dns=self._dns
-        )
+        self._cluster = cluster.Cluster(self._context, self._config.cluster, opts=None)

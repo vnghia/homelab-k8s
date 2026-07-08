@@ -36,7 +36,7 @@ class Token(ComponentResource):
             {f"{self.SCOPE}.{zone.id}": "*" for zone in self._config.zones.values()}
         ).decode()
 
-        self.cert_manager = cloudflare.ApiToken(
+        self._cert_manager = cloudflare.ApiToken(
             "cert-manager",
             opts=self._child_opts.merge(ResourceOptions(delete_before_replace=True)),
             name=common.string.add_prefix(
@@ -54,7 +54,9 @@ class Token(ComponentResource):
                     resources=self._api_resources,
                 )
             ],
-        ).value
+        )
+
+        self.data = {"cert-manager": self._cert_manager.value}
 
     @classmethod
     def get_permission_group_args(

@@ -2,13 +2,15 @@ import typing
 from typing import Any, ClassVar
 
 from homelab_types import BaseModel
-from pydantic import field_validator
+from pydantic import ConfigDict, field_validator
 
 from .data import resolve
 from .type import PythonType, Type
 
 
 class Reference(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     KINDS: ClassVar[dict[str, type[Reference]]] = {}
 
     KIND: ClassVar[str]

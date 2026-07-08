@@ -1,12 +1,11 @@
 from typing import ClassVar
 
-import homelab_dns as dns
 import homelab_pulumi
 import pulumi_kubernetes as kubernetes
 from homelab_context import Context
 from pulumi import ResourceOptions
 
-from . import app, common, config
+from . import app, config
 
 
 class CertManager(app.App[config.cert_manager.Config]):
@@ -18,13 +17,10 @@ class CertManager(app.App[config.cert_manager.Config]):
         config: config.cert_manager.Config,
         *,
         opts: ResourceOptions,
-        dns: dns.Dns,
     ) -> None:
         super().__init__(
             context, config.namespace.name, config, opts=opts, register_output=False
         )
-
-        self._dns = dns
 
         self._manager = kubernetes.helm.v4.Chart(
             self._config.namespace.name,
@@ -41,15 +37,6 @@ class CertManager(app.App[config.cert_manager.Config]):
                     "featureGates": {"ListenerSets": True},
                 },
             },
-        )
-
-        self._issuer_token = kubernetes.core.v1.Secret(
-            f"{self._config.issuer}-token",
-            opts=self._child_opts,
-            immutable=True,
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace.name),
-            type="Opaque",
-            string_data={self.API_TOKEN_KEY: self._dns.token.cert_manager},
         )
 
         self._issuer = kubernetes.apiextensions.CustomResource(
@@ -71,9 +58,9 @@ class CertManager(app.App[config.cert_manager.Config]):
                             "dns01": {
                                 "cloudflare": {
                                     "apiTokenSecretRef": {
-                                        "name": common.metadata.name(
-                                            self._issuer_token.metadata
-                                        ),
+                                        "name": self._secrets[
+                                            f"{self._config.issuer}-token"
+                                        ].name,
                                         "key": self.API_TOKEN_KEY,
                                     }
                                 }

@@ -83,8 +83,9 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
       replacements = [
         {
           sourceValue =
-            contracts.reference.pulumi.Secret
+            contracts.Reference
             & {
+              kind = "pulumi/secret",
               type = "str",
               path = "cluster.kubernetes.networking.cilium.cilium-ca.ca.crt",
             },
@@ -97,8 +98,9 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
         },
         {
           sourceValue =
-            contracts.reference.pulumi.Secret
+            contracts.Reference
             & {
+              kind = "pulumi/secret",
               type = "str",
               path = "cluster.kubernetes.networking.cilium.cilium-ca.ca.key",
             },
@@ -111,8 +113,9 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
         },
         {
           sourceValue =
-            contracts.reference.pulumi.Secret
+            contracts.Reference
             & {
+              kind = "pulumi/secret",
               type = "str",
               path = "cluster.kubernetes.networking.cilium.hubble-server-certs.ca.crt",
             },
@@ -125,8 +128,9 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
         },
         {
           sourceValue =
-            contracts.reference.pulumi.Secret
+            contracts.Reference
             & {
+              kind = "pulumi/secret",
               type = "str",
               path = "cluster.kubernetes.networking.cilium.hubble-server-certs.tls.crt",
             },
@@ -139,8 +143,9 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
         },
         {
           sourceValue =
-            contracts.reference.pulumi.Secret
+            contracts.Reference
             & {
+              kind = "pulumi/secret",
               type = "str",
               path = "cluster.kubernetes.networking.cilium.hubble-server-certs.tls.key",
             },
@@ -153,8 +158,9 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
         },
         {
           sourceValue =
-            contracts.reference.pulumi.Secret
+            contracts.Reference
             & {
+              kind = "pulumi/secret",
               type = "str",
               path = "cluster.kubernetes.networking.cilium.hubble-relay-client-certs.ca.crt",
             },
@@ -167,8 +173,9 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
         },
         {
           sourceValue =
-            contracts.reference.pulumi.Secret
+            contracts.Reference
             & {
+              kind = "pulumi/secret",
               type = "str",
               path = "cluster.kubernetes.networking.cilium.hubble-relay-client-certs.tls.crt",
             },
@@ -181,8 +188,9 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
         },
         {
           sourceValue =
-            contracts.reference.pulumi.Secret
+            contracts.Reference
             & {
+              kind = "pulumi/secret",
               type = "str",
               path = "cluster.kubernetes.networking.cilium.hubble-relay-client-certs.tls.key",
             },

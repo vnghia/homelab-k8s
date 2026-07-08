@@ -21,7 +21,6 @@ class Cluster(ComponentResource):
         config: config.Config,
         *,
         opts: ResourceOptions | None,
-        dns: dns.Dns,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, config.name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
@@ -98,5 +97,4 @@ class Cluster(ComponentResource):
                     }
                 ),
             ),
-            dns=self._dns,
         )
