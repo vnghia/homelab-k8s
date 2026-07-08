@@ -24,6 +24,8 @@ class JsonModel(RootModel[dict[str, Any]]):
     def validate_reference(
         cls, data: Any, handler: ModelWrapValidatorHandler[Self]
     ) -> Self:
+        if isinstance(data, cls):
+            return data
         return handler(
             {
                 key: context.Reference.recursive_validate(value)

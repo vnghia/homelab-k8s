@@ -2,10 +2,11 @@ from typing import ClassVar
 
 import pulumi_kubernetes as kubernetes
 from homelab_context import Context
-from homelab_model import BaseModel
+from homelab_model import BaseModel, JsonModel
 from pulumi import ComponentResource, Output, ResourceOptions
 
-from . import common, config, namespace
+from . import app, namespace
+from . import config as config_
 
 
 class GatewayClass(BaseModel):
@@ -25,7 +26,7 @@ class Gateways(ComponentResource):
         self,
         context: Context,
         name: str,
-        config: config.networking.gateway.Config,
+        config: config_.networking.gateway.Config,
         *,
         opts: ResourceOptions,
     ) -> None:
@@ -47,39 +48,37 @@ class Gateways(ComponentResource):
     def build_classes(self) -> None:
         self._classes = {
             name: GatewayClass(
-                name=common.metadata.name(
-                    kubernetes.apiextensions.CustomResource(
-                        f"{name}-gateway-class",
-                        opts=self._child_opts,
+                name=app.custom_resource.CustomResource(
+                    self._context,
+                    f"{name}-gateway-class",
+                    config_.app.custom_resource.Config(
                         api_version="gateway.networking.k8s.io/v1",
                         kind="GatewayClass",
-                        metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                            namespace=self._namespace.name
-                        ),
-                        spec={
-                            "controllerName": "io.cilium/gateway-controller",
-                            "parametersRef": {
-                                "group": "cilium.io",
-                                "kind": "CiliumGatewayClassConfig",
-                                "name": common.metadata.name(
-                                    kubernetes.apiextensions.CustomResource(
+                        spec=JsonModel(
+                            {
+                                "controllerName": "io.cilium/gateway-controller",
+                                "parametersRef": {
+                                    "group": "cilium.io",
+                                    "kind": "CiliumGatewayClassConfig",
+                                    "name": app.custom_resource.CustomResource(
+                                        self._context,
                                         f"{name}-gateway-class-config",
+                                        config_.app.custom_resource.Config(
+                                            api_version="cilium.io/v2alpha1",
+                                            kind="CiliumGatewayClassConfig",
+                                            spec=config.spec,
+                                        ),
                                         opts=self._child_opts,
-                                        api_version="cilium.io/v2alpha1",
-                                        kind="CiliumGatewayClassConfig",
-                                        metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                                            namespace=self._namespace.name
-                                        ),
-                                        spec=config.spec.model_dump(
-                                            context=self._context.to_serialization_context()
-                                        ),
-                                    ).__dict__["metadata"]
-                                ),
-                                "namespace": self._namespace.name,
-                            },
-                        },
-                    ).__dict__["metadata"]
-                ),
+                                        namespace=self._namespace,
+                                    ).name,
+                                    "namespace": self._namespace.name,
+                                },
+                            }
+                        ),
+                    ),
+                    opts=self._child_opts,
+                    namespace=self._namespace,
+                ).name,
                 service_prefix="cilium-gateway-",
             )
             for name, config in self._config.cilium.classes.items()
@@ -90,28 +89,31 @@ class Gateways(ComponentResource):
         for name, gateway_config in self._config.gateways.items():
             resource_name = f"{name}-gateway"
             gateway_class = self._classes[gateway_config.class_]
-            gateway = kubernetes.apiextensions.CustomResource(
+            gateway = app.custom_resource.CustomResource(
+                self._context,
                 resource_name,
-                opts=self._child_opts,
-                api_version="gateway.networking.k8s.io/v1",
-                kind="Gateway",
-                metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                    namespace=self._namespace.name
-                ),
-                spec={
-                    "gatewayClassName": gateway_class.name,
-                    "listeners": [
+                config_.app.custom_resource.Config(
+                    api_version="gateway.networking.k8s.io/v1",
+                    kind="Gateway",
+                    spec=JsonModel(
                         {
-                            "name": name,
-                            "protocol": listener.protocol,
-                            "port": listener.port,
+                            "gatewayClassName": gateway_class.name,
+                            "listeners": [
+                                {
+                                    "name": name,
+                                    "protocol": listener.protocol,
+                                    "port": listener.port,
+                                }
+                                for name, listener in gateway_config.listeners.items()
+                            ],
+                            "allowedListeners": {"namespaces": {"from": "All"}},
                         }
-                        for name, listener in gateway_config.listeners.items()
-                    ],
-                    "allowedListeners": {"namespaces": {"from": "All"}},
-                },
+                    ),
+                ),
+                opts=self._child_opts,
+                namespace=self._namespace,
             )
-            gateway_name = common.metadata.name(gateway.__dict__["metadata"])
+            gateway_name = gateway.name
 
             def ip_or_error(spec: kubernetes.core.v1.outputs.ServiceSpec) -> str:
                 if not spec.cluster_ip:
@@ -126,7 +128,9 @@ class Gateways(ComponentResource):
                     gateway_class.service_prefix,
                     gateway_name,
                 ),
-                opts=self._child_opts.merge(ResourceOptions(depends_on=[gateway])),
+                opts=self._child_opts.merge(
+                    ResourceOptions(depends_on=[gateway._resource])
+                ),
             ).spec.apply(ip_or_error)
 
             self._gateways[name] = Gateway(name=gateway_name, ip=gateway_ip)

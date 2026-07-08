@@ -23,9 +23,7 @@ class CustomResource:
         self._resource = kubernetes.apiextensions.CustomResource(
             self._name,
             opts=opts,
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                namespace=self._namespace.name if self._config.cluster else None
-            ),
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace.name),
             api_version=self._config.api_version,
             kind=self._config.kind,
             spec=self._config.spec.model_dump(
