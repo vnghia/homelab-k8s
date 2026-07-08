@@ -1,5 +1,6 @@
 (import "account.ncl")
 & (import "deployment/deployment.ncl")
+& (import "secret.ncl")
 & (import "service.ncl")
 & {
   contracts = {},
@@ -21,6 +22,12 @@
     accounts
       | {
         _ : cluster.kubernetes.app.Account
+      }
+      | default
+      = {},
+    secrets
+      | {
+        _ : cluster.kubernetes.app.Secret
       }
       | default
       = {},
