@@ -65,7 +65,7 @@
                 chart | String,
                 version | String,
                 issuer | String,
-                email | String,
+                email | String | not_exported,
               },
             apps
               | {

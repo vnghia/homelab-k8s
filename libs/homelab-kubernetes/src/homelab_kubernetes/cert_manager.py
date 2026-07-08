@@ -1,6 +1,5 @@
 from typing import ClassVar
 
-import homelab_pulumi
 import pulumi_kubernetes as kubernetes
 from homelab_context import Context
 from pulumi import ResourceOptions
@@ -39,34 +38,4 @@ class CertManager(app.App[config.cert_manager.Config]):
             },
         )
 
-        self._issuer = kubernetes.apiextensions.CustomResource(
-            self._config.issuer,
-            opts=self._child_opts.merge(ResourceOptions(depends_on=[self._manager])),
-            api_version="cert-manager.io/v1",
-            kind="ClusterIssuer",
-            spec={
-                "acme": {
-                    "server": "https://acme-staging-v02.api.letsencrypt.org/directory"
-                    if homelab_pulumi.constant.STACK
-                    else "https://acme-v02.api.letsencrypt.org/directory",
-                    "email": self._config.email,
-                    "privateKeySecretRef": {
-                        "name": f"{self._config.issuer}-account-key"
-                    },
-                    "solvers": [
-                        {
-                            "dns01": {
-                                "cloudflare": {
-                                    "apiTokenSecretRef": {
-                                        "name": self._secrets[
-                                            f"{self._config.issuer}-token"
-                                        ].name,
-                                        "key": self.API_TOKEN_KEY,
-                                    }
-                                }
-                            }
-                        }
-                    ],
-                }
-            },
-        )
+        self.register_outputs({})

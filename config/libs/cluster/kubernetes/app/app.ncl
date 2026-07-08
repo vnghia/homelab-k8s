@@ -1,4 +1,5 @@
 (import "account.ncl")
+& (import "custom-resource.ncl")
 & (import "deployment/deployment.ncl")
 & (import "secret.ncl")
 & (import "service.ncl")
@@ -28,6 +29,12 @@
     secrets
       | {
         _ : cluster.kubernetes.app.Secret
+      }
+      | default
+      = {},
+    custom_resources
+      | {
+        _ : cluster.kubernetes.app.CustomResource
       }
       | default
       = {},

@@ -23,6 +23,6 @@ class Config(BaseModel):
             nickel.run(
                 f'(import "{nickel_config}") & '
                 f'(std.deserialize \'Json (m%%%"{data.config}"%%%)) & '
-                f"{{ stack = {('"' + pulumi.constant.STACK + '"') if pulumi.constant.STACK else 'null'} }}"
+                f"{{ cluster.stack = {('"' + pulumi.constant.STACK + '"') if pulumi.constant.STACK else 'null'} }}"
             )
         )
