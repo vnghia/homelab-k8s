@@ -1,6 +1,7 @@
 from typing import ClassVar
 
 import homelab_kubernetes as kubernetes
+import pulumiverse_talos as talos
 from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
@@ -37,6 +38,9 @@ class Host(ComponentResource):
 
         self.build_images()
         self.build_machines()
+        self.build_config()
+
+        self.register_outputs({})
 
     def build_images(self) -> None:
         self._images = {
@@ -70,10 +74,43 @@ class Host(ComponentResource):
         self.bootstrap = self._machines[self._config.bootstrap]
 
         self.controlplane_endpoints = [
-            machine._endpoint
+            machine.endpoint
             for machine in self._machines.values()
-            if machine._config.features.controlplane
+            if machine.features.controlplane
         ]
         self.machine_endpoints = [
-            machine._endpoint for machine in self._machines.values()
+            machine.endpoint for machine in self._machines.values()
         ]
+
+    def build_config(self) -> None:
+        self.kubeconfig = talos.cluster.Kubeconfig(
+            self._name,
+            opts=self._child_opts.merge(
+                ResourceOptions(depends_on=self.bootstrap.machine_bootstrap),
+            ),
+            client_configuration=self._secrets.client_configuration_output.apply(
+                lambda client_configuration: (
+                    talos.cluster.KubeconfigClientConfigurationArgs(
+                        ca_certificate=client_configuration.ca_certificate,
+                        client_certificate=client_configuration.client_certificate,
+                        client_key=client_configuration.client_key,
+                    )
+                ),
+            ),
+            node=self.bootstrap.endpoint,
+        ).kubeconfig_raw
+
+        self.talosconfig = talos.client.get_configuration_output(
+            client_configuration=self._secrets.client_configuration_output.apply(
+                lambda client_configuration: (
+                    talos.client.GetConfigurationClientConfigurationArgs(
+                        ca_certificate=client_configuration.ca_certificate,
+                        client_certificate=client_configuration.client_certificate,
+                        client_key=client_configuration.client_key,
+                    )
+                ),
+            ),
+            cluster_name=self._name,
+            endpoints=self.controlplane_endpoints,
+            nodes=self.machine_endpoints,
+        ).apply(lambda result: result.talos_config)

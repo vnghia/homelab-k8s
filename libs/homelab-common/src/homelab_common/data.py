@@ -4,18 +4,18 @@ from typing import Any, Literal
 
 @typing.overload
 def check_resolve_type[T](
-    data: Any, resolve_type: type[T], raise_error: Literal[True]
+    data: Any, resolve_type: type[T], raise_error: Literal[True],
 ) -> T: ...
 
 
 @typing.overload
 def check_resolve_type[T](
-    data: Any, resolve_type: type[T], raise_error: Literal[False]
+    data: Any, resolve_type: type[T], raise_error: Literal[False],
 ) -> T | None: ...
 
 
 def check_resolve_type[T](
-    data: Any, resolve_type: type[T], raise_error: bool
+    data: Any, resolve_type: type[T], raise_error: bool,
 ) -> T | None:
     if not isinstance(data, resolve_type):
         if raise_error:
@@ -32,5 +32,5 @@ def traverse_resolve_path(data: Any, resolve_path: str) -> Any:
 
 def resolve[T](data: dict[str, Any], resolve_type: type[T], resolve_path: str) -> T:
     return check_resolve_type(
-        traverse_resolve_path(data, resolve_path), resolve_type, True
+        traverse_resolve_path(data, resolve_path), resolve_type, True,
     )

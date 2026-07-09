@@ -12,7 +12,7 @@ class ClientConfiguration(BaseModel):
 
     @classmethod
     def from_output(
-        cls, output: Output[talos.machine.outputs.ClientConfiguration]
+        cls, output: Output[talos.machine.outputs.ClientConfiguration],
     ) -> Self:
         return cls(
             ca_certificate=output.apply(lambda result: result.ca_certificate),
@@ -34,7 +34,7 @@ class Certificate(BaseModel):
 
     @classmethod
     def from_output(
-        cls, output: Output[talos.machine.outputs.CertificateResult]
+        cls, output: Output[talos.machine.outputs.CertificateResult],
     ) -> Self:
         return cls(
             cert=output.apply(lambda result: result.cert),
@@ -70,16 +70,16 @@ class Certificates(BaseModel):
 
     @classmethod
     def from_output(
-        cls, output: Output[talos.machine.outputs.CertificatesResult]
+        cls, output: Output[talos.machine.outputs.CertificatesResult],
     ) -> Self:
         return cls(
             etcd=Certificate.from_output(output.apply(lambda result: result.etcd)),
             k8s=Certificate.from_output(output.apply(lambda result: result.k8s)),
             k8s_aggregator=Certificate.from_output(
-                output.apply(lambda result: result.k8s_aggregator)
+                output.apply(lambda result: result.k8s_aggregator),
             ),
             k8s_serviceaccount=Key.from_output(
-                output.apply(lambda result: result.k8s_serviceaccount)
+                output.apply(lambda result: result.k8s_serviceaccount),
             ),
             os=Certificate.from_output(output.apply(lambda result: result.os)),
         )
@@ -119,15 +119,15 @@ class KubernetesSecrets(BaseModel):
 
     @classmethod
     def from_output(
-        cls, output: Output[talos.machine.outputs.KubernetesSecretsResult]
+        cls, output: Output[talos.machine.outputs.KubernetesSecretsResult],
     ) -> Self:
         return cls(
             bootstrap_token=output.apply(lambda result: result.bootstrap_token),
             secretbox_encryption_secret=output.apply(
-                lambda result: result.secretbox_encryption_secret
+                lambda result: result.secretbox_encryption_secret,
             ),
             aescbc_encryption_secret=output.apply(
-                lambda result: result.aescbc_encryption_secret
+                lambda result: result.aescbc_encryption_secret,
             ),
         )
 
@@ -144,7 +144,7 @@ class TrustdInfo(BaseModel):
 
     @classmethod
     def from_output(
-        cls, output: Output[talos.machine.outputs.TrustdInfoResult]
+        cls, output: Output[talos.machine.outputs.TrustdInfoResult],
     ) -> Self:
         return cls(token=output.apply(lambda result: result.token))
 
@@ -162,16 +162,16 @@ class MachineSecrets(BaseModel):
 
     @classmethod
     def from_output(
-        cls, output: Output[talos.machine.outputs.MachineSecretsResult]
+        cls, output: Output[talos.machine.outputs.MachineSecretsResult],
     ) -> Self:
         return cls(
             certs=Certificates.from_output(output.apply(lambda result: result.certs)),
             cluster=Cluster.from_output(output.apply(lambda result: result.cluster)),
             secrets=KubernetesSecrets.from_output(
-                output.apply(lambda result: result.secrets)
+                output.apply(lambda result: result.secrets),
             ),
             trustdinfo=TrustdInfo.from_output(
-                output.apply(lambda result: result.trustdinfo)
+                output.apply(lambda result: result.trustdinfo),
             ),
         )
 
@@ -187,12 +187,12 @@ class MachineSecrets(BaseModel):
 class Secrets:
     def __init__(self, *, opts: ResourceOptions | None, version: str) -> None:
         self._secrets = talos.machine.Secrets(
-            "secrets", opts=opts, talos_version=version
+            "secrets", opts=opts, talos_version=version,
         )
 
         self.client_configuration_output = self._secrets.client_configuration
         self.client_configuration = ClientConfiguration.from_output(
-            self.client_configuration_output
+            self.client_configuration_output,
         )
 
         self.machine_secrets_output = self._secrets.machine_secrets

@@ -32,7 +32,8 @@ class Service:
             self._name,
             opts=self._child_opts,
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                namespace=self._namespace.name, labels=self._deployment.labels
+                namespace=self._namespace.name,
+                labels=self._deployment.labels,
             ),
             spec=kubernetes.core.v1.ServiceSpecArgs(
                 ip_family_policy="RequireDualStack",
@@ -44,7 +45,7 @@ class Service:
                     )
                     for name, port in self._config.ports.items()
                     if (
-                        container := self._deployment._config.containers[
+                        container := self._deployment.config.containers[
                             port.container.container
                         ]
                     )

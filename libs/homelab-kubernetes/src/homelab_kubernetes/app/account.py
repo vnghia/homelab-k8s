@@ -33,14 +33,14 @@ class Account(ComponentResource):
             self._name,
             opts=self._child_opts,
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                namespace=self._namespace.name, labels=self._namespace.build_labels()
+                namespace=self._namespace.name, labels=self._namespace.build_labels(),
             ),
         )
         self.name = common.metadata.name(self._account.metadata)
 
         if self._config.cluster:
             name = homelab_common.string.add_prefix(
-                self._app, self._name, separator=":"
+                self._app, self._name, separator=":",
             )
             self._role = kubernetes.rbac.v1.ClusterRole(
                 name,
@@ -55,7 +55,7 @@ class Account(ComponentResource):
                         kind="ServiceAccount",
                         name=common.metadata.name(self._account.metadata),
                         namespace=self._namespace.name,
-                    )
+                    ),
                 ],
                 role_ref=kubernetes.rbac.v1.RoleRefArgs(
                     api_group="rbac.authorization.k8s.io",

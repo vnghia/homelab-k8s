@@ -27,7 +27,7 @@ class Secret:
             metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace.name),
             type=self._config.type,
             string_data=self._config.string_data.model_dump(
-                context=self._context.to_serialization_context()
+                context=self._context.to_serialization_context(),
             ),
         )
 

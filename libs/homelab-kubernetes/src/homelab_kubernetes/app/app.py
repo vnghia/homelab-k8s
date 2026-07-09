@@ -40,7 +40,7 @@ class App[T: config.app.Config = config.app.Config](ComponentResource):
             self._config.namespace.model_copy(
                 update={
                     "name": self._config.namespace.name or self._name,
-                }
+                },
             ),
             opts=self._child_opts,
         )

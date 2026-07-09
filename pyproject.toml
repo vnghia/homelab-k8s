@@ -81,26 +81,31 @@ root = [
 extend-select = [
     "ANN",
     "B",
+    "COM",
     "C4",
     "I",
+    "ICN",
     "ISC",
     "PIE",
     "PERF",
+    "E",
     "F",
     "PL",
+    "PTH",
     "PYI",
     "FURB",
     "Q",
     "RET",
+    "SLF",
     "SIM",
     "TID251",
     "T20",
     "RUF",
     "S",
+    "W",
 ]
 ignore = [
     "ANN401",
-    "PLC0414",
     "PLR0913",
     "RUF012",
     "S603",
@@ -109,6 +114,7 @@ ignore = [
     "PLC0415",
     "S104",
     "S404",
+    "E501",
 ]
 preview = true
 

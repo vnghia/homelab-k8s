@@ -42,7 +42,8 @@ class Gateways(ComponentResource):
 
     def build_namespace(self) -> None:
         self._namespace = namespace.Namespace(
-            self._config.namespace, opts=self._child_opts
+            self._config.namespace,
+            opts=self._child_opts,
         )
 
     def build_classes(self) -> None:
@@ -73,7 +74,7 @@ class Gateways(ComponentResource):
                                     ).name,
                                     "namespace": self._namespace.name,
                                 },
-                            }
+                            },
                         ),
                     ),
                     opts=self._child_opts,
@@ -107,7 +108,7 @@ class Gateways(ComponentResource):
                                 for name, listener in gateway_config.listeners.items()
                             ],
                             "allowedListeners": {"namespaces": {"from": "All"}},
-                        }
+                        },
                     ),
                 ),
                 opts=self._child_opts,
@@ -129,7 +130,7 @@ class Gateways(ComponentResource):
                     gateway_name,
                 ),
                 opts=self._child_opts.merge(
-                    ResourceOptions(depends_on=[gateway._resource])
+                    ResourceOptions(depends_on=[gateway.resource]),
                 ),
             ).spec.apply(ip_or_error)
 

@@ -27,8 +27,12 @@ class CustomResource:
             api_version=self._config.api_version,
             kind=self._config.kind,
             spec=self._config.spec.model_dump(
-                context=self._context.to_serialization_context()
+                context=self._context.to_serialization_context(),
             ),
         )
 
         self.name = common.metadata.name(self._resource.__dict__["metadata"])
+
+    @property
+    def resource(self) -> kubernetes.apiextensions.CustomResource:
+        return self._resource

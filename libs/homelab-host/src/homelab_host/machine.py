@@ -10,7 +10,7 @@ import pulumiverse_talos as talos
 from homelab_context import Context
 from pulumi import ComponentResource, Input, Output, ResourceOptions
 
-from . import config
+from . import config as config_
 from .image import Image
 from .secrets import Secrets
 
@@ -22,10 +22,10 @@ class Machine(ComponentResource):
         self,
         context: Context,
         name: str,
-        config: config.machine.Config,
+        config: config_.machine.Config,
         *,
         opts: ResourceOptions | None,
-        host_config: config.Config,
+        host_config: config_.Config,
         host_secrets: Secrets,
         host_images: dict[str, Image],
         kubernetes_config: kubernetes.config.Config,
@@ -46,7 +46,9 @@ class Machine(ComponentResource):
         self._hostname = common.string.add_prefix(
             pulumi.constant.STACK,
             common.string.add_prefix(
-                self._kubernetes_config.domain.cluster, self._name, separator="-"
+                self._kubernetes_config.domain.cluster,
+                self._name,
+                separator="-",
             ),
             separator="-",
         )
@@ -72,7 +74,7 @@ class Machine(ComponentResource):
             talos.machine.Bootstrap(
                 self._name,
                 opts=self._child_opts.merge(
-                    ResourceOptions(depends_on=self._applied_configurations[-1])
+                    ResourceOptions(depends_on=self._applied_configurations[-1]),
                 ),
                 client_configuration=self._client_configuration.to_args(),
                 node=self._endpoint,
@@ -90,6 +92,18 @@ class Machine(ComponentResource):
 
         self.register_outputs({})
 
+    @property
+    def endpoint(self) -> str:
+        return self._endpoint
+
+    @property
+    def features(self) -> config_.features.Config:
+        return self._config.features
+
+    @property
+    def machine_bootstrap(self) -> talos.machine.Bootstrap | None:
+        return self._machine_bootstrap
+
     def get_machine_configuration(self) -> Output[str]:
         return talos.machine.get_configuration_output(
             cluster_name=self._cluster_name,
@@ -99,7 +113,7 @@ class Machine(ComponentResource):
             talos_version=self._host_config.version,
             kubernetes_version=self._kubernetes_config.version,
         ).apply(
-            lambda machine_configuration: machine_configuration.machine_configuration
+            lambda machine_configuration: machine_configuration.machine_configuration,
         )
 
     def apply_patches(self, name: str, patches: list[Input[str]]) -> None:
@@ -112,13 +126,13 @@ class Machine(ComponentResource):
             talos.machine.ConfigurationApply(
                 name,
                 opts=self._child_opts.merge(
-                    ResourceOptions(depends_on=self._machine_bootstrap)
+                    ResourceOptions(depends_on=self._machine_bootstrap),
                 ),
                 node=self._endpoint,
                 client_configuration=self._client_configuration.to_args(),
                 machine_configuration_input=machine_configuration,
                 config_patches=patches,
-            )
+            ),
         )
 
     def apply_initial_patches(self) -> None:
@@ -134,8 +148,8 @@ class Machine(ComponentResource):
                                 "image": self._host_images[
                                     self._config.install.image
                                 ].installer,
-                            }
-                        }
+                            },
+                        },
                     },
                     direct=False,
                 ),
@@ -197,8 +211,8 @@ class Machine(ComponentResource):
                     self._context,
                     {
                         "machine": {
-                            "kubelet": {"nodeIP": {"validSubnets": valid_subnets}}
-                        }
+                            "kubelet": {"nodeIP": {"validSubnets": valid_subnets}},
+                        },
                     },
                     direct=True,
                 ),
@@ -211,7 +225,7 @@ class Machine(ComponentResource):
                                 "serviceSubnets": networking_config.cluster.service_subnets,
                             },
                             "etcd": {"advertisedSubnets": valid_subnets},
-                        }
+                        },
                     },
                     direct=True,
                 ),
@@ -229,7 +243,7 @@ class Machine(ComponentResource):
                                         "ignoreHostname": True,
                                     },
                                     direct=True,
-                                )
+                                ),
                             ]
                             if config.dhcpv4
                             else []
@@ -245,7 +259,7 @@ class Machine(ComponentResource):
                                         "ignoreHostname": True,
                                     },
                                     direct=True,
-                                )
+                                ),
                             ]
                             if config.dhcpv6
                             else []
@@ -268,9 +282,9 @@ class Machine(ComponentResource):
                         {
                             "cluster": {
                                 "extraManifests": [
-                                    f"https://github.com/kubernetes-sigs/gateway-api/releases/download/{gateway_config.version}/{gateway_config.type}-install.yaml"
-                                ]
-                            }
+                                    f"https://github.com/kubernetes-sigs/gateway-api/releases/download/{gateway_config.version}/{gateway_config.type}-install.yaml",
+                                ],
+                            },
                         },
                         direct=True,
                     ),
@@ -289,7 +303,7 @@ class Machine(ComponentResource):
                             "cluster": {
                                 "network": {"cni": {"name": "none"}},
                                 "proxy": {"disabled": True},
-                            }
+                            },
                         },
                         direct=True,
                     ),
@@ -300,10 +314,10 @@ class Machine(ComponentResource):
                                 "features": {
                                     "hostDNS": {
                                         # See this discussion for more context: https://github.com/siderolabs/talos/pull/9200
-                                        "forwardKubeDNSToHost": False
-                                    }
+                                        "forwardKubeDNSToHost": False,
+                                    },
                                 },
-                            }
+                            },
                         },
                         direct=True,
                     ),
@@ -324,9 +338,9 @@ class Machine(ComponentResource):
                                             ),
                                             kustomization=cilium_config.kustomization,
                                         ).manifests,
-                                    }
-                                ]
-                            }
+                                    },
+                                ],
+                            },
                         },
                         direct=False,
                     ),
@@ -342,7 +356,7 @@ class Machine(ComponentResource):
                         self._context,
                         {"cluster": {"allowSchedulingOnControlPlanes": True}},
                         direct=True,
-                    )
+                    ),
                 ],
             )
             if self._config.features.loadbalancer:
@@ -355,13 +369,13 @@ class Machine(ComponentResource):
                                 "machine": {
                                     "nodeLabels": {
                                         "node.kubernetes.io/exclude-from-external-load-balancers": {
-                                            "$patch": "delete"
-                                        }
-                                    }
-                                }
+                                            "$patch": "delete",
+                                        },
+                                    },
+                                },
                             },
                             direct=True,
-                        )
+                        ),
                     ],
                 )
 
@@ -394,6 +408,6 @@ class Machine(ComponentResource):
                         ],
                     },
                     direct=False,
-                )
+                ),
             ],
         )

@@ -33,7 +33,7 @@ class Token(ComponentResource):
         self._config = config
 
         self._api_resources = orjson.dumps(
-            {f"{self.SCOPE}.{zone.id}": "*" for zone in self._config.zones.values()}
+            {f"{self.SCOPE}.{zone.id}": "*" for zone in self._config.zones.values()},
         ).decode()
 
         self._cert_manager = cloudflare.ApiToken(
@@ -52,7 +52,7 @@ class Token(ComponentResource):
                         self.dns_write_permission_group_args,
                     ],
                     resources=self._api_resources,
-                )
+                ),
             ],
         )
 
@@ -62,14 +62,14 @@ class Token(ComponentResource):
 
     @classmethod
     def get_permission_group_args(
-        cls, name: str
+        cls, name: str,
     ) -> Output[cloudflare.ApiTokenPolicyPermissionGroupArgs]:
         return cloudflare.get_api_token_permission_groups_list_output(
-            name=urllib.parse.quote_plus(name), scope=cls.URL_SCOPE
+            name=urllib.parse.quote_plus(name), scope=cls.URL_SCOPE,
         ).apply(
             lambda result: cloudflare.ApiTokenPolicyPermissionGroupArgs(
-                id=result.results[0].id
-            )
+                id=result.results[0].id,
+            ),
         )
 
     @functools.cached_property

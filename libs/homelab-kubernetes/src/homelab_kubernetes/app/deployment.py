@@ -5,7 +5,8 @@ import pulumi_kubernetes as kubernetes
 from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
-from .. import common, config, namespace
+from .. import common, namespace
+from .. import config as config_
 from . import account
 
 
@@ -16,7 +17,7 @@ class Deployment(ComponentResource):
         self,
         context: Context,
         name: str,
-        config: config.app.deployment.Config,
+        config: config_.app.deployment.Config,
         *,
         opts: ResourceOptions,
         app: str,
@@ -38,7 +39,8 @@ class Deployment(ComponentResource):
             self._name,
             opts=self._child_opts,
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                labels=self.labels, namespace=self._namespace.name
+                labels=self.labels,
+                namespace=self._namespace.name,
             ),
             spec=kubernetes.apps.v1.DeploymentSpecArgs(
                 selector=kubernetes.meta.v1.LabelSelectorArgs(match_labels=self.labels),
@@ -64,3 +66,7 @@ class Deployment(ComponentResource):
             common.metadata.name(self._deployment.metadata),
         )
         self.register_outputs({})
+
+    @property
+    def config(self) -> config_.app.deployment.Config:
+        return self._config

@@ -28,7 +28,7 @@ class Image(ComponentResource):
         self._extensions = talos.imagefactory.get_extensions_versions_output(
             talos_version=host_config.version,
             filters=talos.imagefactory.GetExtensionsVersionsFiltersArgs(
-                names=self._config.extensions
+                names=self._config.extensions,
             ),
         )
 
@@ -43,10 +43,10 @@ class Image(ComponentResource):
                             "officialExtensions": self._extensions.apply(
                                 lambda result: [
                                     info.name for info in result.extensions_infos
-                                ]
-                            )
-                        }
-                    }
+                                ],
+                            ),
+                        },
+                    },
                 },
                 direct=False,
             ),

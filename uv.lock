@@ -225,7 +225,6 @@ dependencies = [
     { name = "homelab-pulumi" },
     { name = "pulumi" },
     { name = "pulumi-kubernetes" },
-    { name = "pulumiverse-talos" },
 ]
 
 [package.metadata]
@@ -238,7 +237,6 @@ requires-dist = [
     { name = "homelab-pulumi", editable = "libs/homelab-pulumi" },
     { name = "pulumi", specifier = ">=3.247.0" },
     { name = "pulumi-kubernetes", specifier = ">=4.30.0" },
-    { name = "pulumiverse-talos", specifier = ">=0.8.0" },
 ]
 
 [[package]]

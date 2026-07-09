@@ -6,7 +6,9 @@ import yaml_rs
 from homelab_context import Context
 from pulumi import Output
 
-DEFAULT_DUMPER: Callable[[Any], str] = lambda data: orjson.dumps(data).decode()
+
+def default_dumper(data: Any) -> str:
+    return orjson.dumps(data).decode()
 
 
 def serialize(
@@ -16,7 +18,7 @@ def serialize(
     direct: bool,
     dumper: Callable[[Any], str] | None = None,
 ) -> str | Output[str]:
-    dumper_ = dumper or DEFAULT_DUMPER
+    dumper_ = dumper or default_dumper
     if direct:
         return dumper_(data)
     return Output.from_input(data).apply(dumper_)

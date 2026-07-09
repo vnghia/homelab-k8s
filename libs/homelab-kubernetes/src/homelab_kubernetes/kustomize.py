@@ -33,7 +33,7 @@ class KustomizeProviderProps(BaseModel):
         yaml_rs.dump(self.kustomization, file=directory / "kustomization.yaml")
 
         manifests = subprocess.check_output(
-            [self.KUSTOMIZE, "build", "--enable-helm", directory]
+            [self.KUSTOMIZE, "build", "--enable-helm", directory],
         ).decode()
         if self.namespace:
             manifests += yaml_rs.dumps(
@@ -41,7 +41,7 @@ class KustomizeProviderProps(BaseModel):
                     "apiVersion": "v1",
                     "kind": "Namespace",
                     "metadata": self.namespace.model_dump(),
-                }
+                },
             )
         return manifests
 
@@ -59,7 +59,7 @@ class KustomizeProvider(ResourceProvider):
 
     @typing.override
     def update(
-        self, _id: str, _olds: dict[str, Any], _news: dict[str, Any]
+        self, _id: str, _olds: dict[str, Any], _news: dict[str, Any],
     ) -> UpdateResult:
         kustomize_props = KustomizeProviderProps(**_news)
         return UpdateResult(
@@ -86,7 +86,7 @@ class Kustomize(Resource, module="kubernetes", name="Kustomize"):
                 "id": id,
                 "namespace": namespace.model_dump() if namespace else None,
                 "kustomization": kustomization.model_dump(
-                    context=context.to_serialization_context()
+                    context=context.to_serialization_context(),
                 ),
                 "manifests": None,
             },

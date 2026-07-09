@@ -7,14 +7,14 @@ from . import common, config
 
 class Namespace:
     def __init__(
-        self, config: config.namespace.Config, *, opts: ResourceOptions
+        self, config: config.namespace.Config, *, opts: ResourceOptions,
     ) -> None:
         self._name = config.name
         self._config = config
         self._namespace = kubernetes.core.v1.Namespace(
             self._name,
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                labels=self._config.spec.to_labels()
+                labels=self._config.spec.to_labels(),
             ),
             opts=opts,
         )

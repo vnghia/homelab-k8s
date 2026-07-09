@@ -8,5 +8,5 @@ class Config(BaseModel):
 
     def to_args(self, name: str) -> kubernetes.core.v1.ContainerPortArgs:
         return kubernetes.core.v1.ContainerPortArgs(
-            name=name, container_port=self.container_port
+            name=name, container_port=self.container_port,
         )

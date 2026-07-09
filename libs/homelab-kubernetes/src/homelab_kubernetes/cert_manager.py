@@ -18,7 +18,7 @@ class CertManager(app.App[config.cert_manager.Config]):
         opts: ResourceOptions,
     ) -> None:
         super().__init__(
-            context, config.namespace.name, config, opts=opts, register_output=False
+            context, config.namespace.name, config, opts=opts, register_output=False,
         )
 
         self._manager = kubernetes.helm.v4.Chart(

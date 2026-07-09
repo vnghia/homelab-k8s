@@ -9,5 +9,5 @@ def resolve[T](data: Any, resolve_type: type[T], resolve_path: str) -> T | Outpu
     if checked_data := common.data.check_resolve_type(data, resolve_type, False):
         return checked_data
     return Output.from_input(data).apply(
-        lambda data: common.data.check_resolve_type(data, resolve_type, True)
+        lambda data: common.data.check_resolve_type(data, resolve_type, True),
     )

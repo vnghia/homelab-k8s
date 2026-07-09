@@ -8,5 +8,5 @@ class Config(BaseModel):
 
     def to_args(self) -> kubernetes.core.v1.ResourceRequirementsArgs:
         return kubernetes.core.v1.ResourceRequirementsArgs(
-            requests=self.requests, limits=self.limits
+            requests=self.requests, limits=self.limits,
         )
