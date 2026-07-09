@@ -23,7 +23,7 @@
             "%{secret_key}" = {
               kind = "dns/token",
               type = "str",
-              path = "cert-manager",
+              path = "cert_manager",
             },
           },
         },

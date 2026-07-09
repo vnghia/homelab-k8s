@@ -3,7 +3,7 @@ from typing import ClassVar
 from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
-from . import config, reference, token
+from . import config, token
 
 
 class Dns(ComponentResource):
@@ -24,13 +24,10 @@ class Dns(ComponentResource):
         self._config = config
 
         self.build_token()
-        self.build_data()
+
+        self.register_outputs({})
 
     def build_token(self) -> None:
         self._token = token.Token(
             self._name, self._context, self._config, opts=self._child_opts
         )
-
-    def build_data(self) -> None:
-        self._data = reference.Data(token=self._token)
-        self._context.set(reference.Token, self._data)

@@ -1,42 +1,45 @@
 import typing
 from typing import Any, Literal
 
-import homelab_common as common
+from pulumi import Output
 
+from .. import common
 from . import type
 
 
 @typing.overload
 def resolve(
     data: Any, resolve_type: Literal[type.Type.STR], resolve_path: str
-) -> str: ...
+) -> str | Output[str]: ...
 
 
 @typing.overload
 def resolve(
     data: Any, resolve_type: Literal[type.Type.BOOL], resolve_path: str
-) -> bool: ...
+) -> bool | Output[bool]: ...
 
 
 @typing.overload
 def resolve(
     data: Any, resolve_type: Literal[type.Type.INT], resolve_path: str
-) -> int: ...
+) -> int | Output[int]: ...
 
 
 @typing.overload
 def resolve(
     data: Any, resolve_type: Literal[type.Type.FLOAT], resolve_path: str
-) -> float: ...
+) -> float | Output[float]: ...
 
 
 @typing.overload
 def resolve(
     data: Any, resolve_type: type.Type, resolve_path: str
-) -> str | bool | int | float: ...
+) -> type.PythonType | Output[type.PythonType]: ...
 
 
-def resolve(data: Any, resolve_type: type.Type, resolve_path: str) -> type.PythonType:
+def resolve(
+    data: Any, resolve_type: type.Type, resolve_path: str
+) -> type.PythonType | Output[type.PythonType]:
     match resolve_type:
         case type.Type.STR:
             return common.data.resolve(data, str, resolve_path)

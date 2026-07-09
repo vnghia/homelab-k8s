@@ -2,6 +2,7 @@ import typing
 from typing import Any, ClassVar
 
 from homelab_types import BaseModel
+from pulumi import Output
 from pydantic import ConfigDict, field_validator
 
 from .data import resolve
@@ -48,5 +49,5 @@ class Reference(BaseModel):
             return {key: cls.recursive_validate(value) for key, value in data.items()}
         return data
 
-    def resolve(self, data: Any) -> PythonType:
+    def resolve(self, data: Any) -> PythonType | Output[PythonType]:
         return resolve(data, self.type, self.path)

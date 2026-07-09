@@ -8,4 +8,4 @@ class Type(StrEnum):
     FLOAT = auto()
 
 
-PythonType = str | bool | int | float
+type PythonType = str | bool | int | float

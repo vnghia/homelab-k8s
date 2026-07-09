@@ -9,7 +9,7 @@ import pulumi_cloudflare as cloudflare
 from homelab_context import Context
 from pulumi import ComponentResource, Output, ResourceOptions
 
-from . import config
+from . import config, reference
 
 
 class Token(ComponentResource):
@@ -56,7 +56,9 @@ class Token(ComponentResource):
             ],
         )
 
-        self.data = {"cert-manager": self._cert_manager.value}
+        self._context.set(reference.token.Reference, self)
+
+        self.register_outputs({})
 
     @classmethod
     def get_permission_group_args(
@@ -81,3 +83,7 @@ class Token(ComponentResource):
         self,
     ) -> Output[cloudflare.ApiTokenPolicyPermissionGroupArgs]:
         return self.get_permission_group_args("DNS Write")
+
+    @property
+    def cert_manager(self) -> Output[str]:
+        return self._cert_manager.value

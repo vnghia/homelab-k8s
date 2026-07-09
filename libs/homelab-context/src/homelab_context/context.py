@@ -1,6 +1,5 @@
 from typing import Any, ClassVar, Self
 
-from homelab_types import BaseModel
 from pydantic import SerializationInfo
 
 from .reference import Reference
@@ -22,7 +21,7 @@ class Context:
     def to_serialization_context(self) -> dict[str, Any]:
         return {self.CONTEXT_KEY: self}
 
-    def get[T: BaseModel](self, reference: type[Reference], type: type[T]) -> T:
+    def get[T](self, reference: type[Reference], type: type[T]) -> T:
         data = self.__data[reference]
         if not isinstance(data, type):
             raise TypeError(f"Reference data is not an instance of {type}: {data}")
