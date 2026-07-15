@@ -38,10 +38,7 @@ class Deployment(ComponentResource):
         self._deployment = kubernetes.apps.v1.Deployment(
             self._name,
             opts=self._child_opts,
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                labels=self.labels,
-                namespace=self._namespace.name,
-            ),
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(labels=self.labels, namespace=self._namespace.name),
             spec=kubernetes.apps.v1.DeploymentSpecArgs(
                 selector=kubernetes.meta.v1.LabelSelectorArgs(match_labels=self.labels),
                 template=kubernetes.core.v1.PodTemplateSpecArgs(
@@ -52,19 +49,13 @@ class Deployment(ComponentResource):
                         else None,
                         resources=self._config.resources.to_args(),
                         security_context=self._config.security_context.to_args(),
-                        containers=[
-                            container.to_args(name)
-                            for name, container in self._config.containers.items()
-                        ],
+                        containers=[container.to_args(name) for name, container in self._config.containers.items()],
                     ),
                 ),
             ),
         )
 
-        pulumi.data.export(
-            f"deployment.{self._app}.{self._name}",
-            common.metadata.name(self._deployment.metadata),
-        )
+        pulumi.data.export(f"deployment.{self._app}.{self._name}", common.metadata.name(self._deployment.metadata))
         self.register_outputs({})
 
     @property

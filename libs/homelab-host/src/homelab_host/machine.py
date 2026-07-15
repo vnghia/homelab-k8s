@@ -45,18 +45,10 @@ class Machine(ComponentResource):
 
         self._hostname = common.string.add_prefix(
             pulumi.constant.STACK,
-            common.string.add_prefix(
-                self._kubernetes_config.domain.cluster,
-                self._name,
-                separator="-",
-            ),
+            common.string.add_prefix(self._kubernetes_config.domain.cluster, self._name, separator="-"),
             separator="-",
         )
-        self._endpoint = common.string.add_suffix(
-            self._hostname,
-            self._kubernetes_config.domain.name,
-            separator=".",
-        )
+        self._endpoint = common.string.add_suffix(self._hostname, self._kubernetes_config.domain.name, separator=".")
 
         self._client_configuration = host_secrets.client_configuration
         self._machine_secrets = host_secrets.machine_secrets
@@ -73,9 +65,7 @@ class Machine(ComponentResource):
         self._machine_bootstrap = (
             talos.machine.Bootstrap(
                 self._name,
-                opts=self._child_opts.merge(
-                    ResourceOptions(depends_on=self._applied_configurations[-1]),
-                ),
+                opts=self._child_opts.merge(ResourceOptions(depends_on=self._applied_configurations[-1])),
                 client_configuration=self._client_configuration.to_args(),
                 node=self._endpoint,
             )
@@ -112,9 +102,7 @@ class Machine(ComponentResource):
             machine_secrets=self._machine_secrets.to_args(),
             talos_version=self._host_config.version,
             kubernetes_version=self._kubernetes_config.version,
-        ).apply(
-            lambda machine_configuration: machine_configuration.machine_configuration,
-        )
+        ).apply(lambda machine_configuration: machine_configuration.machine_configuration)
 
     def apply_patches(self, name: str, patches: list[Input[str]]) -> None:
         machine_configuration = (
@@ -125,14 +113,12 @@ class Machine(ComponentResource):
         self._applied_configurations.append(
             talos.machine.ConfigurationApply(
                 name,
-                opts=self._child_opts.merge(
-                    ResourceOptions(depends_on=self._machine_bootstrap),
-                ),
+                opts=self._child_opts.merge(ResourceOptions(depends_on=self._machine_bootstrap)),
                 node=self._endpoint,
                 client_configuration=self._client_configuration.to_args(),
                 machine_configuration_input=machine_configuration,
                 config_patches=patches,
-            ),
+            )
         )
 
     def apply_initial_patches(self) -> None:
@@ -145,22 +131,15 @@ class Machine(ComponentResource):
                         "machine": {
                             "install": {
                                 "disk": self._config.install.disk,
-                                "image": self._host_images[
-                                    self._config.install.image
-                                ].installer,
-                            },
-                        },
+                                "image": self._host_images[self._config.install.image].installer,
+                            }
+                        }
                     },
                     direct=False,
                 ),
                 pulumi.data.serialize.yaml(
                     self._context,
-                    {
-                        "apiVersion": "v1alpha1",
-                        "kind": "HostnameConfig",
-                        "hostname": self._endpoint,
-                        "auto": "off",
-                    },
+                    {"apiVersion": "v1alpha1", "kind": "HostnameConfig", "hostname": self._endpoint, "auto": "off"},
                     direct=True,
                 ),
                 pulumi.data.serialize.yaml(
@@ -169,10 +148,7 @@ class Machine(ComponentResource):
                         "apiVersion": "v1alpha1",
                         "kind": "VolumeConfig",
                         "name": "STATE",
-                        "encryption": {
-                            "provider": "luks2",
-                            "keys": [{"nodeID": {}, "slot": 0}],
-                        },
+                        "encryption": {"provider": "luks2", "keys": [{"nodeID": {}, "slot": 0}]},
                     },
                     direct=True,
                 ),
@@ -182,14 +158,9 @@ class Machine(ComponentResource):
                         "apiVersion": "v1alpha1",
                         "kind": "VolumeConfig",
                         "name": "EPHEMERAL",
-                        "encryption": {
-                            "provider": "luks2",
-                            "keys": [{"nodeID": {}, "slot": 0, "lockToState": True}],
-                        },
+                        "encryption": {"provider": "luks2", "keys": [{"nodeID": {}, "slot": 0, "lockToState": True}]},
                         "provisioning": {
-                            "diskSelector": {
-                                "match": self._config.install.volumes.ephemeral.selector,
-                            },
+                            "diskSelector": {"match": self._config.install.volumes.ephemeral.selector},
                             "minSize": self._config.install.volumes.ephemeral.min_size,
                             "maxSize": self._config.install.volumes.ephemeral.max_size,
                             "grow": True,
@@ -208,13 +179,7 @@ class Machine(ComponentResource):
             "networking-initial",
             [
                 pulumi.data.serialize.yaml(
-                    self._context,
-                    {
-                        "machine": {
-                            "kubelet": {"nodeIP": {"validSubnets": valid_subnets}},
-                        },
-                    },
-                    direct=True,
+                    self._context, {"machine": {"kubelet": {"nodeIP": {"validSubnets": valid_subnets}}}}, direct=True
                 ),
                 pulumi.data.serialize.yaml(
                     self._context,
@@ -225,7 +190,7 @@ class Machine(ComponentResource):
                                 "serviceSubnets": networking_config.cluster.service_subnets,
                             },
                             "etcd": {"advertisedSubnets": valid_subnets},
-                        },
+                        }
                     },
                     direct=True,
                 ),
@@ -243,7 +208,7 @@ class Machine(ComponentResource):
                                         "ignoreHostname": True,
                                     },
                                     direct=True,
-                                ),
+                                )
                             ]
                             if config.dhcpv4
                             else []
@@ -259,7 +224,7 @@ class Machine(ComponentResource):
                                         "ignoreHostname": True,
                                     },
                                     direct=True,
-                                ),
+                                )
                             ]
                             if config.dhcpv6
                             else []
@@ -282,12 +247,12 @@ class Machine(ComponentResource):
                         {
                             "cluster": {
                                 "extraManifests": [
-                                    f"https://github.com/kubernetes-sigs/gateway-api/releases/download/{gateway_config.version}/{gateway_config.type}-install.yaml",
-                                ],
-                            },
+                                    f"https://github.com/kubernetes-sigs/gateway-api/releases/download/{gateway_config.version}/{gateway_config.type}-install.yaml"
+                                ]
+                            }
                         },
                         direct=True,
-                    ),
+                    )
                 ],
             )
 
@@ -299,12 +264,7 @@ class Machine(ComponentResource):
                 [
                     pulumi.data.serialize.yaml(
                         self._context,
-                        {
-                            "cluster": {
-                                "network": {"cni": {"name": "none"}},
-                                "proxy": {"disabled": True},
-                            },
-                        },
+                        {"cluster": {"network": {"cni": {"name": "none"}}, "proxy": {"disabled": True}}},
                         direct=True,
                     ),
                     pulumi.data.serialize.yaml(
@@ -314,10 +274,10 @@ class Machine(ComponentResource):
                                 "features": {
                                     "hostDNS": {
                                         # See this discussion for more context: https://github.com/siderolabs/talos/pull/9200
-                                        "forwardKubeDNSToHost": False,
-                                    },
-                                },
-                            },
+                                        "forwardKubeDNSToHost": False
+                                    }
+                                }
+                            }
                         },
                         direct=True,
                     ),
@@ -338,9 +298,9 @@ class Machine(ComponentResource):
                                             ),
                                             kustomization=cilium_config.kustomization,
                                         ).manifests,
-                                    },
-                                ],
-                            },
+                                    }
+                                ]
+                            }
                         },
                         direct=False,
                     ),
@@ -353,10 +313,8 @@ class Machine(ComponentResource):
                 "worker",
                 [
                     pulumi.data.serialize.yaml(
-                        self._context,
-                        {"cluster": {"allowSchedulingOnControlPlanes": True}},
-                        direct=True,
-                    ),
+                        self._context, {"cluster": {"allowSchedulingOnControlPlanes": True}}, direct=True
+                    )
                 ],
             )
             if self._config.features.loadbalancer:
@@ -368,14 +326,12 @@ class Machine(ComponentResource):
                             {
                                 "machine": {
                                     "nodeLabels": {
-                                        "node.kubernetes.io/exclude-from-external-load-balancers": {
-                                            "$patch": "delete",
-                                        },
-                                    },
-                                },
+                                        "node.kubernetes.io/exclude-from-external-load-balancers": {"$patch": "delete"}
+                                    }
+                                }
                             },
                             direct=True,
-                        ),
+                        )
                     ],
                 )
 
@@ -408,6 +364,6 @@ class Machine(ComponentResource):
                         ],
                     },
                     direct=False,
-                ),
+                )
             ],
         )

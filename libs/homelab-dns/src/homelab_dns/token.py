@@ -18,14 +18,7 @@ class Token(ComponentResource):
     SCOPE: ClassVar[str] = "com.cloudflare.api.account.zone"
     URL_SCOPE: ClassVar[str] = urllib.parse.quote_plus(SCOPE)
 
-    def __init__(
-        self,
-        name: str,
-        context: Context,
-        config: config.Config,
-        *,
-        opts: ResourceOptions | None,
-    ) -> None:
+    def __init__(self, name: str, context: Context, config: config.Config, *, opts: ResourceOptions | None) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
 
@@ -33,7 +26,7 @@ class Token(ComponentResource):
         self._config = config
 
         self._api_resources = orjson.dumps(
-            {f"{self.SCOPE}.{zone.id}": "*" for zone in self._config.zones.values()},
+            {f"{self.SCOPE}.{zone.id}": "*" for zone in self._config.zones.values()}
         ).decode()
 
         self._cert_manager = cloudflare.ApiToken(
@@ -47,12 +40,9 @@ class Token(ComponentResource):
             policies=[
                 cloudflare.ApiTokenPolicyArgs(
                     effect="allow",
-                    permission_groups=[
-                        self.zone_read_permission_group_args,
-                        self.dns_write_permission_group_args,
-                    ],
+                    permission_groups=[self.zone_read_permission_group_args, self.dns_write_permission_group_args],
                     resources=self._api_resources,
-                ),
+                )
             ],
         )
 
@@ -61,29 +51,17 @@ class Token(ComponentResource):
         self.register_outputs({})
 
     @classmethod
-    def get_permission_group_args(
-        cls,
-        name: str,
-    ) -> Output[cloudflare.ApiTokenPolicyPermissionGroupArgs]:
+    def get_permission_group_args(cls, name: str) -> Output[cloudflare.ApiTokenPolicyPermissionGroupArgs]:
         return cloudflare.get_api_token_permission_groups_list_output(
-            name=urllib.parse.quote_plus(name),
-            scope=cls.URL_SCOPE,
-        ).apply(
-            lambda result: cloudflare.ApiTokenPolicyPermissionGroupArgs(
-                id=result.results[0].id,
-            ),
-        )
+            name=urllib.parse.quote_plus(name), scope=cls.URL_SCOPE
+        ).apply(lambda result: cloudflare.ApiTokenPolicyPermissionGroupArgs(id=result.results[0].id))
 
     @functools.cached_property
-    def zone_read_permission_group_args(
-        self,
-    ) -> Output[cloudflare.ApiTokenPolicyPermissionGroupArgs]:
+    def zone_read_permission_group_args(self) -> Output[cloudflare.ApiTokenPolicyPermissionGroupArgs]:
         return self.get_permission_group_args("Zone Read")
 
     @functools.cached_property
-    def dns_write_permission_group_args(
-        self,
-    ) -> Output[cloudflare.ApiTokenPolicyPermissionGroupArgs]:
+    def dns_write_permission_group_args(self) -> Output[cloudflare.ApiTokenPolicyPermissionGroupArgs]:
         return self.get_permission_group_args("DNS Write")
 
     @property

@@ -9,14 +9,7 @@ from . import config, token
 class Dns(ComponentResource):
     RESOURCE_TYPE: ClassVar[str] = "dns"
 
-    def __init__(
-        self,
-        name: str,
-        context: Context,
-        config: config.Config,
-        *,
-        opts: ResourceOptions | None,
-    ) -> None:
+    def __init__(self, name: str, context: Context, config: config.Config, *, opts: ResourceOptions | None) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
 
@@ -28,9 +21,4 @@ class Dns(ComponentResource):
         self.register_outputs({})
 
     def build_token(self) -> None:
-        self._token = token.Token(
-            self._name,
-            self._context,
-            self._config,
-            opts=self._child_opts,
-        )
+        self._token = token.Token(self._name, self._context, self._config, opts=self._child_opts)

@@ -13,10 +13,5 @@ class Homelab:
         self._context.set(pulumi.reference.Secret, pulumi.reference.Data())
         self._config = config.Config.load(self._pulumi_data)
 
-        self._dns = dns.Dns(
-            self._config.cluster.name,
-            self._context,
-            self._config.dns,
-            opts=None,
-        )
+        self._dns = dns.Dns(self._config.cluster.name, self._context, self._config.dns, opts=None)
         self._cluster = cluster.Cluster(self._context, self._config.cluster, opts=None)

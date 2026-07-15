@@ -26,9 +26,7 @@ class CustomResource:
             metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace.name),
             api_version=self._config.api_version,
             kind=self._config.kind,
-            spec=self._config.spec.model_dump(
-                context=self._context.to_serialization_context(),
-            ),
+            spec=self._config.spec.model_dump(context=self._context.to_serialization_context()),
         )
 
         self.name = common.metadata.name(self._resource.__dict__["metadata"])

@@ -31,35 +31,19 @@ class Service:
         self._service = kubernetes.core.v1.Service(
             self._name,
             opts=self._child_opts,
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                namespace=self._namespace.name,
-                labels=self._deployment.labels,
-            ),
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace.name, labels=self._deployment.labels),
             spec=kubernetes.core.v1.ServiceSpecArgs(
                 ip_family_policy="RequireDualStack",
                 ports=[
                     kubernetes.core.v1.ServicePortArgs(
-                        name=name,
-                        port=port.port or target_port,
-                        target_port=target_port,
+                        name=name, port=port.port or target_port, target_port=target_port
                     )
                     for name, port in self._config.ports.items()
-                    if (
-                        container := self._deployment.config.containers[
-                            port.container.container
-                        ]
-                    )
-                    and (
-                        target_port := container.ports[
-                            port.container.port
-                        ].container_port
-                    )
+                    if (container := self._deployment.config.containers[port.container.container])
+                    and (target_port := container.ports[port.container.port].container_port)
                 ],
                 selector=self._deployment.labels,
             ),
         )
 
-        pulumi.data.export(
-            f"service.{self._app}.{self._name}",
-            common.metadata.name(self._service.metadata),
-        )
+        pulumi.data.export(f"service.{self._app}.{self._name}", common.metadata.name(self._service.metadata))

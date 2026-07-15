@@ -14,15 +14,11 @@ class Config(BaseModel):
 
     @classmethod
     def load(cls, data: pulumi.reference.Data) -> Self:
-        nickel_config = (
-            (common.constant.path.ROOT / "config" / "homelab.ncl")
-            .resolve(True)
-            .as_posix()
-        )
+        nickel_config = (common.constant.path.ROOT / "config" / "homelab.ncl").resolve(True).as_posix()
         return cls.model_validate_json(
             nickel.run(
                 f'(import "{nickel_config}") & '
                 f'(std.deserialize \'Json (m%%%"{data.config}"%%%)) & '
-                f"{{ cluster.stack = {('"' + pulumi.constant.STACK + '"') if pulumi.constant.STACK else 'null'} }}",
-            ),
+                f"{{ cluster.stack = {('"' + pulumi.constant.STACK + '"') if pulumi.constant.STACK else 'null'} }}"
+            )
         )

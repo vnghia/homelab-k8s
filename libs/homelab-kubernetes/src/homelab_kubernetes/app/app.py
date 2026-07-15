@@ -11,13 +11,7 @@ class App[T: config.app.Config = config.app.Config](ComponentResource):
     RESOURCE_TYPE: ClassVar[str] = "app"
 
     def __init__(
-        self,
-        context: Context,
-        name: str,
-        config: T,
-        *,
-        opts: ResourceOptions,
-        register_output: bool = True,
+        self, context: Context, name: str, config: T, *, opts: ResourceOptions, register_output: bool = True
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
@@ -37,47 +31,28 @@ class App[T: config.app.Config = config.app.Config](ComponentResource):
 
     def build_namespace(self) -> None:
         self._namespace = namespace.Namespace(
-            self._config.namespace.model_copy(
-                update={
-                    "name": self._config.namespace.name or self._name,
-                },
-            ),
+            self._config.namespace.model_copy(update={"name": self._config.namespace.name or self._name}),
             opts=self._child_opts,
         )
 
     def build_accounts(self) -> None:
         self._accounts = {
             name: account.Account(
-                self._context,
-                name,
-                config,
-                opts=self._child_opts,
-                app=self._name,
-                namespace=self._namespace,
+                self._context, name, config, opts=self._child_opts, app=self._name, namespace=self._namespace
             )
             for name, config in self._config.accounts.items()
         }
 
     def build_secrets(self) -> None:
         self._secrets = {
-            name: secret.Secret(
-                self._context,
-                name,
-                config,
-                opts=self._child_opts,
-                namespace=self._namespace,
-            )
+            name: secret.Secret(self._context, name, config, opts=self._child_opts, namespace=self._namespace)
             for name, config in self._config.secrets.items()
         }
 
     def build_custom_resources(self) -> None:
         self._custom_resources = {
             name: custom_resource.CustomResource(
-                self._context,
-                name,
-                config,
-                opts=self._child_opts,
-                namespace=self._namespace,
+                self._context, name, config, opts=self._child_opts, namespace=self._namespace
             )
             for name, config in self._config.custom_resources.items()
         }

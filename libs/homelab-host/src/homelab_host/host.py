@@ -44,13 +44,7 @@ class Host(ComponentResource):
 
     def build_images(self) -> None:
         self._images = {
-            name: Image(
-                self._context,
-                name,
-                config,
-                opts=self._child_opts,
-                host_config=self._config,
-            )
+            name: Image(self._context, name, config, opts=self._child_opts, host_config=self._config)
             for name, config in self._config.images.items()
         }
 
@@ -74,41 +68,31 @@ class Host(ComponentResource):
         self.bootstrap = self._machines[self._config.bootstrap]
 
         self.controlplane_endpoints = [
-            machine.endpoint
-            for machine in self._machines.values()
-            if machine.features.controlplane
+            machine.endpoint for machine in self._machines.values() if machine.features.controlplane
         ]
-        self.machine_endpoints = [
-            machine.endpoint for machine in self._machines.values()
-        ]
+        self.machine_endpoints = [machine.endpoint for machine in self._machines.values()]
 
     def build_config(self) -> None:
         self.kubeconfig = talos.cluster.Kubeconfig(
             self._name,
-            opts=self._child_opts.merge(
-                ResourceOptions(depends_on=self.bootstrap.machine_bootstrap),
-            ),
+            opts=self._child_opts.merge(ResourceOptions(depends_on=self.bootstrap.machine_bootstrap)),
             client_configuration=self._secrets.client_configuration_output.apply(
-                lambda client_configuration: (
-                    talos.cluster.KubeconfigClientConfigurationArgs(
-                        ca_certificate=client_configuration.ca_certificate,
-                        client_certificate=client_configuration.client_certificate,
-                        client_key=client_configuration.client_key,
-                    )
-                ),
+                lambda client_configuration: talos.cluster.KubeconfigClientConfigurationArgs(
+                    ca_certificate=client_configuration.ca_certificate,
+                    client_certificate=client_configuration.client_certificate,
+                    client_key=client_configuration.client_key,
+                )
             ),
             node=self.bootstrap.endpoint,
         ).kubeconfig_raw
 
         self.talosconfig = talos.client.get_configuration_output(
             client_configuration=self._secrets.client_configuration_output.apply(
-                lambda client_configuration: (
-                    talos.client.GetConfigurationClientConfigurationArgs(
-                        ca_certificate=client_configuration.ca_certificate,
-                        client_certificate=client_configuration.client_certificate,
-                        client_key=client_configuration.client_key,
-                    )
-                ),
+                lambda client_configuration: talos.client.GetConfigurationClientConfigurationArgs(
+                    ca_certificate=client_configuration.ca_certificate,
+                    client_certificate=client_configuration.client_certificate,
+                    client_key=client_configuration.client_key,
+                )
             ),
             cluster_name=self._name,
             endpoints=self.controlplane_endpoints,

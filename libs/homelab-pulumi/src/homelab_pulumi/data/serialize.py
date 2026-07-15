@@ -12,11 +12,7 @@ def default_dumper(data: Any) -> str:
 
 
 def serialize(
-    context: Context,
-    data: Any,
-    *,
-    direct: bool,
-    dumper: Callable[[Any], str] | None = None,
+    context: Context, data: Any, *, direct: bool, dumper: Callable[[Any], str] | None = None
 ) -> str | Output[str]:
     dumper_ = dumper or default_dumper
     if direct:
@@ -30,8 +26,6 @@ def yaml(context: Context, data: Any, *, direct: bool) -> str | Output[str]:
         data,
         direct=direct,
         dumper=lambda data: (
-            "\n".join([yaml_rs.dumps(item) for item in data])
-            if isinstance(data, list)
-            else yaml_rs.dumps(data)
+            "\n".join([yaml_rs.dumps(item) for item in data]) if isinstance(data, list) else yaml_rs.dumps(data)
         ),
     )

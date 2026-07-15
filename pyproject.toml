@@ -77,6 +77,15 @@ root = [
     "./libs/homelab-types/src",
 ]
 
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+skip-magic-trailing-comma = true
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
+
 [tool.ruff.lint]
 extend-select = [
     "ANN",
@@ -106,6 +115,7 @@ extend-select = [
 ]
 ignore = [
     "ANN401",
+    "COM812",
     "PLR0913",
     "RUF012",
     "S603",

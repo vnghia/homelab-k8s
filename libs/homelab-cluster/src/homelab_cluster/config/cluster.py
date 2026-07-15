@@ -20,11 +20,7 @@ class Config(BaseModel):
         return f"https://{
             common.string.add_prefix(
                 pulumi.constant.STACK,
-                common.string.add_prefix(
-                    self.name,
-                    self.kubernetes.domain.name,
-                    separator='.',
-                ),
+                common.string.add_prefix(self.name, self.kubernetes.domain.name, separator='.'),
                 separator='.',
             )
         }:6443"

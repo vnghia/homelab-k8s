@@ -32,16 +32,10 @@ class KustomizeProviderProps(BaseModel):
         directory.mkdir(parents=True, exist_ok=True)
         yaml_rs.dump(self.kustomization, file=directory / "kustomization.yaml")
 
-        manifests = subprocess.check_output(
-            [self.KUSTOMIZE, "build", "--enable-helm", directory],
-        ).decode()
+        manifests = subprocess.check_output([self.KUSTOMIZE, "build", "--enable-helm", directory]).decode()
         if self.namespace:
             manifests += yaml_rs.dumps(
-                {
-                    "apiVersion": "v1",
-                    "kind": "Namespace",
-                    "metadata": self.namespace.model_dump(),
-                },
+                {"apiVersion": "v1", "kind": "Namespace", "metadata": self.namespace.model_dump()}
             )
         return manifests
 
@@ -53,21 +47,13 @@ class KustomizeProvider(ResourceProvider):
     def create(self, props: dict[str, Any]) -> CreateResult:
         kustomize_props = KustomizeProviderProps(**props)
         return CreateResult(
-            id_=kustomize_props.id,
-            outs=kustomize_props.model_dump() | {"manifests": kustomize_props.build()},
+            id_=kustomize_props.id, outs=kustomize_props.model_dump() | {"manifests": kustomize_props.build()}
         )
 
     @typing.override
-    def update(
-        self,
-        _id: str,
-        _olds: dict[str, Any],
-        _news: dict[str, Any],
-    ) -> UpdateResult:
+    def update(self, _id: str, _olds: dict[str, Any], _news: dict[str, Any]) -> UpdateResult:
         kustomize_props = KustomizeProviderProps(**_news)
-        return UpdateResult(
-            outs=kustomize_props.model_dump() | {"manifests": kustomize_props.build()},
-        )
+        return UpdateResult(outs=kustomize_props.model_dump() | {"manifests": kustomize_props.build()})
 
 
 class Kustomize(Resource, module="kubernetes", name="Kustomize"):
@@ -88,9 +74,7 @@ class Kustomize(Resource, module="kubernetes", name="Kustomize"):
             {
                 "id": id,
                 "namespace": namespace.model_dump() if namespace else None,
-                "kustomization": kustomization.model_dump(
-                    context=context.to_serialization_context(),
-                ),
+                "kustomization": kustomization.model_dump(context=context.to_serialization_context()),
                 "manifests": None,
             },
             opts.merge(ResourceOptions(additional_secret_outputs=["manifests"])),

@@ -60,10 +60,7 @@ class Reference(BaseModel):
     def resolve(self, context: Context) -> PythonType | Output[PythonType]: ...
 
     @model_serializer(mode="plain")
-    def serialize(
-        self,
-        info: SerializationInfo,
-    ) -> PythonType | Output[PythonType]:
+    def serialize(self, info: SerializationInfo) -> PythonType | Output[PythonType]:
         from ..context import Context
 
         return self.resolve(Context.from_serialization_info(info))

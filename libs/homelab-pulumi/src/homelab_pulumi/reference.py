@@ -23,8 +23,5 @@ class Data(BaseModel):
 
 class Secret(Reference, kind="pulumi/secret"):
     @typing.override
-    def resolve(
-        self,
-        context: Context,
-    ) -> Output[context.reference.type.PythonType]:
+    def resolve(self, context: Context) -> Output[context.reference.type.PythonType]:
         return context.get(self.__class__, Data).secrets.apply(self.resolve_data)

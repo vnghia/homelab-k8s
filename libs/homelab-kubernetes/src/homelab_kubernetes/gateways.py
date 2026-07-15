@@ -23,12 +23,7 @@ class Gateways(ComponentResource):
     RESOURCE_TYPE: ClassVar[str] = "gateway"
 
     def __init__(
-        self,
-        context: Context,
-        name: str,
-        config: config_.networking.gateway.Config,
-        *,
-        opts: ResourceOptions,
+        self, context: Context, name: str, config: config_.networking.gateway.Config, *, opts: ResourceOptions
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
@@ -41,10 +36,7 @@ class Gateways(ComponentResource):
         self.build_gateways()
 
     def build_namespace(self) -> None:
-        self._namespace = namespace.Namespace(
-            self._config.namespace,
-            opts=self._child_opts,
-        )
+        self._namespace = namespace.Namespace(self._config.namespace, opts=self._child_opts)
 
     def build_classes(self) -> None:
         self._classes = {
@@ -74,7 +66,7 @@ class Gateways(ComponentResource):
                                     ).name,
                                     "namespace": self._namespace.name,
                                 },
-                            },
+                            }
                         ),
                     ),
                     opts=self._child_opts,
@@ -100,15 +92,11 @@ class Gateways(ComponentResource):
                         {
                             "gatewayClassName": gateway_class.name,
                             "listeners": [
-                                {
-                                    "name": name,
-                                    "protocol": listener.protocol,
-                                    "port": listener.port,
-                                }
+                                {"name": name, "protocol": listener.protocol, "port": listener.port}
                                 for name, listener in gateway_config.listeners.items()
                             ],
                             "allowedListeners": {"namespaces": {"from": "All"}},
-                        },
+                        }
                     ),
                 ),
                 opts=self._child_opts,
@@ -123,15 +111,8 @@ class Gateways(ComponentResource):
 
             gateway_ip = kubernetes.core.v1.Service.get(
                 resource_name,
-                Output.concat(
-                    self._namespace.name,
-                    "/",
-                    gateway_class.service_prefix,
-                    gateway_name,
-                ),
-                opts=self._child_opts.merge(
-                    ResourceOptions(depends_on=[gateway.resource]),
-                ),
+                Output.concat(self._namespace.name, "/", gateway_class.service_prefix, gateway_name),
+                opts=self._child_opts.merge(ResourceOptions(depends_on=[gateway.resource])),
             ).spec.apply(ip_or_error)
 
             self._gateways[name] = Gateway(name=gateway_name, ip=gateway_ip)

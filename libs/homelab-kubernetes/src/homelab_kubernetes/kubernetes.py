@@ -9,14 +9,7 @@ from . import app, cert_manager, config, gateways
 class Kubernetes(ComponentResource):
     RESOURCE_TYPE: ClassVar[str] = "kubernetes"
 
-    def __init__(
-        self,
-        context: Context,
-        name: str,
-        config: config.Config,
-        *,
-        opts: ResourceOptions,
-    ) -> None:
+    def __init__(self, context: Context, name: str, config: config.Config, *, opts: ResourceOptions) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self, delete_before_replace=True)
 
@@ -29,17 +22,12 @@ class Kubernetes(ComponentResource):
 
     def build_cert_manager(self) -> None:
         self._cert_manager = cert_manager.CertManager(
-            self._context,
-            self._config.apps.cert_manager,
-            opts=self._child_opts,
+            self._context, self._config.apps.cert_manager, opts=self._child_opts
         )
 
     def build_gateways(self) -> None:
         self._gateways = gateways.Gateways(
-            self._context,
-            self._name,
-            self._config.networking.gateway,
-            opts=self._child_opts,
+            self._context, self._name, self._config.networking.gateway, opts=self._child_opts
         )
 
     def build_apps(self) -> None:
