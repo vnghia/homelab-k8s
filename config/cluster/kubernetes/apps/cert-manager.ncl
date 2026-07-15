@@ -7,15 +7,11 @@ let { contracts, .. } = import "../../../libs/contracts.ncl" in
       secret_key = "%{issuer}-token",
     in
     {
+      issuer = "letsencrypt",
+
       namespace = {
         name = "cert-manager",
       },
-
-      chart = "oci://quay.io/jetstack/charts/cert-manager",
-      # renovate: datasource=github-releases packageName=cert-manager/cert-manager
-      version = "v1.20.3",
-
-      issuer = "letsencrypt",
 
       secrets = {
         "%{secret_name}" = {
@@ -27,6 +23,27 @@ let { contracts, .. } = import "../../../libs/contracts.ncl" in
               path = "cert_manager",
             },
           },
+        },
+      },
+
+      charts = {
+        cert-manager = {
+          chart = "oci://quay.io/jetstack/charts/cert-manager",
+          # renovate: datasource=github-releases packageName=cert-manager/cert-manager
+          version = "v1.20.3",
+          skip_crds = false,
+          values = {
+            crds = {
+              enabled = true,
+            },
+            config = {
+              enableGatewayAPI = true,
+              enableGatewayAPIListenerSet = true,
+              featureGates = {
+                ListenerSets = true,
+              },
+            },
+          }
         },
       },
 

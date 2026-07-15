@@ -1,4 +1,5 @@
 (import "account.ncl")
+& (import "chart.ncl")
 & (import "custom-resource.ncl")
 & (import "deployment/deployment.ncl")
 & (import "secret.ncl")
@@ -29,6 +30,12 @@
     secrets
       | {
         _ : cluster.kubernetes.app.Secret
+      }
+      | default
+      = {},
+    charts
+      | {
+        _ : cluster.kubernetes.app.Chart
       }
       | default
       = {},

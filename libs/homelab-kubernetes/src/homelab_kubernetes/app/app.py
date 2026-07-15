@@ -5,7 +5,7 @@ from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
 from .. import config, namespace
-from . import account, custom_resource, deployment, secret, service
+from . import account, chart, custom_resource, deployment, secret, service
 from . import context as context_
 
 if typing.TYPE_CHECKING:
@@ -35,6 +35,7 @@ class App[T: config.app.Config = config.app.Config](ComponentResource):
         self.build_namespace()
         self.build_accounts()
         self.build_secrets()
+        self.build_charts()
         self.build_custom_resources()
         self.build_deployments()
         self.build_services()
@@ -64,6 +65,12 @@ class App[T: config.app.Config = config.app.Config](ComponentResource):
         self._secrets = {
             name: secret.Secret(self._context, name, config, opts=self._child_opts, namespace=self._namespace)
             for name, config in self._config.secrets.items()
+        }
+
+    def build_charts(self) -> None:
+        self._charts = {
+            name: chart.Chart(self._context, name, config, opts=self._child_opts, namespace=self._namespace)
+            for name, config in self._config.charts.items()
         }
 
     def build_custom_resources(self) -> None:

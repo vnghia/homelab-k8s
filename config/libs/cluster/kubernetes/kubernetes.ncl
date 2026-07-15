@@ -62,8 +62,6 @@
             cert_manager
               | cluster.kubernetes.App
               & {
-                chart | String,
-                version | String,
                 issuer | String,
                 email | String | not_exported,
               },
