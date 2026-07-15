@@ -9,7 +9,7 @@ class Homelab:
     def __init__(self) -> None:
         self._pulumi_data = pulumi.reference.Data()
 
-        self._context = context.Context()
+        self._context = context.Context(references={})
         self._context.set(pulumi.reference.Secret, pulumi.reference.Data())
         self._config = config.Config.load(self._pulumi_data)
 

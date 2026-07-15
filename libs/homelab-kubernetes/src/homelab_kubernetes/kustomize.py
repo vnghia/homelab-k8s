@@ -74,7 +74,7 @@ class Kustomize(Resource, module="kubernetes", name="Kustomize"):
             {
                 "id": id,
                 "namespace": namespace.model_dump() if namespace else None,
-                "kustomization": kustomization.model_dump(context=context.to_serialization_context()),
+                "kustomization": kustomization.model_dump(context=context.asdict()),
                 "manifests": None,
             },
             opts.merge(ResourceOptions(additional_secret_outputs=["manifests"])),

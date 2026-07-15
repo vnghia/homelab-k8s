@@ -10,8 +10,10 @@ from . import app, config
 class CertManager(app.App[config.cert_manager.Config]):
     API_TOKEN_KEY: ClassVar[str] = "api-token"  # noqa: S105
 
-    def __init__(self, context: Context, config: config.cert_manager.Config, *, opts: ResourceOptions) -> None:
-        super().__init__(context, config.namespace.name, config, opts=opts, register_output=False)
+    def __init__(
+        self, context: Context, config: config.cert_manager.Config, *, opts: ResourceOptions, data: app.reference.Data
+    ) -> None:
+        super().__init__(context, config.namespace.name, config, opts=opts, data=data, register_output=False)
 
         self._manager = kubernetes.helm.v4.Chart(
             self._config.namespace.name,

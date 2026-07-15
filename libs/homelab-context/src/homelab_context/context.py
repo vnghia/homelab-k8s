@@ -1,20 +1,20 @@
 from typing import Any, Self
 
-from homelab_types import BaseModel
-from pydantic import SerializationInfo
+from pydantic import SerializationInfo, dataclasses
 
 from .reference import Reference
 
 
-class Context(BaseModel):
-    references: dict[type[Reference], Any] = {}
+@dataclasses.dataclass
+class Context:
+    references: dict[type[Reference], Any]
 
     @classmethod
     def from_serialization_info(cls, info: SerializationInfo) -> Self:
         return cls(**(info.context or {}))
 
-    def to_serialization_context(self) -> dict[str, Any]:
-        return {field: getattr(self, field) for field in self.__class__.model_fields}
+    def asdict(self) -> dict[str, Any]:
+        return {field: getattr(self, field) for field in self.__dataclass_fields__}
 
     def get[T](self, reference: type[Reference], type: type[T]) -> T:
         data = self.references[reference]

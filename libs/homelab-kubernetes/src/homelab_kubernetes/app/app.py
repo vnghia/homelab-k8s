@@ -1,3 +1,4 @@
+import typing
 from typing import ClassVar
 
 from homelab_context import Context
@@ -5,18 +6,30 @@ from pulumi import ComponentResource, ResourceOptions
 
 from .. import config, namespace
 from . import account, custom_resource, deployment, secret, service
+from . import context as context_
+
+if typing.TYPE_CHECKING:
+    from . import reference
 
 
 class App[T: config.app.Config = config.app.Config](ComponentResource):
     RESOURCE_TYPE: ClassVar[str] = "app"
 
     def __init__(
-        self, context: Context, name: str, config: T, *, opts: ResourceOptions, register_output: bool = True
+        self,
+        context: Context,
+        name: str,
+        config: T,
+        *,
+        opts: ResourceOptions,
+        data: reference.Data,
+        register_output: bool = True,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
+        data.apps[name] = self
 
-        self._context = context
+        self._context = context_.Context(name=self._name, **context.asdict())
         self._config = config
 
         self.build_namespace()
@@ -28,6 +41,10 @@ class App[T: config.app.Config = config.app.Config](ComponentResource):
 
         if register_output:
             self.register_outputs({})
+
+    @property
+    def secrets(self) -> dict[str, secret.Secret]:
+        return self._secrets
 
     def build_namespace(self) -> None:
         self._namespace = namespace.Namespace(

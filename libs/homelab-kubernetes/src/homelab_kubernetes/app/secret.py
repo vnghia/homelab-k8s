@@ -26,7 +26,7 @@ class Secret:
             immutable=True,
             metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace.name),
             type=self._config.type,
-            string_data=self._config.string_data.model_dump(context=self._context.to_serialization_context()),
+            string_data=self._config.string_data.model_dump(context=self._context.asdict()),
         )
 
         self.name = common.metadata.name(self._secret.metadata)

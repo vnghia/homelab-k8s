@@ -4,9 +4,9 @@ from typing import Any
 
 import homelab_context as context
 import pulumi
-from homelab_context import Context, Reference
 from homelab_model import BaseModel
 from pulumi import Output
+from pydantic import SerializationInfo, model_serializer
 
 
 class Data(BaseModel):
@@ -21,7 +21,10 @@ class Data(BaseModel):
         return self._config.require_secret_object("secrets")
 
 
-class Secret(Reference, kind="pulumi/secret"):
+class Secret(context.Reference, kind="pulumi/secret"):
     @typing.override
-    def resolve(self, context: Context) -> Output[context.reference.type.PythonType]:
-        return context.get(self.__class__, Data).secrets.apply(self.resolve_data)
+    @model_serializer(mode="plain")
+    def serialize(
+        self, info: SerializationInfo
+    ) -> context.reference.type.PythonType | Output[context.reference.type.PythonType]:
+        return context.Context.from_serialization_info(info).get(self.__class__, Data).secrets.apply(self.resolve)

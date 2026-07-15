@@ -15,5 +15,14 @@
         | [| 'str, 'bool, 'int, 'float |],
       path | String,
     },
+
+    kubernetes = {
+      AppReference =
+        Reference
+        & {
+          kind = "kubernetes/app",
+          name | Nullable String | default = null,
+        },
+    },
   },
 }

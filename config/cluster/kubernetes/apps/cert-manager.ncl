@@ -1,3 +1,4 @@
+let { contracts, .. } = import "../../../libs/contracts.ncl" in
 {
   cluster.kubernetes.apps.cert_manager =
     let issuer = cluster.kubernetes.apps.cert_manager.issuer in
@@ -49,7 +50,12 @@
                   dns01 = {
                     cloudflare = {
                       apiTokenSecretRef = {
-                        name = secret_name,
+                        name =
+                          contracts.kubernetes.AppReference
+                          & {
+                            type = "str",
+                            path = "secrets.%{secret_name}.name",
+                          },
                         key = secret_key,
                       },
                     },

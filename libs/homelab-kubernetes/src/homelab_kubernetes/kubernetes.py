@@ -16,13 +16,16 @@ class Kubernetes(ComponentResource):
         self._context = context
         self._config = config
 
+        self._reference_app_data = app.reference.Data(apps={})
+        self._context.set(app.reference.Reference, self._reference_app_data)
+
         self.build_cert_manager()
         self.build_gateways()
         self.build_apps()
 
     def build_cert_manager(self) -> None:
         self._cert_manager = cert_manager.CertManager(
-            self._context, self._config.apps.cert_manager, opts=self._child_opts
+            self._context, self._config.apps.cert_manager, opts=self._child_opts, data=self._reference_app_data
         )
 
     def build_gateways(self) -> None:
@@ -32,6 +35,6 @@ class Kubernetes(ComponentResource):
 
     def build_apps(self) -> None:
         self._apps = {
-            name: app.App(self._context, name, config, opts=self._child_opts)
+            name: app.App(self._context, name, config, opts=self._child_opts, data=self._reference_app_data)
             for name, config in self._config.apps.apps.items()
         }
