@@ -34,6 +34,7 @@
         packages = with pkgs; [
           uv
           nickel
+          nls
           jq
 
           pulumi-bin
