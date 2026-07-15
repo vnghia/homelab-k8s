@@ -7,7 +7,10 @@ from . import common, config
 
 class Namespace:
     def __init__(
-        self, config: config.namespace.Config, *, opts: ResourceOptions,
+        self,
+        config: config.namespace.Config,
+        *,
+        opts: ResourceOptions,
     ) -> None:
         self._name = config.name
         self._config = config

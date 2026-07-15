@@ -22,7 +22,9 @@ class JsonModel(RootModel[dict[str, Any]]):
     @model_validator(mode="wrap")
     @classmethod
     def validate_reference(
-        cls, data: Any, handler: ModelWrapValidatorHandler[Self],
+        cls,
+        data: Any,
+        handler: ModelWrapValidatorHandler[Self],
     ) -> Self:
         if isinstance(data, cls):
             return data

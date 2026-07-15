@@ -24,7 +24,8 @@ class Data(BaseModel):
 class Secret(Reference, kind="pulumi/secret"):
     @model_serializer(mode="plain")
     def serialize(
-        self, info: SerializationInfo,
+        self,
+        info: SerializationInfo,
     ) -> Output[context.reference.type.PythonType]:
         context = Context.from_serialization_info(info)
         return context.get(self.__class__, Data).secrets.apply(self.resolve)

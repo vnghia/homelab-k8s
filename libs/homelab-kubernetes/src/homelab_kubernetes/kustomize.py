@@ -59,7 +59,10 @@ class KustomizeProvider(ResourceProvider):
 
     @typing.override
     def update(
-        self, _id: str, _olds: dict[str, Any], _news: dict[str, Any],
+        self,
+        _id: str,
+        _olds: dict[str, Any],
+        _news: dict[str, Any],
     ) -> UpdateResult:
         kustomize_props = KustomizeProviderProps(**_news)
         return UpdateResult(

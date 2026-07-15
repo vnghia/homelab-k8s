@@ -7,7 +7,8 @@ from pydantic import SerializationInfo, model_serializer
 class Reference(context.Reference, kind="dns/token"):
     @model_serializer(mode="plain")
     def serialize(
-        self, info: SerializationInfo,
+        self,
+        info: SerializationInfo,
     ) -> context.reference.type.PythonType | Output[context.reference.type.PythonType]:
         from .. import token
 

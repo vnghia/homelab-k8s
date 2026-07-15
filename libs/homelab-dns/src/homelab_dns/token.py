@@ -62,10 +62,12 @@ class Token(ComponentResource):
 
     @classmethod
     def get_permission_group_args(
-        cls, name: str,
+        cls,
+        name: str,
     ) -> Output[cloudflare.ApiTokenPolicyPermissionGroupArgs]:
         return cloudflare.get_api_token_permission_groups_list_output(
-            name=urllib.parse.quote_plus(name), scope=cls.URL_SCOPE,
+            name=urllib.parse.quote_plus(name),
+            scope=cls.URL_SCOPE,
         ).apply(
             lambda result: cloudflare.ApiTokenPolicyPermissionGroupArgs(
                 id=result.results[0].id,

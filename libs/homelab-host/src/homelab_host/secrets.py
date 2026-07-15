@@ -12,7 +12,8 @@ class ClientConfiguration(BaseModel):
 
     @classmethod
     def from_output(
-        cls, output: Output[talos.machine.outputs.ClientConfiguration],
+        cls,
+        output: Output[talos.machine.outputs.ClientConfiguration],
     ) -> Self:
         return cls(
             ca_certificate=output.apply(lambda result: result.ca_certificate),
@@ -34,7 +35,8 @@ class Certificate(BaseModel):
 
     @classmethod
     def from_output(
-        cls, output: Output[talos.machine.outputs.CertificateResult],
+        cls,
+        output: Output[talos.machine.outputs.CertificateResult],
     ) -> Self:
         return cls(
             cert=output.apply(lambda result: result.cert),
@@ -70,7 +72,8 @@ class Certificates(BaseModel):
 
     @classmethod
     def from_output(
-        cls, output: Output[talos.machine.outputs.CertificatesResult],
+        cls,
+        output: Output[talos.machine.outputs.CertificatesResult],
     ) -> Self:
         return cls(
             etcd=Certificate.from_output(output.apply(lambda result: result.etcd)),
@@ -119,7 +122,8 @@ class KubernetesSecrets(BaseModel):
 
     @classmethod
     def from_output(
-        cls, output: Output[talos.machine.outputs.KubernetesSecretsResult],
+        cls,
+        output: Output[talos.machine.outputs.KubernetesSecretsResult],
     ) -> Self:
         return cls(
             bootstrap_token=output.apply(lambda result: result.bootstrap_token),
@@ -144,7 +148,8 @@ class TrustdInfo(BaseModel):
 
     @classmethod
     def from_output(
-        cls, output: Output[talos.machine.outputs.TrustdInfoResult],
+        cls,
+        output: Output[talos.machine.outputs.TrustdInfoResult],
     ) -> Self:
         return cls(token=output.apply(lambda result: result.token))
 
@@ -162,7 +167,8 @@ class MachineSecrets(BaseModel):
 
     @classmethod
     def from_output(
-        cls, output: Output[talos.machine.outputs.MachineSecretsResult],
+        cls,
+        output: Output[talos.machine.outputs.MachineSecretsResult],
     ) -> Self:
         return cls(
             certs=Certificates.from_output(output.apply(lambda result: result.certs)),
@@ -187,7 +193,9 @@ class MachineSecrets(BaseModel):
 class Secrets:
     def __init__(self, *, opts: ResourceOptions | None, version: str) -> None:
         self._secrets = talos.machine.Secrets(
-            "secrets", opts=opts, talos_version=version,
+            "secrets",
+            opts=opts,
+            talos_version=version,
         )
 
         self.client_configuration_output = self._secrets.client_configuration
