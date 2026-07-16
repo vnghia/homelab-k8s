@@ -29,13 +29,11 @@ class Token(ComponentResource):
             {f"{self.SCOPE}.{zone.id}": "*" for zone in self._config.zones.values()}
         ).decode()
 
-        self._cert_manager = cloudflare.ApiToken(
-            "cert-manager",
+        self._letsencrypt = cloudflare.ApiToken(
+            "letsencrypt",
             opts=self._child_opts.merge(ResourceOptions(delete_before_replace=True)),
             name=common.string.add_prefix(
-                pulumi.constant.STACK,
-                common.string.add_suffix(self._name, "cert-manager", separator="-"),
-                separator="-",
+                pulumi.constant.STACK, common.string.add_suffix(self._name, "letsencrypt", separator="-"), separator="-"
             ),
             policies=[
                 cloudflare.ApiTokenPolicyArgs(
@@ -65,5 +63,5 @@ class Token(ComponentResource):
         return self.get_permission_group_args("DNS Write")
 
     @property
-    def cert_manager(self) -> Output[str]:
-        return self._cert_manager.value
+    def letsencrypt(self) -> Output[str]:
+        return self._letsencrypt.value

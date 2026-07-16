@@ -1,7 +1,7 @@
 let { contracts, .. } = import "../../../libs/contracts.ncl" in
 {
-  cluster.kubernetes.apps.cert_manager =
-    let issuer = cluster.kubernetes.apps.cert_manager.issuer in
+  cluster.kubernetes.networking.certificate =
+    let issuer = cluster.kubernetes.networking.certificate.issuer in
     let
       secret_name = "%{issuer}-token",
       secret_key = "%{issuer}-token",
@@ -10,7 +10,7 @@ let { contracts, .. } = import "../../../libs/contracts.ncl" in
       issuer = "letsencrypt",
 
       namespace = {
-        name = "cert-manager",
+        name = "certificate",
       },
 
       secrets = {
@@ -20,14 +20,14 @@ let { contracts, .. } = import "../../../libs/contracts.ncl" in
             "%{secret_key}" = {
               kind = "dns/token",
               type = "str",
-              path = "cert_manager",
+              path = issuer,
             },
           },
         },
       },
 
       charts = {
-        cert-manager = {
+        manager = {
           chart = "oci://quay.io/jetstack/charts/cert-manager",
           # renovate: datasource=github-releases packageName=cert-manager/cert-manager
           version = "v1.20.3",
@@ -58,7 +58,7 @@ let { contracts, .. } = import "../../../libs/contracts.ncl" in
                   "https://acme-staging-v02.api.letsencrypt.org/directory"
                 else
                   "https://acme-v02.api.letsencrypt.org/directory",
-              email = cluster.kubernetes.apps.cert_manager.email,
+              email = cluster.kubernetes.networking.certificate.email,
               privateKeySecretRef = {
                 name = "%{issuer}-account-key",
               },

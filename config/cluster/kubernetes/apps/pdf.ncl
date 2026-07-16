@@ -1,3 +1,3 @@
 {
-  cluster.kubernetes.apps.apps.pdf = {},
+  cluster.kubernetes.apps.pdf = {},
 }

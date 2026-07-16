@@ -1,4 +1,4 @@
-from . import app
+from .. import app
 
 
 class Config(app.Config):

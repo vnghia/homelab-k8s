@@ -1,7 +1,6 @@
 (import "namespace.ncl")
 & (import "app/app.ncl")
 & {
-  contracts = {},
   cluster = {
     kubernetes.Kustomization = import "kustomization.ncl",
     Cluster.kubernetes
@@ -56,19 +55,16 @@
                 version | String | not_exported,
                 kustomization | { _ : Dyn },
               },
-          },
-        apps
-          | {
-            cert_manager
+            certificate
               | cluster.kubernetes.App
               & {
                 issuer | String,
                 email | String | not_exported,
               },
-            apps
-              | {
-                _ : cluster.kubernetes.App
-              },
+          },
+        apps
+          | {
+            _ : cluster.kubernetes.App
           },
       },
   },

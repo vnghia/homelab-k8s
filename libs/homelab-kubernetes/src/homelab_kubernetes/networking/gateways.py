@@ -5,8 +5,8 @@ from homelab_context import Context
 from homelab_model import BaseModel, JsonModel
 from pulumi import ComponentResource, Output, ResourceOptions
 
-from . import app, namespace
-from . import config as config_
+from .. import app, namespace
+from .. import config as config_
 
 
 class GatewayClass(BaseModel):

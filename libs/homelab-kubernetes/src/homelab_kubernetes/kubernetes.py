@@ -3,7 +3,7 @@ from typing import ClassVar
 from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
-from . import app, cert_manager, config, gateways
+from . import app, config, networking
 
 
 class Kubernetes(ComponentResource):
@@ -19,22 +19,18 @@ class Kubernetes(ComponentResource):
         self._reference_app_data = app.reference.Data(apps={})
         self._context.set(app.reference.Reference, self._reference_app_data)
 
-        self.build_cert_manager()
-        self.build_gateways()
+        self.build_networking()
         self.build_apps()
 
-    def build_cert_manager(self) -> None:
-        self._cert_manager = cert_manager.CertManager(
-            self._context, self._config.apps.cert_manager, opts=self._child_opts, data=self._reference_app_data
-        )
+        self.register_outputs({})
 
-    def build_gateways(self) -> None:
-        self._gateways = gateways.Gateways(
-            self._context, self._name, self._config.networking.gateway, opts=self._child_opts
+    def build_networking(self) -> None:
+        self._networking = networking.Networking(
+            self._context, self._name, self._config.networking, opts=self._child_opts, data=self._reference_app_data
         )
 
     def build_apps(self) -> None:
         self._apps = {
             name: app.App(self._context, name, config, opts=self._child_opts, data=self._reference_app_data)
-            for name, config in self._config.apps.apps.items()
+            for name, config in self._config.apps.items()
         }
