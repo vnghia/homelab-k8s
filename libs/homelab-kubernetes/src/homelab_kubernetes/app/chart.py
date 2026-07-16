@@ -27,6 +27,9 @@ class Chart:
             chart=self._config.chart,
             version=self._config.version,
             skip_crds=self._config.skip_crds,
+            repository_opts=kubernetes.helm.v4.RepositoryOptsArgs(repo=self._config.repository.repo)
+            if self._config.repository
+            else None,
             values=self._config.values.model_dump(context=self._context.asdict()),
         )
 

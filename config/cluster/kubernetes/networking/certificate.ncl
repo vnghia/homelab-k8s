@@ -8,11 +8,9 @@ let { contracts, .. } = import "../../../libs/contracts.ncl" in
     in
     {
       issuer = "letsencrypt",
-
       namespace = {
         name = "certificate",
       },
-
       secrets = {
         "%{secret_name}" = {
           type = "Opaque",
@@ -25,7 +23,6 @@ let { contracts, .. } = import "../../../libs/contracts.ncl" in
           },
         },
       },
-
       charts = {
         manager = {
           chart = "oci://quay.io/jetstack/charts/cert-manager",
@@ -46,7 +43,6 @@ let { contracts, .. } = import "../../../libs/contracts.ncl" in
           }
         },
       },
-
       custom_resources = {
         "%{issuer}" = {
           api_version = "cert-manager.io/v1",
