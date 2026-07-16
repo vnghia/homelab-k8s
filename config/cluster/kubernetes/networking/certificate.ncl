@@ -1,8 +1,8 @@
 let { contracts, .. } = import "../../../libs/contracts.ncl" in
 {
   cluster.kubernetes.networking.certificate =
-    let issuer = cluster.kubernetes.networking.certificate.issuer in
-    let
+    let rec
+      issuer = cluster.kubernetes.networking.certificate.issuer,
       secret_name = "%{issuer}-token",
       secret_key = "%{issuer}-token",
     in
