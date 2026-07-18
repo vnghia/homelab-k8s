@@ -5,8 +5,8 @@ from homelab_context import Context
 from homelab_model import BaseModel, JsonModel
 from pulumi import ComponentResource, Output, ResourceOptions
 
-from .. import app, namespace
 from .. import config as config_
+from .. import custom_resource, namespace
 
 
 class GatewayClass(BaseModel):
@@ -41,10 +41,10 @@ class Gateways(ComponentResource):
     def build_classes(self) -> None:
         self._classes = {
             name: GatewayClass(
-                name=app.custom_resource.CustomResource(
+                name=custom_resource.CustomResource(
                     self._context,
                     f"{name}-gateway-class",
-                    config_.app.custom_resource.Config(
+                    config_.custom_resource.Config(
                         api_version="gateway.networking.k8s.io/v1",
                         kind="GatewayClass",
                         spec=JsonModel(
@@ -53,10 +53,10 @@ class Gateways(ComponentResource):
                                 "parametersRef": {
                                     "group": "cilium.io",
                                     "kind": "CiliumGatewayClassConfig",
-                                    "name": app.custom_resource.CustomResource(
+                                    "name": custom_resource.CustomResource(
                                         self._context,
                                         f"{name}-gateway-class-config",
-                                        config_.app.custom_resource.Config(
+                                        config_.custom_resource.Config(
                                             api_version="cilium.io/v2alpha1",
                                             kind="CiliumGatewayClassConfig",
                                             spec=config.spec,
@@ -82,10 +82,10 @@ class Gateways(ComponentResource):
         for name, gateway_config in self._config.gateways.items():
             resource_name = f"{name}-gateway"
             gateway_class = self._classes[gateway_config.class_]
-            gateway = app.custom_resource.CustomResource(
+            gateway = custom_resource.CustomResource(
                 self._context,
                 resource_name,
-                config_.app.custom_resource.Config(
+                config_.custom_resource.Config(
                     api_version="gateway.networking.k8s.io/v1",
                     kind="Gateway",
                     spec=JsonModel(

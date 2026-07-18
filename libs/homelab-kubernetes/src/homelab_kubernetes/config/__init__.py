@@ -1,4 +1,5 @@
 from . import app as app
+from . import custom_resource as custom_resource
 from . import domain as domain
 from . import namespace as namespace
 from . import networking as networking

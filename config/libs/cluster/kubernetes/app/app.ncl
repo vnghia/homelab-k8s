@@ -1,6 +1,5 @@
 (import "account.ncl")
 & (import "chart.ncl")
-& (import "custom-resource.ncl")
 & (import "deployment/deployment.ncl")
 & (import "secret.ncl")
 & (import "service.ncl")
@@ -41,7 +40,7 @@
       = {},
     custom_resources
       | {
-        _ : cluster.kubernetes.app.CustomResource
+        _ : cluster.kubernetes.CustomResource
       }
       | default
       = {},

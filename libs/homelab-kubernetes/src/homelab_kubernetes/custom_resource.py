@@ -2,7 +2,7 @@ import pulumi_kubernetes as kubernetes
 from homelab_context import Context
 from pulumi import ResourceOptions
 
-from .. import common, config, namespace
+from . import common, config, namespace
 
 
 class CustomResource:
@@ -10,7 +10,7 @@ class CustomResource:
         self,
         context: Context,
         name: str,
-        config: config.app.custom_resource.Config,
+        config: config.custom_resource.Config,
         *,
         opts: ResourceOptions,
         namespace: namespace.Namespace,

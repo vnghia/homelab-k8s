@@ -4,8 +4,8 @@ from typing import ClassVar
 from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
-from .. import config, namespace
-from . import account, chart, custom_resource, deployment, secret, service
+from .. import config, custom_resource, namespace
+from . import account, chart, deployment, secret, service
 from . import context as context_
 
 if typing.TYPE_CHECKING:

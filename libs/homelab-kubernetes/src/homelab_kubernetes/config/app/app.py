@@ -1,7 +1,7 @@
 from homelab_model import BaseModel
 
-from .. import namespace
-from . import account, chart, custom_resource, deployment, secret, service
+from .. import custom_resource, namespace
+from . import account, chart, deployment, secret, service
 
 
 class Config(BaseModel):

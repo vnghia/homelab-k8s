@@ -1,4 +1,5 @@
 (import "namespace.ncl")
+& (import "custom-resource.ncl")
 & (import "app/app.ncl")
 & {
   cluster = {
