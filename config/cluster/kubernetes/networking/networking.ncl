@@ -1,1 +1,1 @@
-(import "certificate.ncl") & (import "gateway.ncl") & (import "cilium/cilium.ncl")
+(import "certificate.ncl") & (import "gateway.ncl") & (import "cilium/cilium.ncl") & (import "policy.ncl")

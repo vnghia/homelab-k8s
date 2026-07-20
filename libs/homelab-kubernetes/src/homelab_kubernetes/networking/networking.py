@@ -5,7 +5,7 @@ from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
 from .. import config
-from . import certificate, gateways
+from . import certificate, gateways, policy
 
 if typing.TYPE_CHECKING:
     from .. import app
@@ -33,6 +33,7 @@ class Networking(ComponentResource):
 
         self.build_certificate()
         self.build_gateways()
+        self.build_policy()
 
         self.register_outputs({})
 
@@ -43,3 +44,6 @@ class Networking(ComponentResource):
 
     def build_gateways(self) -> None:
         self._gateways = gateways.Gateways(self._context, self._name, self._config.gateway, opts=self._child_opts)
+
+    def build_policy(self) -> None:
+        self._policy = policy.Policy(self._context, self._name, config=self._config.policy, opts=self._child_opts)

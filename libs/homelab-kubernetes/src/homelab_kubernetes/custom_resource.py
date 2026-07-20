@@ -13,7 +13,7 @@ class CustomResource:
         config: config.custom_resource.Config,
         *,
         opts: ResourceOptions,
-        namespace: namespace.Namespace,
+        namespace: namespace.Namespace | None,
     ) -> None:
         self._name = name
         self._context = context
@@ -23,7 +23,7 @@ class CustomResource:
         self._resource = kubernetes.apiextensions.CustomResource(
             self._name,
             opts=opts,
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace.name),
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(namespace=self._namespace.name) if self._namespace else None,
             api_version=self._config.api_version,
             kind=self._config.kind,
             spec=self._config.spec.model_dump(context=self._context.asdict()),
