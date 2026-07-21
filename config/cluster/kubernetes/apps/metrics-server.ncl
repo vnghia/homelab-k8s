@@ -1,8 +1,33 @@
 let { contracts, .. } = import "../../../libs/contracts.ncl" in
 {
   cluster.kubernetes.apps.metrics-server = {
-    namespace = {
-      name = "metrics-server",
+    network = {
+      policies = {
+        metrics-server = {
+          endpointSelector = {},
+          egress = [
+            {
+              toEntities = [
+                "host"
+              ],
+              toPorts = [
+                {
+                  ports = [
+                    {
+                      port = "6443",
+                      protocol = "TCP",
+                    },
+                    {
+                      port = "10250",
+                      protocol = "TCP",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      },
     },
     charts = {
       metrics-server = {

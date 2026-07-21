@@ -11,6 +11,30 @@ let { contracts, .. } = import "../../../libs/contracts.ncl" in
       namespace = {
         name = "certificate",
       },
+      network = {
+        policies = {
+          manager = {
+            endpointSelector = {},
+            egress = [
+              {
+                toEntities = [
+                  "host"
+                ],
+                toPorts = [
+                  {
+                    ports = [
+                      {
+                        port = "6443",
+                        protocol = "TCP",
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
       secrets = {
         "%{secret_name}" = {
           type = "Opaque",

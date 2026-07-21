@@ -1,11 +1,12 @@
 from homelab_model import BaseModel
 
 from .. import custom_resource, namespace
-from . import account, chart, deployment, secret, service
+from . import account, chart, deployment, network, secret, service
 
 
 class Config(BaseModel):
     namespace: namespace.Config
+    network: network.Config
     accounts: dict[str, account.Config]
     secrets: dict[str, secret.Config]
     charts: dict[str, chart.Config]

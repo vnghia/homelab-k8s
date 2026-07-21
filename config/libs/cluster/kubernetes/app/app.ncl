@@ -20,6 +20,17 @@
       }
       | default
       = {},
+    network
+      | {
+        policies
+          | {
+            _ : Dyn
+          }
+          | default
+          = {},
+      }
+      | default
+      = {},
     accounts
       | {
         _ : cluster.kubernetes.app.Account

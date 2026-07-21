@@ -8,6 +8,30 @@ let
 in
 {
   cluster.kubernetes.apps.dozzle = {
+    network = {
+      policies = {
+        dozzle = {
+          endpointSelector = {},
+          egress = [
+            {
+              toEntities = [
+                "host"
+              ],
+              toPorts = [
+                {
+                  ports = [
+                    {
+                      port = "6443",
+                      protocol = "TCP",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      },
+    },
     accounts = {
       "%{account_name}" = {
         cluster = true,
