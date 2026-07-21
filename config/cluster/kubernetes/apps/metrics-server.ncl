@@ -8,7 +8,7 @@ let { contracts, .. } = import "../../../libs/contracts.ncl" in
           egress = [
             {
               toEntities = [
-                "host"
+                "kube-apiserver"
               ],
               toPorts = [
                 {

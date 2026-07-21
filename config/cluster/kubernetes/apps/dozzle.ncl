@@ -15,7 +15,7 @@ in
           egress = [
             {
               toEntities = [
-                "host"
+                "kube-apiserver"
               ],
               toPorts = [
                 {
