@@ -62,9 +62,9 @@
                 issuer | String,
                 email | String | not_exported,
               },
-            policy
+            policies
               | {
-                cluster | { _ : Dyn },
+                _ : Dyn
               },
           },
         apps

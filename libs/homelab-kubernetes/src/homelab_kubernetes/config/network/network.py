@@ -1,10 +1,10 @@
-from homelab_model import BaseModel
+from homelab_model import BaseModel, JsonModel
 
-from . import certificate, cilium, gateway, policy
+from . import certificate, cilium, gateway
 
 
 class Config(BaseModel):
     gateway: gateway.Config
     cilium: cilium.Config
     certificate: certificate.Config
-    policy: policy.Config
+    policies: dict[str, JsonModel]

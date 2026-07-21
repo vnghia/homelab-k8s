@@ -4,8 +4,8 @@ from typing import ClassVar
 from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
-from .. import config
-from . import certificate, gateways, policy
+from .. import config, custom_resource
+from . import certificate, gateways
 
 if typing.TYPE_CHECKING:
     from .. import app
@@ -33,7 +33,7 @@ class network(ComponentResource):
 
         self.build_certificate()
         self.build_gateways()
-        self.build_policy()
+        self.build_policies()
 
         self.register_outputs({})
 
@@ -45,5 +45,16 @@ class network(ComponentResource):
     def build_gateways(self) -> None:
         self._gateways = gateways.Gateways(self._context, self._name, self._config.gateway, opts=self._child_opts)
 
-    def build_policy(self) -> None:
-        self._policy = policy.Policy(self._context, self._name, config=self._config.policy, opts=self._child_opts)
+    def build_policies(self) -> None:
+        self._policies = {
+            name: custom_resource.CustomResource(
+                self._context,
+                name,
+                config=config.custom_resource.Config(
+                    api_version="cilium.io/v2", kind="CiliumClusterwideNetworkPolicy", spec=policy
+                ),
+                opts=self._child_opts,
+                namespace=None,
+            )
+            for name, policy in self._config.policies.items()
+        }
