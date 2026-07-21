@@ -1,7 +1,13 @@
-let { contracts, .. } = import "../../../libs/contracts.ncl" in
+let { contracts, .. } = import "../../../libs/contracts.ncl"
+in
 {
   cluster.kubernetes.network.certificate =
     let rec
+      acme_endpoint =
+        if cluster.stack != null then
+          "acme-staging-v02.api.letsencrypt.org"
+        else
+          "acme-v02.api.letsencrypt.org",
       issuer = cluster.kubernetes.network.certificate.issuer,
       secret_name = "%{issuer}-token",
       secret_key = "%{issuer}-token",
@@ -31,6 +37,23 @@ let { contracts, .. } = import "../../../libs/contracts.ncl" in
                   },
                 ],
               },
+              {
+                toFQDNs = [
+                  {
+                    matchName = acme_endpoint,
+                  },
+                ],
+                toPorts = [
+                  {
+                    ports = [
+                      {
+                        port = "443",
+                        protocol = "TCP",
+                      },
+                    ],
+                  },
+                ],
+              }
             ],
           },
         },
@@ -73,11 +96,7 @@ let { contracts, .. } = import "../../../libs/contracts.ncl" in
           kind = "ClusterIssuer",
           spec = {
             acme = {
-              server =
-                if cluster.stack != null then
-                  "https://acme-staging-v02.api.letsencrypt.org/directory"
-                else
-                  "https://acme-v02.api.letsencrypt.org/directory",
+              server = "https://%{acme_endpoint}/directory",
               email = cluster.kubernetes.network.certificate.email,
               privateKeySecretRef = {
                 name = "%{issuer}-account-key",
