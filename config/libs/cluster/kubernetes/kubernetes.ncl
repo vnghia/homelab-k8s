@@ -12,7 +12,7 @@
             cluster | String,
             name | String,
           },
-        networking
+        network
           | {
             gateway
               | {

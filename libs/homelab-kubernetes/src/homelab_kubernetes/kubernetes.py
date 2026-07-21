@@ -3,7 +3,7 @@ from typing import ClassVar
 from homelab_context import Context
 from pulumi import ComponentResource, ResourceOptions
 
-from . import app, config, networking
+from . import app, config, network
 
 
 class Kubernetes(ComponentResource):
@@ -19,14 +19,14 @@ class Kubernetes(ComponentResource):
         self._reference_app_data = app.reference.Data(apps={})
         self._context.set(app.reference.Reference, self._reference_app_data)
 
-        self.build_networking()
+        self.build_network()
         self.build_apps()
 
         self.register_outputs({})
 
-    def build_networking(self) -> None:
-        self._networking = networking.Networking(
-            self._context, self._name, self._config.networking, opts=self._child_opts, data=self._reference_app_data
+    def build_network(self) -> None:
+        self._network = network.network(
+            self._context, self._name, self._config.network, opts=self._child_opts, data=self._reference_app_data
         )
 
     def build_apps(self) -> None:

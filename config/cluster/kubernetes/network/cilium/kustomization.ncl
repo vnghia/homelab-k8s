@@ -1,15 +1,15 @@
 let { contracts, .. } = import "../../../../libs/contracts.ncl" in
 {
-  cluster.kubernetes.networking.cilium.kustomization = {
+  cluster.kubernetes.network.cilium.kustomization = {
     apiVersion = "kustomize.config.k8s.io/v1beta1",
     kind = "Kustomization",
     helmCharts = [
       {
         name = "cilium",
         releaseName = "cilium",
-        namespace = cluster.kubernetes.networking.cilium.namespace.name,
+        namespace = cluster.kubernetes.network.cilium.namespace.name,
         repo = "oci://quay.io/cilium/charts/cilium",
-        version = cluster.kubernetes.networking.cilium.version,
+        version = cluster.kubernetes.network.cilium.version,
         valuesInline = {
           bpf = { hostLegacyRouting = false, masquerade = true },
           cgroup = {
@@ -85,7 +85,7 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
           & {
             kind = "pulumi/secret",
             type = "str",
-            path = "cluster.kubernetes.networking.cilium.cilium-ca.ca.crt",
+            path = "cluster.kubernetes.network.cilium.cilium-ca.ca.crt",
           },
         targets = [
           {
@@ -100,7 +100,7 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
           & {
             kind = "pulumi/secret",
             type = "str",
-            path = "cluster.kubernetes.networking.cilium.cilium-ca.ca.key",
+            path = "cluster.kubernetes.network.cilium.cilium-ca.ca.key",
           },
         targets = [
           {
@@ -115,7 +115,7 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
           & {
             kind = "pulumi/secret",
             type = "str",
-            path = "cluster.kubernetes.networking.cilium.hubble-server-certs.ca.crt",
+            path = "cluster.kubernetes.network.cilium.hubble-server-certs.ca.crt",
           },
         targets = [
           {
@@ -130,7 +130,7 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
           & {
             kind = "pulumi/secret",
             type = "str",
-            path = "cluster.kubernetes.networking.cilium.hubble-server-certs.tls.crt",
+            path = "cluster.kubernetes.network.cilium.hubble-server-certs.tls.crt",
           },
         targets = [
           {
@@ -145,7 +145,7 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
           & {
             kind = "pulumi/secret",
             type = "str",
-            path = "cluster.kubernetes.networking.cilium.hubble-server-certs.tls.key",
+            path = "cluster.kubernetes.network.cilium.hubble-server-certs.tls.key",
           },
         targets = [
           {
@@ -160,7 +160,7 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
           & {
             kind = "pulumi/secret",
             type = "str",
-            path = "cluster.kubernetes.networking.cilium.hubble-relay-client-certs.ca.crt",
+            path = "cluster.kubernetes.network.cilium.hubble-relay-client-certs.ca.crt",
           },
         targets = [
           {
@@ -175,7 +175,7 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
           & {
             kind = "pulumi/secret",
             type = "str",
-            path = "cluster.kubernetes.networking.cilium.hubble-relay-client-certs.tls.crt",
+            path = "cluster.kubernetes.network.cilium.hubble-relay-client-certs.tls.crt",
           },
         targets = [
           {
@@ -190,7 +190,7 @@ let { contracts, .. } = import "../../../../libs/contracts.ncl" in
           & {
             kind = "pulumi/secret",
             type = "str",
-            path = "cluster.kubernetes.networking.cilium.hubble-relay-client-certs.tls.key",
+            path = "cluster.kubernetes.network.cilium.hubble-relay-client-certs.tls.key",
           },
         targets = [
           {

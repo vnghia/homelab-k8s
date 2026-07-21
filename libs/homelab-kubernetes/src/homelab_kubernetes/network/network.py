@@ -11,14 +11,14 @@ if typing.TYPE_CHECKING:
     from .. import app
 
 
-class Networking(ComponentResource):
-    RESOURCE_TYPE: ClassVar[str] = "networking"
+class network(ComponentResource):
+    RESOURCE_TYPE: ClassVar[str] = "network"
 
     def __init__(
         self,
         context: Context,
         name: str,
-        config: config.networking.Config,
+        config: config.network.Config,
         *,
         opts: ResourceOptions,
         data: app.reference.Data,

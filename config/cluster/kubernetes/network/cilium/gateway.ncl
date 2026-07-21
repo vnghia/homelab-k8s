@@ -1,6 +1,6 @@
 let class_nodeipam = "cilium-nodeipam" in
 {
-  cluster.kubernetes.networking.gateway = {
+  cluster.kubernetes.network.gateway = {
     cilium = {
       classes = {
         "%{class_nodeipam}" = {

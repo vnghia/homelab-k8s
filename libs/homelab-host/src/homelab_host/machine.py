@@ -58,9 +58,9 @@ class Machine(ComponentResource):
         self._applied_configurations: list[talos.machine.ConfigurationApply] = []
 
         self.apply_initial_patches()
-        self.apply_networking_initial_patches()
-        self.apply_networking_gateway_api_patches()
-        self.apply_networking_cilium_patches()
+        self.apply_network_initial_patches()
+        self.apply_network_gateway_api_patches()
+        self.apply_network_cilium_patches()
 
         self._machine_bootstrap = (
             talos.machine.Bootstrap(
@@ -171,12 +171,12 @@ class Machine(ComponentResource):
             ],
         )
 
-    def apply_networking_initial_patches(self) -> None:
-        networking_config = self._config.networking
+    def apply_network_initial_patches(self) -> None:
+        network_config = self._config.network
         valid_subnets = ["192.168.0.0/16", "100.64.0.0/10", "fc00::/7"]
 
         self.apply_patches(
-            "networking-initial",
+            "network-initial",
             [
                 pulumi.data.serialize.yaml(
                     self._context, {"machine": {"kubelet": {"nodeIP": {"validSubnets": valid_subnets}}}}, direct=True
@@ -186,8 +186,8 @@ class Machine(ComponentResource):
                     {
                         "cluster": {
                             "network": {
-                                "podSubnets": networking_config.cluster.pod_subnets,
-                                "serviceSubnets": networking_config.cluster.service_subnets,
+                                "podSubnets": network_config.cluster.pod_subnets,
+                                "serviceSubnets": network_config.cluster.service_subnets,
                             },
                             "etcd": {"advertisedSubnets": valid_subnets},
                         }
@@ -229,18 +229,18 @@ class Machine(ComponentResource):
                             if config.dhcpv6
                             else []
                         )
-                        for interface, config in networking_config.interfaces.items()
+                        for interface, config in network_config.interfaces.items()
                     ],
                     [],
                 ),
             ],
         )
 
-    def apply_networking_gateway_api_patches(self) -> None:
+    def apply_network_gateway_api_patches(self) -> None:
         if self._config.features.controlplane:
-            gateway_config = self._kubernetes_config.networking.gateway.crd
+            gateway_config = self._kubernetes_config.network.gateway.crd
             self.apply_patches(
-                "networking-gateway-api",
+                "network-gateway-api",
                 [
                     pulumi.data.serialize.yaml(
                         self._context,
@@ -256,11 +256,11 @@ class Machine(ComponentResource):
                 ],
             )
 
-    def apply_networking_cilium_patches(self) -> None:
+    def apply_network_cilium_patches(self) -> None:
         if self._config.features.controlplane:
-            cilium_config = self._kubernetes_config.networking.cilium
+            cilium_config = self._kubernetes_config.network.cilium
             self.apply_patches(
-                "networking-cilium",
+                "network-cilium",
                 [
                     pulumi.data.serialize.yaml(
                         self._context,

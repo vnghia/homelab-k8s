@@ -1,5 +1,5 @@
 {
-  cluster.kubernetes.networking.cilium = {
+  cluster.kubernetes.network.cilium = {
     namespace = {
       name = "cilium-core",
       spec = {

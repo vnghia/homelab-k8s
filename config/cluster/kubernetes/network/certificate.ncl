@@ -1,8 +1,8 @@
 let { contracts, .. } = import "../../../libs/contracts.ncl" in
 {
-  cluster.kubernetes.networking.certificate =
+  cluster.kubernetes.network.certificate =
     let rec
-      issuer = cluster.kubernetes.networking.certificate.issuer,
+      issuer = cluster.kubernetes.network.certificate.issuer,
       secret_name = "%{issuer}-token",
       secret_key = "%{issuer}-token",
     in
@@ -54,7 +54,7 @@ let { contracts, .. } = import "../../../libs/contracts.ncl" in
                   "https://acme-staging-v02.api.letsencrypt.org/directory"
                 else
                   "https://acme-v02.api.letsencrypt.org/directory",
-              email = cluster.kubernetes.networking.certificate.email,
+              email = cluster.kubernetes.network.certificate.email,
               privateKeySecretRef = {
                 name = "%{issuer}-account-key",
               },

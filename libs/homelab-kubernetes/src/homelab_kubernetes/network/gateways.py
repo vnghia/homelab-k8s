@@ -23,7 +23,7 @@ class Gateways(ComponentResource):
     RESOURCE_TYPE: ClassVar[str] = "gateway"
 
     def __init__(
-        self, context: Context, name: str, config: config_.networking.gateway.Config, *, opts: ResourceOptions
+        self, context: Context, name: str, config: config_.network.gateway.Config, *, opts: ResourceOptions
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)

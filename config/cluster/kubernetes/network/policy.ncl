@@ -1,5 +1,5 @@
 {
-  cluster.kubernetes.networking.policy = {
+  cluster.kubernetes.network.policy = {
     cluster = {
       intercept-all-dns = {
         endpointSelector = {

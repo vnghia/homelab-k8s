@@ -4,11 +4,11 @@ from pulumi import ResourceOptions
 from .. import app, config
 
 
-class Certificate(app.App[config.networking.certificate.Config]):
+class Certificate(app.App[config.network.certificate.Config]):
     def __init__(
         self,
         context: Context,
-        config: config.networking.certificate.Config,
+        config: config.network.certificate.Config,
         *,
         opts: ResourceOptions,
         data: app.reference.Data,

@@ -36,7 +36,7 @@
                   | default
                   = {},
               },
-            networking
+            network
               | {
                 interfaces
                   | {

@@ -4,5 +4,5 @@
     version = "v1.36.2",
   },
 }
-& (import "networking/networking.ncl")
+& (import "network/network.ncl")
 & (import "apps/apps.ncl")
