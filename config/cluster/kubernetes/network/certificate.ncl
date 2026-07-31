@@ -92,8 +92,10 @@ in
             },
             nameOverride = cluster.kubernetes.network.certificate.namespace.name,
             config = {
-              enableGatewayAPI = true,
-              enableGatewayAPIListenerSet = true,
+              gatewayAPI = {
+                enabled = true,
+                enableListenerSet = true,
+              },
               featureGates = {
                 ListenerSets = true,
               },
