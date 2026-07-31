@@ -23,20 +23,27 @@ class Gateways(ComponentResource):
     RESOURCE_TYPE: ClassVar[str] = "gateway"
 
     def __init__(
-        self, context: Context, name: str, config: config_.network.gateway.Config, *, opts: ResourceOptions
+        self,
+        context: Context,
+        name: str,
+        config: config_.network.gateway.Config,
+        *,
+        opts: ResourceOptions,
+        label: config_.label.Config,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
         self._child_opts = ResourceOptions(parent=self)
 
         self._context = context
         self._config = config
+        self._label = label
 
         self.build_namespace()
         self.build_classes()
         self.build_gateways()
 
     def build_namespace(self) -> None:
-        self._namespace = namespace.Namespace(self._config.namespace, opts=self._child_opts)
+        self._namespace = namespace.Namespace(self._config.namespace, opts=self._child_opts, label=self._label)
 
     def build_classes(self) -> None:
         self._classes = {

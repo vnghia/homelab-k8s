@@ -22,6 +22,7 @@ class App[T: config.app.Config = config.app.Config](ComponentResource):
         config: T,
         *,
         opts: ResourceOptions,
+        label: config.label.Config,
         data: reference.Data,
         register_output: bool = True,
     ) -> None:
@@ -31,6 +32,7 @@ class App[T: config.app.Config = config.app.Config](ComponentResource):
 
         self._context = context_.Context(name=self._name, **context.asdict())
         self._config = config
+        self._label = label
 
         self.build_namespace()
         self.build_network()
@@ -52,6 +54,7 @@ class App[T: config.app.Config = config.app.Config](ComponentResource):
         self._namespace = namespace.Namespace(
             self._config.namespace.model_copy(update={"name": self._config.namespace.name or self._name}),
             opts=self._child_opts,
+            label=self._label,
         )
 
     def build_network(self) -> None:

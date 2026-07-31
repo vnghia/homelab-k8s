@@ -6,9 +6,10 @@ from . import common, config
 
 
 class Namespace:
-    def __init__(self, config: config.namespace.Config, *, opts: ResourceOptions) -> None:
+    def __init__(self, config: config.namespace.Config, *, opts: ResourceOptions, label: config.label.Config) -> None:
         self._name = config.name
         self._config = config
+        self._label = label
         self._namespace = kubernetes.core.v1.Namespace(
             self._name, metadata=kubernetes.meta.v1.ObjectMetaArgs(labels=self._config.spec.to_labels()), opts=opts
         )
@@ -16,6 +17,6 @@ class Namespace:
         pulumi.data.export(f"namespace.{self._name}", self.name)
 
     def build_labels(self, *, apps: dict[str, str] | None = None) -> dict[str, str]:
-        return {"app.kubernetes.io/name": self._name} | (
-            {f"app.kubernetes.io/{key}": value for key, value in (apps or {}).items()}
+        return {f"{self._label.app}/name": self._name} | (
+            {f"{self._label.app}/{key}": value for key, value in (apps or {}).items()}
         )

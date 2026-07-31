@@ -1,0 +1,5 @@
+from homelab_model import BaseModel
+
+
+class Config(BaseModel):
+    app: str

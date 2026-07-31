@@ -21,6 +21,7 @@ class network(ComponentResource):
         config: config.network.Config,
         *,
         opts: ResourceOptions,
+        label: config.label.Config,
         data: app.reference.Data,
     ) -> None:
         super().__init__(self.RESOURCE_TYPE, name, None, opts)
@@ -28,6 +29,7 @@ class network(ComponentResource):
 
         self._context = context
         self._config = config
+        self._label = label
 
         self._reference_app_data = data
 
@@ -39,11 +41,17 @@ class network(ComponentResource):
 
     def build_certificate(self) -> None:
         self._certificate = certificate.Certificate(
-            self._context, self._config.certificate, opts=self._child_opts, data=self._reference_app_data
+            self._context,
+            self._config.certificate,
+            opts=self._child_opts,
+            label=self._label,
+            data=self._reference_app_data,
         )
 
     def build_gateways(self) -> None:
-        self._gateways = gateways.Gateways(self._context, self._name, self._config.gateway, opts=self._child_opts)
+        self._gateways = gateways.Gateways(
+            self._context, self._name, self._config.gateway, opts=self._child_opts, label=self._label
+        )
 
     def build_policies(self) -> None:
         self._policies = {

@@ -15,6 +15,7 @@ class Kubernetes(ComponentResource):
 
         self._context = context
         self._config = config
+        self._label = self._config.label
 
         self._reference_app_data = app.reference.Data(apps={})
         self._context.set(app.reference.Reference, self._reference_app_data)
@@ -26,11 +27,18 @@ class Kubernetes(ComponentResource):
 
     def build_network(self) -> None:
         self._network = network.network(
-            self._context, self._name, self._config.network, opts=self._child_opts, data=self._reference_app_data
+            self._context,
+            self._name,
+            self._config.network,
+            opts=self._child_opts,
+            label=self._label,
+            data=self._reference_app_data,
         )
 
     def build_apps(self) -> None:
         self._apps = {
-            name: app.App(self._context, name, config, opts=self._child_opts, data=self._reference_app_data)
+            name: app.App(
+                self._context, name, config, opts=self._child_opts, label=self._label, data=self._reference_app_data
+            )
             for name, config in self._config.apps.items()
         }

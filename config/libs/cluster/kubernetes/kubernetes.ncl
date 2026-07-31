@@ -12,6 +12,11 @@
             cluster | String,
             name | String,
           },
+        label
+          | {
+            app = "app.kubernetes.io",
+          }
+          = {},
         network
           | {
             gateway
