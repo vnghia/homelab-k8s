@@ -27,17 +27,12 @@
     in
     {
       devShells.${system}.default = pkgs.mkShell {
-        shellHook = ''
-          ln -s $PWD/.config/pulumi $HOME/.pulumi || true
-        '';
-
         packages = with pkgs; [
           uv
           nickel
           nls
           jq
 
-          pulumi-bin
           talosctl
           kubectl
           kubernetes-helm
