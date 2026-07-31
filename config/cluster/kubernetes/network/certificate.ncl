@@ -3,14 +3,19 @@ in
 {
   cluster.kubernetes.network.certificate =
     let rec
+      manager_label = {
+        "%{cluster.kubernetes.label.app}/part-of" = "manager",
+      },
+
+      # issuer
       acme_endpoint =
         if cluster.stack != null then
           "acme-staging-v02.api.letsencrypt.org"
         else
           "acme-v02.api.letsencrypt.org",
       issuer = cluster.kubernetes.network.certificate.issuer,
-      secret_name = "%{issuer}-token",
-      secret_key = "%{issuer}-token",
+      issuer_secret_name = "%{issuer}-token",
+      issuer_secret_key = "%{issuer}-token",
     in
     {
       issuer = "letsencrypt",
@@ -20,7 +25,9 @@ in
       network = {
         policies = {
           manager = {
-            endpointSelector = {},
+            endpointSelector = {
+              matchLabels = manager_label,
+            },
             egress = [
               {
                 toEntities = [
@@ -59,10 +66,10 @@ in
         },
       },
       secrets = {
-        "%{secret_name}" = {
+        "%{issuer_secret_name}" = {
           type = "Opaque",
           string_data = {
-            "%{secret_key}" = {
+            "%{issuer_secret_key}" = {
               kind = "dns/token",
               type = "str",
               path = issuer,
@@ -80,6 +87,10 @@ in
             crds = {
               enabled = true,
             },
+            global = {
+              commonLabels = manager_label,
+            },
+            nameOverride = cluster.kubernetes.network.certificate.namespace.name,
             config = {
               enableGatewayAPI = true,
               enableGatewayAPIListenerSet = true,
@@ -110,9 +121,9 @@ in
                           contracts.kubernetes.AppReference
                           & {
                             type = "str",
-                            path = "secrets.%{secret_name}.name",
+                            path = "secrets.%{issuer_secret_name}.name",
                           },
-                        key = secret_key,
+                        key = issuer_secret_key,
                       },
                     },
                   },
