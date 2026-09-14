@@ -77,7 +77,7 @@ in
             image = {
               # renovate: datasource=docker
               repo = "ghcr.io/amir20/dozzle",
-              tag = "v10.6.14",
+              tag = "v11.1.0",
             },
             env = {
               DOZZLE_ADDR = ":%{port_value}",
