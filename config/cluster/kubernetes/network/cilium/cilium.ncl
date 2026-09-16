@@ -11,7 +11,7 @@
       },
     },
     # renovate: datasource=github-releases packageName=cilium/cilium
-    version = "1.20.0",
+    version = "1.20.2",
   },
 }
 & (import "kustomization.ncl")
